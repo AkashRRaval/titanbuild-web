@@ -6,6 +6,21 @@
     <title>TitanBuild - My Account</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Check 30 Minutes Session Expiry
+        (function checkAuth() {
+            const loginTime = localStorage.getItem('loginTime');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentTime = new Date().getTime();
+            const thirtyMinutes = 30 * 60 * 1000;
+
+            if (!isLoggedIn || !loginTime || (currentTime - loginTime > thirtyMinutes)) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('loginTime');
+                window.location.href = "login.html";
+            }
+        })();
+    </script>
 </head>
 <body class="bg-gray-900 text-white pb-24 font-sans">
 
@@ -21,9 +36,9 @@
                     <span class="bg-black text-yellow-400 text-[10px] px-2 py-0.5 rounded font-bold">VIP 1 MEMBER</span>
                 </div>
             </div>
-            <a href="login.html" class="bg-black/20 text-black px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1">
+            <button onclick="logoutUser()" class="bg-black/20 text-black px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1">
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </a>
+            </button>
         </div>
 
         <!-- Balance Cards -->
@@ -54,7 +69,7 @@
     <!-- User Management Options -->
     <div class="px-4 mt-5">
         <div class="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden divide-y divide-gray-700/60 text-sm">
-            <a href="#" class="flex items-center justify-between p-4 hover:bg-gray-750">
+            <a href="index.html#productsSection" class="flex items-center justify-between p-4 hover:bg-gray-750">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-truck-monster text-yellow-400 text-lg w-5"></i>
                     <span>My Machinery Fleet</span>
@@ -68,7 +83,7 @@
                 </div>
                 <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
             </a>
-            <a href="#" class="flex items-center justify-between p-4 hover:bg-gray-750">
+            <a href="team.html" class="flex items-center justify-between p-4 hover:bg-gray-750">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-users text-purple-400 text-lg w-5"></i>
                     <span>My Team / Referrals</span>
@@ -102,11 +117,11 @@
             <i class="fa-solid fa-house text-lg mb-0.5"></i>
             <span>Home</span>
         </a>
-        <a href="index.html" class="text-gray-400 flex flex-col items-center">
+        <a href="index.html#productsSection" class="text-gray-400 flex flex-col items-center">
             <i class="fa-solid fa-truck-monster text-lg mb-0.5"></i>
             <span>Products</span>
         </a>
-        <a href="#" class="text-gray-400 flex flex-col items-center">
+        <a href="team.html" class="text-gray-400 flex flex-col items-center">
             <i class="fa-solid fa-users text-lg mb-0.5"></i>
             <span>Team</span>
         </a>
@@ -116,6 +131,12 @@
         </a>
     </nav>
 
+    <script>
+        function logoutUser() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginTime');
+            window.location.href = "login.html";
+        }
+    </script>
 </body>
 </html>
-
