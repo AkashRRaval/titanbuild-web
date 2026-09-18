@@ -45,7 +45,7 @@
             </button>
         </form>
 
-        <!-- Register Form (Hidden by default) -->
+        <!-- Register Form -->
         <form id="registerForm" class="space-y-4 hidden">
             <div>
                 <label class="text-xs text-gray-400 block mb-1">Mobile Number</label>
@@ -60,18 +60,37 @@
                 <input type="password" placeholder="Set password" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
 
+            <!-- Captcha Code Section -->
             <div>
-                <label class="text-xs text-gray-400 block mb-1">Invite Code (Optional)</label>
-                <input type="text" placeholder="Enter referral code" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none">
+                <label class="text-xs text-gray-400 block mb-1">Verification Code (Captcha)</label>
+                <div class="flex gap-2">
+                    <input id="userCaptcha" type="text" placeholder="Enter captcha code" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none">
+                    <div onclick="generateCaptcha()" class="bg-yellow-500/20 border border-yellow-500/40 text-yellow-400 font-mono font-bold tracking-widest text-lg px-4 py-2 rounded-lg flex items-center justify-center cursor-pointer select-none">
+                        <span id="captchaBox">8492</span>
+                        <i class="fa-solid fa-rotate-right text-xs ml-2 opacity-70"></i>
+                    </div>
+                </div>
             </div>
 
-            <button type="button" onclick="alert('Registration Successful!')" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-lg shadow-lg text-sm transition">
+            <div>
+                <label class="text-xs text-gray-400 block mb-1">Invite Code (Optional)</label>
+                <input type="text" placeholder="Default: TITAN888" value="TITAN888" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm text-yellow-400 font-bold focus:outline-none">
+            </div>
+
+            <button type="button" onclick="verifyAndRegister()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-lg shadow-lg text-sm transition">
                 CREATE ACCOUNT
             </button>
         </form>
     </div>
 
     <script>
+        let currentCaptcha = "";
+
+        function generateCaptcha() {
+            currentCaptcha = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById('captchaBox').innerText = currentCaptcha;
+        }
+
         function switchTab(tab) {
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
@@ -88,9 +107,21 @@
                 registerForm.classList.remove('hidden');
                 registerTab.className = "flex-1 bg-yellow-500 text-black py-2 rounded-lg text-center shadow";
                 loginTab.className = "flex-1 text-gray-400 py-2 rounded-lg text-center";
+                generateCaptcha();
             }
         }
+
+        function verifyAndRegister() {
+            const inputVal = document.getElementById('userCaptcha').value;
+            if (inputVal === currentCaptcha) {
+                alert('Registration Successful!');
+            } else {
+                alert('Incorrect Captcha Code! Please try again.');
+                generateCaptcha();
+            }
+        }
+
+        generateCaptcha();
     </script>
 </body>
 </html>
-
