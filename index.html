@@ -6,6 +6,21 @@
     <title>TitanBuild - Heavy Machinery Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Check 30 Minutes Session Expiry & Login Protection
+        (function checkAuth() {
+            const loginTime = localStorage.getItem('loginTime');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentTime = new Date().getTime();
+            const thirtyMinutes = 30 * 60 * 1000;
+
+            if (!isLoggedIn || !loginTime || (currentTime - loginTime > thirtyMinutes)) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('loginTime');
+                window.location.href = "login.html";
+            }
+        })();
+    </script>
 </head>
 <body class="bg-gray-900 text-white pb-24 font-sans">
 
@@ -16,9 +31,9 @@
             <span class="text-xl tracking-wide">TitanBuild</span>
         </div>
         <div class="flex items-center space-x-2">
-            <a href="login.html" class="bg-black text-yellow-400 text-xs px-3 py-1.5 rounded-lg font-bold shadow flex items-center gap-1">
-                <i class="fa-solid fa-user"></i> Login
-            </a>
+            <button onclick="logoutUser()" class="bg-black text-yellow-400 text-xs px-3 py-1.5 rounded-lg font-bold shadow flex items-center gap-1">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
             <span class="bg-black/20 text-black text-xs px-2 py-1 rounded-full font-bold">₹ INR</span>
         </div>
     </header>
@@ -82,16 +97,18 @@
     <!-- Product Lineup Section -->
     <div id="productsSection" class="px-4">
 
-        <!-- ================= STANDARD PRODUCTS (500, 800, 1200, 1500) ================= -->
+        <!-- STANDARD PRODUCTS -->
         <div id="standardList" class="block space-y-5">
-            <!-- ₹500 Plan -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>MINI COMPACT EXCAVATOR</span>
+                    <span>TERRAX 450 COMPACT EXCAVATOR</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 1</span>
                 </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1579412690850-bd41cd0af397?auto=format&fit=crop&w=800&q=80" alt="Excavator" class="w-full h-full object-cover">
+                <div class="relative h-44 bg-gray-900 flex items-center justify-center border-b border-gray-700 overflow-hidden">
+                    <div class="text-center p-4">
+                        <i class="fa-solid fa-dumpster text-6xl text-yellow-500 opacity-80 mb-2"></i>
+                        <p class="text-xs text-gray-400">TerraX 450 Heavy Digger</p>
+                    </div>
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -100,18 +117,20 @@
                         <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">30 Days</span></div>
                         <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹1,500</span></div>
                     </div>
-                    <a href="login.html" class="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Now</a>
+                    <button onclick="alert('Order Placed Successfully!')" class="w-full text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Now</button>
                 </div>
             </div>
 
-            <!-- ₹800 Plan -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>SKID STEER LOADER</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 2</span>
                 </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Loader" class="w-full h-full object-cover">
+                <div class="relative h-44 bg-gray-900 flex items-center justify-center border-b border-gray-700 overflow-hidden">
+                    <div class="text-center p-4">
+                        <i class="fa-solid fa-truck-ramp-box text-6xl text-yellow-500 opacity-80 mb-2"></i>
+                        <p class="text-xs text-gray-400">Atlas Heavy Loader</p>
+                    </div>
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -120,61 +139,23 @@
                         <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">30 Days</span></div>
                         <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹2,550</span></div>
                     </div>
-                    <a href="login.html" class="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Now</a>
-                </div>
-            </div>
-
-            <!-- ₹1,200 Plan -->
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
-                <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>TERRAIN FORKLIFT 3T</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 3</span>
-                </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80" alt="Forklift" class="w-full h-full object-cover">
-                </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹1,200</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹135</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">35 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹4,725</span></div>
-                    </div>
-                    <a href="login.html" class="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Now</a>
-                </div>
-            </div>
-
-            <!-- ₹1,500 Plan -->
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
-                <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>BACKHOE DIGGER LOADER</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 4</span>
-                </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=800&q=80" alt="Backhoe" class="w-full h-full object-cover">
-                </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹1,500</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹175</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">40 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹7,000</span></div>
-                    </div>
-                    <a href="login.html" class="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Now</a>
+                    <button onclick="alert('Order Placed Successfully!')" class="w-full text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Now</button>
                 </div>
             </div>
         </div>
 
-        <!-- ================= BENEFICIAL PRODUCTS (1800, 2000, 2500) ================= -->
+        <!-- BENEFICIAL PRODUCTS -->
         <div id="beneficialList" class="hidden space-y-5">
-            <!-- ₹1,800 Plan -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-green-500/50">
                 <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>ROAD COMPACTOR ROLLER</span>
                     <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded font-bold">EXPRESS 1</span>
                 </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=800&q=80" alt="Road Roller" class="w-full h-full object-cover">
+                <div class="relative h-44 bg-gray-900 flex items-center justify-center border-b border-green-500/30 overflow-hidden">
+                    <div class="text-center p-4">
+                        <i class="fa-solid fa-truck-monster text-6xl text-green-400 opacity-80 mb-2"></i>
+                        <p class="text-xs text-gray-400">High Speed Compactor</p>
+                    </div>
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-green-500/30 text-xs">
@@ -183,108 +164,54 @@
                         <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">10 Days</span></div>
                         <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹3,600</span></div>
                     </div>
-                    <a href="login.html" class="w-full block text-center bg-green-500 hover:bg-green-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Beneficial</a>
-                </div>
-            </div>
-
-            <!-- ₹2,000 Plan -->
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-green-500/50">
-                <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>CONCRETE MIXER TRUCK</span>
-                    <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded font-bold">EXPRESS 2</span>
-                </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1591768793355-74d04bb6608f?auto=format&fit=crop&w=800&q=80" alt="Mixer Truck" class="w-full h-full object-cover">
-                </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-green-500/30 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹2,000</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹450</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">10 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹4,500</span></div>
-                    </div>
-                    <a href="login.html" class="w-full block text-center bg-green-500 hover:bg-green-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Beneficial</a>
-                </div>
-            </div>
-
-            <!-- ₹2,500 Plan -->
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-green-500/50">
-                <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>MINI DUMPER TRUCK 4x4</span>
-                    <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded font-bold">EXPRESS 3</span>
-                </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80" alt="Dumper" class="w-full h-full object-cover">
-                </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-green-500/30 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹2,500</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹600</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">8 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹4,800</span></div>
-                    </div>
-                    <a href="login.html" class="w-full block text-center bg-green-500 hover:bg-green-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Beneficial</a>
+                    <button onclick="alert('Order Placed Successfully!')" class="w-full text-center bg-green-500 hover:bg-green-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest Beneficial</button>
                 </div>
             </div>
         </div>
 
-        <!-- ================= VIP PRODUCTS (3500, 4000, 5000) ================= -->
+        <!-- VIP SPECIAL PRODUCTS (CUSTOM DESIGN) -->
         <div id="vipList" class="hidden space-y-5">
-            <!-- ₹3,500 Plan -->
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-yellow-500/50">
-                <div class="bg-gradient-to-r from-yellow-500 to-amber-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>HEAVY TRACK BULLDOZER</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded font-bold">VIP 1</span>
+            <div class="bg-gradient-to-b from-yellow-900/40 to-gray-800 rounded-2xl overflow-hidden shadow-2xl border-2 border-yellow-500">
+                <div class="bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center shadow-md">
+                    <span class="tracking-wider"><i class="fa-solid fa-crown mr-1"></i> HEAVY TRACK BULLDOZER</span>
+                    <span class="text-xs bg-black text-yellow-400 px-2.5 py-0.5 rounded-full font-black">VIP 1</span>
                 </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=800&q=80" alt="Bulldozer" class="w-full h-full object-cover">
+                <div class="relative h-40 bg-gradient-to-b from-gray-950 to-gray-900 flex flex-col items-center justify-center border-b border-yellow-500/30 p-4 text-center">
+                    <i class="fa-solid fa-oil-well text-5xl text-yellow-400 mb-2 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]"></i>
+                    <h3 class="text-yellow-400 font-black text-lg tracking-widest uppercase">VIP PROGRAM ASSET</h3>
+                    <p class="text-[10px] text-gray-400 tracking-wide mt-0.5">EXCLUSIVE HIGH-YIELD MINING EQUIPMENT</p>
+                    <span class="absolute top-2 right-2 bg-yellow-500 text-black text-[9px] px-2 py-0.5 rounded font-black uppercase">VIP ONLY</span>
                 </div>
                 <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-yellow-500/30 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹3,500</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹480</span></div>
+                    <div class="grid grid-cols-2 gap-2 bg-gray-900/90 p-3 rounded-xl mb-3 border border-yellow-500/30 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-black text-base">₹3,500</span></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-black text-base">₹480</span></div>
                         <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">45 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹21,600</span></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-black">₹21,600</span></div>
                     </div>
-                    <a href="login.html" class="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest VIP</a>
+                    <button onclick="alert('VIP Investment Placed!')" class="w-full text-center bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3 rounded-xl shadow-lg transition tracking-wider text-sm">INVEST VIP ASSET</button>
                 </div>
             </div>
 
-            <!-- ₹4,000 Plan -->
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-yellow-500/50">
-                <div class="bg-gradient-to-r from-yellow-500 to-amber-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>TOWER CRANE BUILDER</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded font-bold">VIP 2</span>
-                alt="Tower Crane" class="w-full h-full object-cover">
+            <div class="bg-gradient-to-b from-yellow-900/40 to-gray-800 rounded-2xl overflow-hidden shadow-2xl border-2 border-yellow-500">
+                <div class="bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center shadow-md">
+                    <span class="tracking-wider"><i class="fa-solid fa-crown mr-1"></i> TOWER CRANE BUILDER</span>
+                    <span class="text-xs bg-black text-yellow-400 px-2.5 py-0.5 rounded-full font-black">VIP 2</span>
+                </div>
+                <div class="relative h-40 bg-gradient-to-b from-gray-950 to-gray-900 flex flex-col items-center justify-center border-b border-yellow-500/30 p-4 text-center">
+                    <i class="fa-solid fa-building-circle-check text-5xl text-yellow-400 mb-2 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]"></i>
+                    <h3 class="text-yellow-400 font-black text-lg tracking-widest uppercase">VIP PROGRAM ASSET</h3>
+                    <p class="text-[10px] text-gray-400 tracking-wide mt-0.5">EXCLUSIVE HIGH-YIELD MINING EQUIPMENT</p>
+                    <span class="absolute top-2 right-2 bg-yellow-500 text-black text-[9px] px-2 py-0.5 rounded font-black uppercase">VIP ONLY</span>
                 </div>
                 <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-yellow-500/30 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹4,000</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹560</span></div>
+                    <div class="grid grid-cols-2 gap-2 bg-gray-900/90 p-3 rounded-xl mb-3 border border-yellow-500/30 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-black text-base">₹4,000</span></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-black text-base">₹560</span></div>
                         <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">50 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹28,000</span></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-black">₹28,000</span></div>
                     </div>
-                    <a href="login.html" class="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest VIP</a>
-                </div>
-            </div>
-
-            <!-- ₹5,000 Plan -->
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-yellow-500/50">
-                <div class="bg-gradient-to-r from-yellow-500 to-amber-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>TITAN HEAVY CRANE 100T</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded font-bold">VIP 3</span>
-                </div>
-                <div class="relative h-48 bg-gray-900 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1579412690850-bd41cd0af397?auto=format&fit=crop&w=800&q=80" alt="Heavy Crane" class="w-full h-full object-cover">
-                </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-yellow-500/30 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹5,000</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹720</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">60 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹43,200</span></div>
-                    </div>
-                    <a href="login.html" class="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-2.5 rounded-lg text-sm shadow-md transition">Invest VIP</a>
+                    <button onclick="alert('VIP Investment Placed!')" class="w-full text-center bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3 rounded-xl shadow-lg transition tracking-wider text-sm">INVEST VIP ASSET</button>
                 </div>
             </div>
         </div>
@@ -311,7 +238,6 @@
         </a>
     </nav>
 
-    <!-- JavaScript Tabs Switcher -->
     <script>
         function switchCategory(category) {
             const standardList = document.getElementById('standardList');
@@ -341,6 +267,13 @@
                 tabVip.className = "flex-1 bg-yellow-500 text-black py-2 rounded-lg text-center shadow transition";
             }
         }
+
+        function logoutUser() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginTime');
+            window.location.href = "login.html";
+        }
     </script>
 </body>
-</html>
+    </html>
+                                                                                                                                                      
