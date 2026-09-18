@@ -15,8 +15,11 @@
             <i class="fa-solid fa-helmet-safety text-2xl"></i>
             <span class="text-xl tracking-wide">TitanBuild</span>
         </div>
-        <div class="bg-black text-yellow-400 text-xs px-3 py-1 rounded-full font-bold shadow">
-            ₹ INR
+        <div class="flex items-center space-x-2">
+            <a href="login.html" class="bg-black text-yellow-400 text-xs px-3 py-1.5 rounded-lg font-bold shadow flex items-center gap-1">
+                <i class="fa-solid fa-user"></i> Login
+            </a>
+            <span class="bg-black/20 text-black text-xs px-2 py-1 rounded-full font-bold">₹ INR</span>
         </div>
     </header>
 
@@ -38,27 +41,27 @@
     </div>
 
     <!-- Quick Action Icons -->
-    <div class="px-4 mb-6">
+    <div class="px-4 mb-4">
         <div class="bg-gray-800 rounded-xl p-4 grid grid-cols-4 gap-2 text-center shadow-lg border border-gray-700">
-            <div class="flex flex-col items-center">
+            <a href="profile.html" class="flex flex-col items-center">
                 <div class="w-12 h-12 bg-yellow-500/20 text-yellow-400 rounded-xl flex items-center justify-center text-xl mb-1">
                     <i class="fa-solid fa-wallet"></i>
                 </div>
                 <span class="text-xs font-medium">Recharge</span>
-            </div>
-            <div class="flex flex-col items-center">
+            </a>
+            <a href="profile.html" class="flex flex-col items-center">
                 <div class="w-12 h-12 bg-green-500/20 text-green-400 rounded-xl flex items-center justify-center text-xl mb-1">
                     <i class="fa-solid fa-money-bill-transfer"></i>
                 </div>
                 <span class="text-xs font-medium">Withdraw</span>
-            </div>
-            <div class="flex flex-col items-center">
+            </a>
+            <div onclick="alert('Daily Check-in Successful! +₹10 Added')" class="flex flex-col items-center cursor-pointer">
                 <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center text-xl mb-1">
                     <i class="fa-solid fa-calendar-check"></i>
                 </div>
                 <span class="text-xs font-medium">Check-In</span>
             </div>
-            <div class="flex flex-col items-center">
+            <div onclick="alert('Lucky Wheel coming soon!')" class="flex flex-col items-center cursor-pointer">
                 <div class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center text-xl mb-1">
                     <i class="fa-solid fa-dharmachakra"></i>
                 </div>
@@ -67,18 +70,29 @@
         </div>
     </div>
 
-    <!-- Product Lineup Section -->
-    <div class="px-4">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold border-l-4 border-yellow-500 pl-3">High Yield Projects</h2>
-            <span class="text-xs text-yellow-400 font-semibold">View All</span>
+    <!-- Category Tabs -->
+    <div class="px-4 mb-4">
+        <div class="flex space-x-2 bg-gray-800 p-1.5 rounded-xl border border-gray-700 text-xs font-bold">
+            <button class="flex-1 bg-yellow-500 text-black py-2 rounded-lg text-center shadow">Standard Fleet</button>
+            <button class="flex-1 bg-gray-900 text-yellow-400 py-2 rounded-lg text-center border border-yellow-500/30">VIP Special</button>
+            <button class="flex-1 bg-gray-900 text-gray-400 py-2 rounded-lg text-center">Beneficial</button>
         </div>
+    </div>
 
-        <!-- Product 1: TerraX Series -->
+    <!-- Product Lineup Section -->
+    <div id="productsSection" class="px-4">
+        <!-- Product 1 -->
         <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl mb-5 border border-gray-700">
             <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                 <span>TERRAX 450 COMPACT EXCAVATOR</span>
                 <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">Category 1</span>
+            </div>
+            <div class="relative h-44 bg-gray-900 flex items-center justify-center border-b border-gray-700 overflow-hidden">
+                <div class="text-center p-4">
+                    <i class="fa-solid fa-dumpster text-6xl text-yellow-500 opacity-80 mb-2"></i>
+                    <p class="text-xs text-gray-400">TerraX 450 Heavy Digger</p>
+                </div>
+                <span class="absolute top-2 right-2 bg-black/70 text-yellow-400 text-[10px] px-2 py-1 rounded font-bold border border-yellow-500/30">3D Rendered</span>
             </div>
             <div class="p-4">
                 <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -101,18 +115,25 @@
                 </div>
                 <div class="flex justify-between items-center mt-2">
                     <span class="text-xs text-gray-400">Stock: <span class="text-white font-bold">Available</span></span>
-                    <button class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold px-6 py-2.5 rounded-lg text-sm shadow-md active:scale-95 transition">
+                    <a href="login.html" class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold px-6 py-2.5 rounded-lg text-sm shadow-md active:scale-95 transition inline-block text-center">
                         Invest Now
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Product 2: Atlas Lift Series -->
+        <!-- Product 2 -->
         <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl mb-5 border border-gray-700">
             <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                 <span>ATLAS LIFT 5T TERRAIN HANDLER</span>
                 <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">Category 2</span>
+            </div>
+            <div class="relative h-44 bg-gray-900 flex items-center justify-center border-b border-gray-700 overflow-hidden">
+                <div class="text-center p-4">
+                    <i class="fa-solid fa-truck-ramp-box text-6xl text-yellow-500 opacity-80 mb-2"></i>
+                    <p class="text-xs text-gray-400">Atlas Lift 5T Forklift</p>
+                </div>
+                <span class="absolute top-2 right-2 bg-black/70 text-yellow-400 text-[10px] px-2 py-1 rounded font-bold border border-yellow-500/30">3D Rendered</span>
             </div>
             <div class="p-4">
                 <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -135,71 +156,32 @@
                 </div>
                 <div class="flex justify-between items-center mt-2">
                     <span class="text-xs text-gray-400">Stock: <span class="text-white font-bold">Available</span></span>
-                    <button class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold px-6 py-2.5 rounded-lg text-sm shadow-md active:scale-95 transition">
+                    <a href="login.html" class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold px-6 py-2.5 rounded-lg text-sm shadow-md active:scale-95 transition inline-block text-center">
                         Invest Now
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product 3: VIP Titan Crane -->
-        <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl mb-5 border border-yellow-500/50">
-            <div class="bg-gradient-to-r from-yellow-500 to-amber-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                <span>VIP TITAN CRANE 100T</span>
-                <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded font-bold">VIP 5</span>
-            </div>
-            <div class="p-4">
-                <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-yellow-500/30 text-xs">
-                    <div>
-                        <span class="text-gray-400 block text-[10px]">Invest Amount</span>
-                        <span class="text-yellow-400 font-bold text-base">₹5,000</span>
-                    </div>
-                    <div>
-                        <span class="text-gray-400 block text-[10px]">Daily Return</span>
-                        <span class="text-green-400 font-bold text-base">₹650</span>
-                    </div>
-                    <div>
-                        <span class="text-gray-400 block text-[10px]">Lease Cycle</span>
-                        <span class="text-white font-bold">60 Days</span>
-                    </div>
-                    <div>
-                        <span class="text-gray-400 block text-[10px]">Total Revenue</span>
-                        <span class="text-green-400 font-bold">₹39,000</span>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center mt-2">
-                    <span class="text-xs text-yellow-400 font-bold">VIP Exclusive</span>
-                    <button class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold px-6 py-2.5 rounded-lg text-sm shadow-md active:scale-95 transition">
-                        Invest VIP
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Floating WhatsApp Support Icon -->
-    <a href="#" class="fixed bottom-20 right-4 bg-green-500 text-white rounded-full shadow-2xl flex items-center justify-center w-14 h-14 text-2xl z-40 border-2 border-white">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (Functional Links) -->
     <nav class="fixed bottom-0 left-0 right-0 bg-gray-950 border-t border-gray-800 flex justify-around p-3 text-center text-xs z-50">
-        <div class="text-yellow-400 font-bold flex flex-col items-center">
+        <a href="index.html" class="text-yellow-400 font-bold flex flex-col items-center">
             <i class="fa-solid fa-house text-lg mb-0.5"></i>
             <span>Home</span>
-        </div>
-        <div class="text-gray-400 flex flex-col items-center">
+        </a>
+        <a href="#productsSection" class="text-gray-400 flex flex-col items-center">
             <i class="fa-solid fa-truck-monster text-lg mb-0.5"></i>
             <span>Products</span>
-        </div>
-        <div class="text-gray-400 flex flex-col items-center">
+        </a>
+        <a href="team.html" class="text-gray-400 flex flex-col items-center">
             <i class="fa-solid fa-users text-lg mb-0.5"></i>
             <span>Team</span>
-        </div>
-        <div class="text-gray-400 flex flex-col items-center">
+        </a>
+        <a href="profile.html" class="text-gray-400 flex flex-col items-center">
             <i class="fa-solid fa-user text-lg mb-0.5"></i>
             <span>My</span>
-        </div>
+        </a>
     </nav>
 
 </body>
