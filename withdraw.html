@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw Funds - TitanBuild</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const loginTime = localStorage.getItem('loginTime');
+        if (!isLoggedIn || !loginTime || (Date.now() - parseInt(loginTime)) > 30 * 60 * 1000) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginTime');
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body class="bg-gray-950 text-white min-h-screen pb-10 font-sans">
+
+    <!-- Header -->
+    <div class="bg-gray-900 border-b border-gray-800 p-4 flex items-center justify-between sticky top-0 z-50">
+        <a href="profile.html" class="text-yellow-400 text-xl font-bold">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">Withdraw Funds</h1>
+        <div class="w-5"></div>
+    </div>
+
+    <div class="max-w-md mx-auto p-4 space-y-5">
+
+        <!-- Balance Card -->
+        <div class="bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 rounded-2xl p-5 text-black shadow-xl flex justify-between items-center">
+            <div>
+                <p class="text-xs font-bold uppercase opacity-80">Withdrawable Balance</p>
+                <h2 class="text-3xl font-black mt-1">₹ 0.00</h2>
+            </div>
+            <i class="fa-solid fa-building-columns text-3xl opacity-80"></i>
+        </div>
+
+        <!-- Bank Details Form -->
+        <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-3">
+            <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wide flex items-center space-x-2">
+                <i class="fa-solid fa-id-card"></i>
+                <span>Bank Account Details</span>
+            </h3>
+
+            <div>
+                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Account Holder Name</label>
+                <input type="text" id="bankNameHolder" placeholder="Full name in bank" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Bank Account Number</label>
+                <input type="number" id="bankAccNo" placeholder="Enter account number" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-semibold text-gray-400 mb-1">IFSC Code</label>
+                <input type="text" id="bankIfsc" placeholder="e.g. SBIN0001234" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-yellow-400 uppercase focus:outline-none focus:border-yellow-500">
+            </div>
+        </div>
+      
+        <!-- Withdrawal Amount Input -->
+        <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-3">
+            <label class="block text-xs font-bold text-gray-400 uppercase">Enter Amount (Min ₹110)</label>
+            <input type="number" id="withdrawAmount" placeholder="Min ₹110" class="w-full bg-gray-950 border border-yellow-500/50 rounded-xl p-3 text-2xl font-black text-yellow-400 text-center focus:outline-none">
+
+            <div class="bg-gray-950 p-3 rounded-xl text-[11px] text-gray-400 space-y-1">
+                <p>• Minimum withdrawal: <span class="text-yellow-400 font-bold">₹110</span></p>
+                <p>• Withdrawal timing: <span class="text-yellow-400 font-bold">09:00 AM - 06:00 PM</span></p>
+                <p>• Handling fee: <span class="text-green-400 font-bold">0% tax</span></p>
+            </div>
+
+            <button onclick="submitWithdrawal()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3.5 rounded-xl text-sm shadow-lg transition uppercase tracking-wide">
+                Confirm Withdrawal
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function submitWithdrawal() {
+            const holder = document.getElementById('bankNameHolder').value.trim();
+            const acc = document.getElementById('bankAccNo').value.trim();
+            const ifsc = document.getElementById('bankIfsc').value.trim();
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+
+            if (!holder || !acc || !ifsc) {
+                alert('Please fill all bank details correctly!');
+                return;
+            }
+
+            if (!amount || amount < 110) {
+                alert('Minimum withdrawal amount is ₹110!');
+                return;
+            }
+
+            alert(`Withdrawal Request Submitted!\nAmount: ₹${amount}\nAccount: ${acc}\nStatus: Processing (1-24 Hours)`);
+            window.location.href = "profile.html";
+        }
+    </script>
+</body>
+</html>
