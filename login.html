@@ -40,7 +40,7 @@
                 <input type="password" placeholder="Enter password" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
 
-            <button type="button" onclick="alert('Login Successful!')" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-lg shadow-lg text-sm transition">
+            <button type="button" onclick="handleLogin()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-lg shadow-lg text-sm transition">
                 LOG IN
             </button>
         </form>
@@ -111,10 +111,14 @@
             }
         }
 
+        function handleLogin() {
+            window.location.href = "profile.html";
+        }
+
         function verifyAndRegister() {
             const inputVal = document.getElementById('userCaptcha').value;
             if (inputVal === currentCaptcha) {
-                alert('Registration Successful!');
+                window.location.href = "profile.html";
             } else {
                 alert('Incorrect Captcha Code! Please try again.');
                 generateCaptcha();
