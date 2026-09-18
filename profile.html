@@ -1,112 +1,106 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - My Account</title>
+    <title>My Profile - TitanBuild</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        // Check 30 Minutes Session Expiry
-        (function checkAuth() {
-            const loginTime = localStorage.getItem('loginTime');
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const currentTime = new Date().getTime();
-            const thirtyMinutes = 30 * 60 * 1000;
-
-            if (!isLoggedIn || !loginTime || (currentTime - loginTime > thirtyMinutes)) {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('loginTime');
-                window.location.href = "login.html";
-            }
-        })();
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const loginTime = localStorage.getItem('loginTime');
+        if (!isLoggedIn || !loginTime || (Date.now() - parseInt(loginTime)) > 30 * 60 * 1000) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginTime');
+            window.location.href = "login.html";
+        }
     </script>
 </head>
-<body class="bg-gray-900 text-white pb-24 font-sans">
+<body class="bg-gray-950 text-white min-h-screen pb-24 font-sans">
 
-    <!-- Top Profile Banner -->
-    <div class="bg-gradient-to-b from-yellow-500 to-yellow-600 text-black p-6 rounded-b-3xl shadow-xl">
-        <div class="flex items-center justify-between mb-4">
+    <!-- Profile Header Banner -->
+    <div class="bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 text-black p-5 rounded-b-3xl shadow-2xl relative">
+        <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-14 h-14 bg-black text-yellow-400 rounded-full flex items-center justify-center text-2xl font-bold border-2 border-yellow-300">
-                    <i class="fa-solid fa-user-gear"></i>
+                <div class="w-14 h-14 bg-black rounded-full flex items-center justify-center border-2 border-yellow-300 shadow">
+                    <i class="fa-solid fa-user-gear text-yellow-400 text-2xl"></i>
                 </div>
                 <div>
                     <h2 class="text-lg font-black tracking-wide">+91 7359679116</h2>
-                    <span class="bg-black text-yellow-400 text-[10px] px-2 py-0.5 rounded font-bold">VIP 1 MEMBER</span>
+                    <span class="bg-black text-yellow-400 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">VIP 1 MEMBER</span>
                 </div>
             </div>
-            <button onclick="logoutUser()" class="bg-black/20 text-black px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            <button onclick="logoutUser()" class="bg-black/20 hover:bg-black/40 text-black font-extrabold text-xs border border-black/30 px-3 py-1.5 rounded-lg transition">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i>Logout
             </button>
         </div>
 
-        <!-- Balance Cards -->
-        <div class="bg-gray-900 text-white rounded-2xl p-4 shadow-2xl border border-yellow-400/30 grid grid-cols-2 gap-4 mt-2">
+        <!-- Wallet Summary -->
+        <div class="mt-5 bg-gray-900 text-white rounded-2xl p-4 border border-yellow-500/40 shadow-xl grid grid-cols-2 gap-4">
             <div>
-                <span class="text-xs text-gray-400 block mb-1">Total Assets</span>
-                <span class="text-xl font-black text-yellow-400">₹ 0.00</span>
+                <p class="text-gray-400 text-xs font-semibold">Total Assets</p>
+                <h3 class="text-xl font-black text-yellow-400 mt-1">₹ 0.00</h3>
             </div>
-            <div>
-                <span class="text-xs text-gray-400 block mb-1">Today Income</span>
-                <span class="text-xl font-black text-green-400">₹ 0.00</span>
+            <div class="border-l border-gray-800 pl-4">
+                <p class="text-gray-400 text-xs font-semibold">Today Income</p>
+                <h3 class="text-xl font-black text-green-400 mt-1">₹ 0.00</h3>
             </div>
         </div>
     </div>
 
-    <!-- Quick Finance Actions -->
-    <div class="px-4 mt-5">
+    <!-- Quick Actions (Recharge / Withdraw) -->
+    <div class="max-w-md mx-auto p-4 space-y-4">
         <div class="grid grid-cols-2 gap-3">
-            <button class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold p-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm transition">
-                <i class="fa-solid fa-wallet text-lg"></i> Recharge
-            </button>
-            <button class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 font-bold p-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm transition">
-                <i class="fa-solid fa-money-bill-transfer text-lg text-green-400"></i> Withdraw
+            <a href="recharge.html" class="bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 text-sm transition">
+                <i class="fa-solid fa-wallet text-base"></i>
+                <span>Recharge</span>
+            </a>
+            <button onclick="alert('Withdrawal System Available Soon!')" class="bg-gray-900 hover:bg-gray-800 text-gray-200 border border-gray-800 font-extrabold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 text-sm transition">
+                <i class="fa-solid fa-money-bill-transfer text-green-400 text-base"></i>
+                <span>Withdraw</span>
             </button>
         </div>
-    </div>
+                <!-- Menu List -->
+        <div class="bg-gray-900 rounded-2xl border border-gray-800 divide-y divide-gray-800 shadow-xl text-sm">
+            <a href="#" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-truck-monster text-yellow-400 text-base"></i>
+                    <span class="font-bold">My Machinery</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
+            </a>
 
-    <!-- User Management Options -->
-    <div class="px-4 mt-5">
-        <div class="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden divide-y divide-gray-700/60 text-sm">
-            <a href="index.html#productsSection" class="flex items-center justify-between p-4 hover:bg-gray-750">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-truck-monster text-yellow-400 text-lg w-5"></i>
-                    <span>My Machinery Fleet</span>
+            <a href="recharge.html" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-clock-rotate-left text-yellow-400 text-base"></i>
+                    <span class="font-bold">Recharge & Income Record</span>
                 </div>
                 <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
             </a>
-            <a href="#" class="flex items-center justify-between p-4 hover:bg-gray-750">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-clock-rotate-left text-blue-400 text-lg w-5"></i>
-                    <span>Recharge & Income Records</span>
+
+            <a href="team.html" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-users text-yellow-400 text-base"></i>
+                    <span class="font-bold">My Team / Referrals</span>
                 </div>
                 <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
             </a>
-            <a href="team.html" class="flex items-center justify-between p-4 hover:bg-gray-750">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-users text-purple-400 text-lg w-5"></i>
-                    <span>My Team / Referrals</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-            </a>
-            <a href="#" class="flex items-center justify-between p-4 hover:bg-gray-750">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-building-columns text-green-400 text-lg w-5"></i>
-                    <span>Bank Account Details</span>
+
+            <a href="#" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-building-columns text-yellow-400 text-base"></i>
+                    <span class="font-bold">Bank Account Details</span>
                 </div>
                 <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
             </a>
         </div>
-    </div>
 
-    <!-- Invite Link Box -->
-    <div class="px-4 mt-5">
-        <div class="bg-gray-800 p-4 rounded-2xl border border-yellow-500/30">
-            <span class="text-xs text-yellow-400 font-bold block mb-1">Your Referral Code</span>
-            <div class="flex gap-2">
-                <input type="text" readonly value="TITAN888" class="bg-gray-900 border border-gray-700 rounded-lg p-2 text-sm text-center font-bold text-white w-full">
-                <button onclick="alert('Code Copied!')" class="bg-yellow-500 text-black px-4 rounded-lg font-bold text-xs">Copy</button>
+        <!-- Referral Link Share Box -->
+        <div class="bg-gray-900 p-4 rounded-2xl border border-yellow-500/20 shadow-xl space-y-2">
+            <label class="block text-xs font-bold text-gray-400 uppercase">Your Referral Code</label>
+            <div class="flex items-center space-x-2">
+                <input type="text" value="TITAN8899" readonly class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-yellow-400 font-mono font-bold text-sm focus:outline-none">
+                <button onclick="alert('Referral Code Copied!')" class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold px-4 py-2.5 rounded-lg text-xs transition">Copy</button>
             </div>
         </div>
     </div>
