@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        // Check 30 Minutes Session Expiry & Login Protection
         (function checkAuth() {
             const loginTime = localStorage.getItem('loginTime');
             const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -97,15 +96,16 @@
     <!-- Product Lineup Section -->
     <div id="productsSection" class="px-4">
 
-        <!-- ================= STANDARD PRODUCTS (500 to 2500) ================= -->
+        <!-- ================= STANDARD PRODUCTS (WITH REAL PHOTOS) ================= -->
         <div id="standardList" class="block space-y-5">
+            <!-- ₹500 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>MINI COMPACT EXCAVATOR</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 1</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-gray-700">
-                    <i class="fa-solid fa-dumpster text-5xl text-yellow-500 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1579412690850-bd41cd0af397?auto=format&fit=crop&w=800&q=80" alt="Excavator" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -118,13 +118,14 @@
                 </div>
             </div>
 
+            <!-- ₹800 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>SKID STEER LOADER</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 2</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-gray-700">
-                    <i class="fa-solid fa-truck-ramp-box text-5xl text-yellow-500 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Loader" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -137,13 +138,14 @@
                 </div>
             </div>
 
+            <!-- ₹1,200 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>TERRAIN FORKLIFT 3T</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 3</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-gray-700">
-                    <i class="fa-solid fa-box-open text-5xl text-yellow-500 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80" alt="Forklift" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -156,13 +158,14 @@
                 </div>
             </div>
 
+            <!-- ₹1,500 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>BACKHOE DIGGER LOADER</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 4</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-gray-700">
-                    <i class="fa-solid fa-truck-field text-5xl text-yellow-500 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=800&q=80" alt="Backhoe" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -175,13 +178,14 @@
                 </div>
             </div>
 
+            <!-- ₹2,000 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>WHEEL LOADER CAT 924</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 5</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-gray-700">
-                    <i class="fa-solid fa-tractor text-5xl text-yellow-500 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80" alt="Loader" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -194,13 +198,14 @@
                 </div>
             </div>
 
+            <!-- ₹2,500 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
                 <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>TRACK EXCAVATOR HEAVY</span>
                     <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">STD 6</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-gray-700">
-                    <i class="fa-solid fa-mountain-city text-5xl text-yellow-500 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1579412690850-bd41cd0af397?auto=format&fit=crop&w=800&q=80" alt="Excavator" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-gray-700 text-xs">
@@ -214,7 +219,7 @@
             </div>
         </div>
 
-        <!-- ================= BENEFICIAL PRODUCTS (3000, 3500, 4500, 5000) ================= -->
+        <!-- ================= BENEFICIAL PRODUCTS (WITH REAL PHOTOS) ================= -->
         <div id="beneficialList" class="hidden space-y-5">
             <!-- ₹3,000 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-green-500/50">
@@ -222,8 +227,8 @@
                     <span>ROAD COMPACTOR ROLLER</span>
                     <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded font-bold">EXPRESS 1</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-green-500/30">
-                    <i class="fa-solid fa-truck-monster text-5xl text-green-400 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=800&q=80" alt="Road Roller" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-green-500/30 text-xs">
@@ -242,8 +247,8 @@
                     <span>ASPHALT PAVING MACHINE</span>
                     <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded font-bold">EXPRESS 2</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-green-500/30">
-                    <i class="fa-solid fa-road text-5xl text-green-400 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Paver" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-green-500/30 text-xs">
@@ -256,15 +261,15 @@
                 </div>
             </div>
 
-            <!-- ₹4,500 -->
+            
+                        <!-- ₹4,500 -->
             <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-green-500/50">
                 <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
                     <span>CONCRETE MIXER TRUCK</span>
                     <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded font-bold">EXPRESS 3</span>
                 </div>
-                <div class="relative h-40 bg-___
-bg-gray-900 flex items-center justify-center border-b border-green-500/30">
-                    <i class="fa-solid fa-recycle text-5xl text-green-400 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1591768793355-74d04bb6608f?auto=format&fit=crop&w=800&q=80" alt="Mixer Truck" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-green-500/30 text-xs">
@@ -283,8 +288,8 @@ bg-gray-900 flex items-center justify-center border-b border-green-500/30">
                     <span>MINI DUMPER TRUCK 4x4</span>
                     <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded font-bold">EXPRESS 4</span>
                 </div>
-                <div class="relative h-40 bg-gray-900 flex items-center justify-center border-b border-green-500/30">
-                    <i class="fa-solid fa-truck-droplet text-5xl text-green-400 opacity-80"></i>
+                <div class="relative h-48 bg-gray-900 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80" alt="Dumper" class="w-full h-full object-cover">
                 </div>
                 <div class="p-4">
                     <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 border border-green-500/30 text-xs">
@@ -298,7 +303,7 @@ bg-gray-900 flex items-center justify-center border-b border-green-500/30">
             </div>
         </div>
 
-        <!-- ================= VIP SPECIAL PRODUCTS (6000 to 8000) ================= -->
+        <!-- ================= VIP SPECIAL PRODUCTS (TEXT BADGE & NO PHOTO) ================= -->
         <div id="vipList" class="hidden space-y-5">
             <div class="bg-gradient-to-b from-yellow-900/40 to-gray-800 rounded-2xl overflow-hidden shadow-2xl border-2 border-yellow-500">
                 <div class="bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-600 text-black px-4 py-2 font-black text-sm flex justify-between items-center shadow-md">
