@@ -34,13 +34,11 @@
                     <input type="tel" placeholder="Enter 10 digit number" class="bg-transparent w-full p-2.5 text-sm focus:outline-none">
                 </div>
             </div>
-
             <div>
                 <label class="text-xs text-gray-400 block mb-1">Password</label>
                 <input type="password" placeholder="Enter password" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
-
-            <button type="button" onclick="handleLogin()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-lg shadow-lg text-sm transition">
+            <button type="button" onclick="loginSuccess()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-lg shadow-lg text-sm transition">
                 LOG IN
             </button>
         </form>
@@ -54,13 +52,10 @@
                     <input type="tel" placeholder="Enter 10 digit number" class="bg-transparent w-full p-2.5 text-sm focus:outline-none">
                 </div>
             </div>
-
             <div>
                 <label class="text-xs text-gray-400 block mb-1">Create Password</label>
                 <input type="password" placeholder="Set password" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
-
-            <!-- Captcha Code Section -->
             <div>
                 <label class="text-xs text-gray-400 block mb-1">Verification Code (Captcha)</label>
                 <div class="flex gap-2">
@@ -71,12 +66,10 @@
                     </div>
                 </div>
             </div>
-
             <div>
                 <label class="text-xs text-gray-400 block mb-1">Invite Code (Optional)</label>
                 <input type="text" placeholder="Default: TITAN888" value="TITAN888" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm text-yellow-400 font-bold focus:outline-none">
             </div>
-
             <button type="button" onclick="verifyAndRegister()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold py-3 rounded-lg shadow-lg text-sm transition">
                 CREATE ACCOUNT
             </button>
@@ -111,14 +104,16 @@
             }
         }
 
-        function handleLogin() {
-            window.location.href = "profile.html";
+        function loginSuccess() {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('loginTime', new Date().getTime());
+            window.location.href = "index.html";
         }
 
         function verifyAndRegister() {
             const inputVal = document.getElementById('userCaptcha').value;
             if (inputVal === currentCaptcha) {
-                window.location.href = "profile.html";
+                loginSuccess();
             } else {
                 alert('Incorrect Captcha Code! Please try again.');
                 generateCaptcha();
