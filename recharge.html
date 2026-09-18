@@ -41,17 +41,17 @@
             </div>
         </div>
 
-        <!-- Payment Channel -->
+        <!-- Payment Channel Selection -->
         <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-3">
             <label class="block text-xs font-bold text-gray-400 uppercase">Select Payment Channel</label>
             <div class="grid grid-cols-2 gap-2">
-                <button class="bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow">
+                <button id="btnChan1" onclick="switchChannel(1)" class="bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow border-2 border-yellow-400">
                     <div>CHANNEL 1</div>
                     <div class="text-[10px] font-normal opacity-80">Navi / Express UPI</div>
                 </button>
-                <button class="bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center">
+                <button id="btnChan2" onclick="switchChannel(2)" class="bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center">
                     <div>CHANNEL 2</div>
-                    <div class="text-[10px] font-normal opacity-60">Manual / QR Code</div>
+                    <div class="text-[10px] font-normal opacity-60">Fast Pay / Secondary UPI</div>
                 </button>
             </div>
         </div>
@@ -90,25 +90,45 @@
     </div>
 
     <script>
-        function updateQR(amount) {
-            const upi = "ravalrajubhai331@naviaxis";
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${upi}&pn=TitanBuild&am=${amount}&cu=INR`;
+        let currentUpi = "ravalrajubhai331@naviaxis";
+        const upi1 = "ravalrajubhai331@naviaxis";
+        const upi2 = "fastpaytes@naviaxis";
+
+        function updateQR() {
+            const amount = document.getElementById('rechargeAmount').value || 0;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${currentUpi}&pn=TitanBuild&am=${amount}&cu=INR`;
             document.getElementById('qrImage').src = qrUrl;
+            document.getElementById('upiId').innerText = currentUpi;
+        }
+
+        function switchChannel(chan) {
+            const btn1 = document.getElementById('btnChan1');
+            const btn2 = document.getElementById('btnChan2');
+
+            if (chan === 1) {
+                currentUpi = upi1;
+                btn1.className = "bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow border-2 border-yellow-400";
+                btn2.className = "bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center";
+            } else {
+                currentUpi = upi2;
+                btn2.className = "bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow border-2 border-yellow-400";
+                btn1.className = "bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center";
+            }
+            updateQR();
         }
 
         function setAmount(val) {
             document.getElementById('rechargeAmount').value = val;
-            updateQR(val);
+            updateQR();
         }
 
         document.getElementById('rechargeAmount').addEventListener('input', function() {
-            updateQR(this.value || 0);
+            updateQR();
         });
 
         function copyUPI() {
-            const upiText = document.getElementById('upiId').innerText;
-            navigator.clipboard.writeText(upiText);
-            alert('UPI ID Copied: ' + upiText);
+            navigator.clipboard.writeText(currentUpi);
+            alert('UPI ID Copied: ' + currentUpi);
         }
 
         function submitRecharge() {
@@ -125,5 +145,4 @@
         }
     </script>
 </body>
-                    </html>
-                    
+</html>
