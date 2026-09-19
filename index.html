@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Platform Dashboard</title>
+    <title>TitanBuild - Complete Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -46,7 +46,7 @@
             }
         });
 
-        // Investment Function supporting multiple types
+        // Investment Function for all tiers
         window.investAsset = async function(price, dailyReturn, assetName) {
             const userPhone = localStorage.getItem('userPhone');
             if (!userPhone) {
@@ -76,7 +76,7 @@
                     lockedEarnings: increment(dailyReturn)
                 });
 
-                alert('Successfully purchased/leased ' + assetName + '!');
+                alert('Successfully leased ' + assetName + '!');
                 location.reload();
 
             } catch (e) {
@@ -85,7 +85,7 @@
             }
         };
 
-        // Tab Switching Logic for Categories (Standard, VIP, Debit Card, etc.)
+        // Tab Switching Logic for 4 Top Categories
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => {
@@ -95,8 +95,10 @@
             
             document.getElementById('content-' + tabId).classList.remove('hidden');
             const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.remove('border-gray-800', 'text-gray-400');
-            activeBtn.classList.add('border-yellow-400', 'text-yellow-400', 'bg-yellow-500/10');
+            if(activeBtn) {
+                activeBtn.classList.remove('border-gray-800', 'text-gray-400');
+                activeBtn.classList.add('border-yellow-400', 'text-yellow-400', 'bg-yellow-500/10');
+            }
         };
     </script>
 </head>
@@ -133,88 +135,204 @@
             </div>
         </div>
 
-        <!-- Category Tabs (Standard Fleet, Debit Card, VIP Options) -->
-        <div class="grid grid-cols-3 gap-2">
-            <button id="btn-standard" onclick="switchTab('standard')" class="tab-btn border border-yellow-400 bg-yellow-500/10 text-yellow-400 py-2.5 rounded-2xl text-[11px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
-                <i class="fa-solid fa-truck-fast text-sm"></i>
+        <!-- 4 Category Tabs Options -->
+        <div class="grid grid-cols-4 gap-1.5">
+            <button id="btn-fleet" onclick="switchTab('fleet')" class="tab-btn border border-yellow-400 bg-yellow-500/10 text-yellow-400 py-2 rounded-xl text-[10px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
+                <i class="fa-solid fa-truck-fast text-xs"></i>
                 <span>Fleet</span>
             </button>
-            <button id="btn-debit" onclick="switchTab('debit')" class="tab-btn border border-gray-800 text-gray-400 bg-gray-900 py-2.5 rounded-2xl text-[11px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
-                <i class="fa-solid fa-credit-card text-sm"></i>
-                <span>Debit Card</span>
+            <button id="btn-heavy" onclick="switchTab('heavy')" class="tab-btn border border-gray-800 text-gray-400 bg-gray-900 py-2 rounded-xl text-[10px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
+                <i class="fa-solid fa-tractor text-xs"></i>
+                <span>Heavy</span>
             </button>
-            <button id="btn-vip" onclick="switchTab('vip')" class="tab-btn border border-gray-800 text-gray-400 bg-gray-900 py-2.5 rounded-2xl text-[11px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
-                <i class="fa-solid fa-crown text-sm"></i>
+            <button id="btn-debit" onclick="switchTab('debit')" class="tab-btn border border-gray-800 text-gray-400 bg-gray-900 py-2 rounded-xl text-[10px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
+                <i class="fa-solid fa-credit-card text-xs"></i>
+                <span>Cards</span>
+            </button>
+            <button id="btn-vip" onclick="switchTab('vip')" class="tab-btn border border-gray-800 text-gray-400 bg-gray-900 py-2 rounded-xl text-[10px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
+                <i class="fa-solid fa-crown text-xs"></i>
                 <span>VIP Gold</span>
             </button>
         </div>
 
-        <!-- TAB 1: Standard Fleet Products -->
-        <div id="content-standard" class="tab-content space-y-3">
+        <!-- TAB 1: Fleet Products (₹500 & ₹800) -->
+        <div id="content-fleet" class="tab-content space-y-3">
             <div class="flex justify-between items-center px-1">
-                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-toolbox mr-1"></i> Fleet & Equipment Assets</h3>
-                <span class="text-[10px] text-gray-500 font-bold">Standard Tier</span>
+                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-toolbox mr-1"></i> Fleet Tier Assets</h3>
+                <span class="text-[10px] text-gray-500 font-bold">Standard Units</span>
             </div>
 
-            <!-- Asset Card 1 -->
+            <!-- Product 1: ₹500 -->
             <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
-                <div class="h-40 bg-gray-950 relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Heavy Crane" class="w-full h-full object-cover opacity-80">
-                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">
-                        Standard Unit
-                    </div>
+                <div class="h-36 bg-gray-950 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=600&q=80" alt="Loader" class="w-full h-full object-cover opacity-85">
+                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">Starter Unit</div>
                 </div>
                 <div class="p-4 space-y-3">
                     <div>
-                        <h4 class="text-sm font-black text-white">Titan Heavy Crane X1</h4>
-                        <p class="text-[11px] text-gray-400 mt-0.5">Daily industrial deployment unit.</p>
+                        <h4 class="text-sm font-black text-white">Titan Compact Loader X5</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Entry-level daily yield unit.</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800/60 text-xs">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800 text-xs">
                         <div>
                             <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
-                            <strong class="text-yellow-400 font-black">₹1,000</strong>
+                            <strong class="text-yellow-400 font-black">₹500</strong>
                         </div>
                         <div>
                             <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Return</span>
-                            <strong class="text-green-400 font-black">+₹250 / day</strong>
+                            <strong class="text-green-400 font-black">+₹120 / day</strong>
                         </div>
                     </div>
-                    <button onclick="investAsset(1000, 250, 'Titan Heavy Crane X1')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-3 rounded-2xl text-xs uppercase tracking-wide transition">
-                        LEASE ASSET
+                    <button onclick="investAsset(500, 120, 'Titan Compact Loader X5')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-2.5 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET (₹500)
                     </button>
                 </div>
             </div>
 
-            <!-- Asset Card 2 -->
+            <!-- Product 2: ₹800 -->
             <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
-                <div class="h-40 bg-gray-950 relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1541888946425-d0fbb18f0296?auto=format&fit=crop&w=600&q=80" alt="Excavator" class="w-full h-full object-cover opacity-80">
-                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">
-                        High Yield
+                <div class="h-36 bg-gray-950 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80" alt="Generator" class="w-full h-full object-cover opacity-85">
+                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">Standard Unit</div>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div>
+                        <h4 class="text-sm font-black text-white">Titan Power Generator 800</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Reliable backup power asset.</p>
                     </div>
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800 text-xs">
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
+                            <strong class="text-yellow-400 font-black">₹800</strong>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Return</span>
+                            <strong class="text-green-400 font-black">+₹200 / day</strong>
+                        </div>
+                    </div>
+                    <button onclick="investAsset(800, 200, 'Titan Power Generator 800')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-2.5 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET (₹800)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Heavy Machinery Products (₹1,200, ₹1,500, ₹3,000, ₹5,000) -->
+        <div id="content-heavy" class="tab-content hidden space-y-3">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-tractor mr-1"></i> Heavy Machinery Assets</h3>
+                <span class="text-[10px] text-gray-500 font-bold">High Yield Units</span>
+            </div>
+
+            <!-- Product 3: ₹1,200 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="h-36 bg-gray-950 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Crane" class="w-full h-full object-cover opacity-85">
+                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">Growth Unit</div>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div>
+                        <h4 class="text-sm font-black text-white">Titan Heavy Crane X1</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Industrial lifting unit.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800 text-xs">
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
+                            <strong class="text-yellow-400 font-black">₹1,200</strong>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Return</span>
+                            <strong class="text-green-400 font-black">+₹320 / day</strong>
+                        </div>
+                    </div>
+                    <button onclick="investAsset(1200, 320, 'Titan Heavy Crane X1')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-2.5 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET (₹1,200)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 4: ₹1,500 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="h-36 bg-gray-950 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1541888946425-d0fbb18f0296?auto=format&fit=crop&w=600&q=80" alt="Excavator" class="w-full h-full object-cover opacity-85">
+                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">Pro Unit</div>
                 </div>
                 <div class="p-4 space-y-3">
                     <div>
                         <h4 class="text-sm font-black text-white">Titan Pro Excavator 300</h4>
                         <p class="text-[11px] text-gray-400 mt-0.5">Commercial earthmoving asset.</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800/60 text-xs">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800 text-xs">
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
+                            <strong class="text-yellow-400 font-black">₹1,500</strong>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Return</span>
+                            <strong class="text-green-400 font-black">+₹400 / day</strong>
+                        </div>
+                    </div>
+                    <button onclick="investAsset(1500, 400, 'Titan Pro Excavator 300')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-2.5 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET (₹1,500)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 5: ₹3,000 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="h-36 bg-gray-950 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" alt="Bulldozer" class="w-full h-full object-cover opacity-85">
+                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">Elite Unit</div>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div>
+                        <h4 class="text-sm font-black text-white">Titan Master Bulldozer 500</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Heavy industrial site grader.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800 text-xs">
                         <div>
                             <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
                             <strong class="text-yellow-400 font-black">₹3,000</strong>
                         </div>
                         <div>
                             <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Return</span>
-                            <strong class="text-green-400 font-black">+₹800 / day</strong>
+                            <strong class="text-green-400 font-black">+₹850 / day</strong>
                         </div>
                     </div>
-                    <button onclick="investAsset(3000, 800, 'Titan Pro Excavator 300')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-3 rounded-2xl text-xs uppercase tracking-wide transition">
-                        LEASE ASSET
+                    <button onclick="investAsset(3000, 850, 'Titan Master Bulldozer 500')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-2.5 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET (₹3,000)
                     </button>
                 </div>
             </div>
-        </div>
-                <!-- TAB 2: Debit Card / Financial Assets -->
+
+            <!-- Product 6: ₹5,000 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="h-36 bg-gray-950 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1513828583688-c52646f4da62?auto=format&fit=crop&w=600&q=80" alt="Mega Plant" class="w-full h-full object-cover opacity-85">
+                    <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">Apex Unit</div>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div>
+                        <h4 class="text-sm font-black text-white">Titan Apex Construction Plant</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Full-scale commercial plant unit.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800 text-xs">
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
+                            <strong class="text-yellow-400 font-black">₹5,000</strong>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Return</span>
+                            <strong class="text-green-400 font-black">+₹1,500 / day</strong>
+                        </div>
+                    </div>
+                    <button onclick="investAsset(5000, 1500, 'Titan Apex Construction Plant')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-2.5 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET (₹5,000)
+                    </button>
+                </div>
+            </div>
+                                </div>
+                                        <!-- TAB 3: Debit Cards Products -->
         <div id="content-debit" class="tab-content hidden space-y-3">
             <div class="flex justify-between items-center px-1">
                 <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-credit-card mr-1"></i> Titan Financial Debit Cards</h3>
@@ -238,16 +356,16 @@
                     </div>
                     <div>
                         <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Cashback</span>
-                        <strong class="text-green-400 font-black">+₹600 / day</strong>
+                        <strong class="text-green-400 font-black">+₹650 / day</strong>
                     </div>
                 </div>
-                <button onclick="investAsset(2500, 600, 'Titan Metal Debit Card')" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg">
-                    ORDER DEBIT CARD
+                <button onclick="investAsset(2500, 650, 'Titan Metal Debit Card')" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg">
+                    ORDER DEBIT CARD (₹2,500)
                 </button>
             </div>
         </div>
 
-        <!-- TAB 3: VIP Gold Options -->
+        <!-- TAB 4: VIP Gold Options -->
         <div id="content-vip" class="tab-content hidden space-y-3">
             <div class="flex justify-between items-center px-1">
                 <h3 class="text-xs font-black text-amber-300 uppercase tracking-widest"><i class="fa-solid fa-crown mr-1"></i> VIP Golden Tier Assets</h3>
@@ -280,7 +398,7 @@
                 </div>
 
                 <button onclick="investAsset(10000, 3000, 'Titan Emperor VIP Syndicate')" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-black font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg">
-                    CLAIM VIP GOLDEN LEASE
+                    CLAIM VIP GOLDEN LEASE (₹10,000)
                 </button>
             </div>
         </div>
@@ -288,24 +406,25 @@
     </div>
 
     <!-- Bottom Navigation Bar (4 Options: Home, Recharge, Withdraw, Profile) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-2 flex justify-around items-center z-50 max-w-md mx-auto">
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-2 flex justify-around items-center z-50 max-w-md mx-auto shadow-2xl">
         <a href="index.html" class="text-yellow-400 flex flex-col items-center py-1 text-xs font-bold">
             <i class="fa-solid fa-house text-base"></i>
             <span class="text-[10px] mt-0.5">Home</span>
         </a>
-        <a href="recharge.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+        <a href="recharge.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs transition">
             <i class="fa-solid fa-wallet text-base"></i>
             <span class="text-[10px] mt-0.5">Recharge</span>
         </a>
-        <a href="withdraw.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+        <a href="withdraw.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs transition">
             <i class="fa-solid fa-arrow-right-arrow-left text-base"></i>
             <span class="text-[10px] mt-0.5">Withdraw</span>
         </a>
-        <a href="profile.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+        <a href="profile.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs transition">
             <i class="fa-solid fa-user text-base"></i>
             <span class="text-[10px] mt-0.5">Profile</span>
         </a>
     </div>
 
 </body>
-</html>
+    </html>
+                            
