@@ -6,14 +6,109 @@
     <title>Recharge Account - TitanBuild</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC89zMGIcD6Gi-KuNzP7xlRsqfj0gtXhDo",
+            authDomain: "titanbuild-1509e.firebaseapp.com",
+            projectId: "safargo-55e25",
+            storageBucket: "titanbuild-1509e.firebasestorage.app",
+            messagingSenderId: "740130026137",
+            appId: "1:740130026137:web:ca74a4ca8c72b537efbe08",
+            measurementId: "G-70T3E080HM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         const loginTime = localStorage.getItem('loginTime');
+        const userPhone = localStorage.getItem('userPhone');
+
         if (!isLoggedIn || !loginTime || (Date.now() - parseInt(loginTime)) > 30 * 60 * 1000) {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('loginTime');
+            localStorage.removeItem('userPhone');
             window.location.href = "login.html";
         }
+
+        let currentUpi = "ravalrajubhai331@naviaxis";
+        const upi1 = "ravalrajubhai331@naviaxis";
+        const upi2 = "fastpaytes@naviaxis";
+
+        window.updateQR = function() {
+            const amount = document.getElementById('rechargeAmount').value || 0;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${currentUpi}&pn=TitanBuild&am=${amount}&cu=INR`;
+            document.getElementById('qrImage').src = qrUrl;
+            document.getElementById('upiId').innerText = currentUpi;
+        }
+
+        window.switchChannel = function(chan) {
+            const btn1 = document.getElementById('btnChan1');
+            const btn2 = document.getElementById('btnChan2');
+            if (chan === 1) {
+                currentUpi = upi1;
+                btn1.className = "bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow border-2 border-yellow-400";
+                btn2.className = "bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center";
+            } else {
+                currentUpi = upi2;
+                btn2.className = "bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow border-2 border-yellow-400";
+                btn1.className = "bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center";
+            }
+            window.updateQR();
+        }
+
+        window.setAmount = function(val) {
+            document.getElementById('rechargeAmount').value = val;
+            window.updateQR();
+        }
+
+        window.copyUPI = function() {
+            navigator.clipboard.writeText(currentUpi);
+            alert('UPI ID Copied: ' + currentUpi);
+        }
+
+        window.submitRecharge = async function() {
+            const utr = document.getElementById('utrNumber').value.trim();
+            const amount = document.getElementById('rechargeAmount').value;
+
+            if (!utr || utr.length < 12) {
+                alert('Please enter a valid 12-Digit UTR/Ref Number!');
+                return;
+            }
+
+            try {
+                // Save recharge request to Firestore database under 'recharges' collection
+                const rechargeRef = doc(db, "recharges", utr);
+                await setDoc(rechargeRef, {
+                    phone: userPhone || 'Unknown',
+                    amount: Number(amount),
+                    utr: utr,
+                    upi: currentUpi,
+                    status: 'Pending',
+                    timestamp: new Date().toISOString()
+                });
+
+                alert(`Recharge request of ₹${amount} submitted successfully!\nUTR: ${utr}\nIt will be updated within 10 minutes.`);
+                window.location.href = "profile.html";
+            } catch (error) {
+                console.error("Error submitting recharge: ", error);
+                alert('Failed to submit recharge. Please check your internet connection.');
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const amountInput = document.getElementById('rechargeAmount');
+            if (amountInput) {
+                amountInput.addEventListener('input', () => {
+                    window.updateQR();
+                });
+            }
+        });
     </script>
 </head>
 <body class="bg-gray-950 text-white min-h-screen pb-10 font-sans">
@@ -28,12 +123,10 @@
     </div>
 
     <div class="max-w-md mx-auto p-4 space-y-5">
-
         <!-- Amount Selection -->
         <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-3">
             <label class="block text-xs font-bold text-gray-400 uppercase">Select or Enter Amount (₹)</label>
             <input type="number" id="rechargeAmount" value="1000" class="w-full bg-gray-950 border border-yellow-500/50 rounded-xl p-3 text-2xl font-black text-yellow-400 text-center focus:outline-none">
-            
             <div class="grid grid-cols-3 gap-2 pt-2">
                 <button onclick="setAmount(500)" class="bg-gray-800 hover:bg-yellow-500 hover:text-black text-yellow-400 font-bold py-2 rounded-lg text-sm border border-gray-700 transition">₹500</button>
                 <button onclick="setAmount(1000)" class="bg-gray-800 hover:bg-yellow-500 hover:text-black text-yellow-400 font-bold py-2 rounded-lg text-sm border border-gray-700 transition">₹1,000</button>
@@ -55,18 +148,17 @@
                 </button>
             </div>
         </div>
-                <!-- QR Code & UPI Box -->
+
+        <!-- QR Code & UPI Box -->
         <div class="bg-gray-900 p-5 rounded-2xl border border-yellow-500/30 shadow-xl text-center space-y-4">
             <span class="bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 text-xs font-bold px-3 py-1 rounded-full inline-block">
                 Scan QR Code or Copy UPI ID
             </span>
-
-            <!-- Dynamic Auto-Generated QR Code -->
+            
             <div class="bg-white p-3 rounded-2xl inline-block border-4 border-yellow-400 shadow-2xl">
                 <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=ravalrajubhai331@naviaxis&pn=TitanBuild&am=1000&cu=INR" alt="UPI QR Code" class="w-48 h-48 mx-auto rounded-lg">
             </div>
 
-            <!-- UPI ID Copy Section -->
             <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex items-center justify-between">
                 <div class="text-left">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">UPI ID</p>
@@ -86,63 +178,8 @@
                 Submit Recharge
             </button>
         </div>
-
     </div>
 
-    <script>
-        let currentUpi = "ravalrajubhai331@naviaxis";
-        const upi1 = "ravalrajubhai331@naviaxis";
-        const upi2 = "fastpaytes@naviaxis";
-
-        function updateQR() {
-            const amount = document.getElementById('rechargeAmount').value || 0;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${currentUpi}&pn=TitanBuild&am=${amount}&cu=INR`;
-            document.getElementById('qrImage').src = qrUrl;
-            document.getElementById('upiId').innerText = currentUpi;
-        }
-
-        function switchChannel(chan) {
-            const btn1 = document.getElementById('btnChan1');
-            const btn2 = document.getElementById('btnChan2');
-
-            if (chan === 1) {
-                currentUpi = upi1;
-                btn1.className = "bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow border-2 border-yellow-400";
-                btn2.className = "bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center";
-            } else {
-                currentUpi = upi2;
-                btn2.className = "bg-yellow-500 text-black font-extrabold p-3 rounded-xl text-xs text-center shadow border-2 border-yellow-400";
-                btn1.className = "bg-gray-950 text-gray-400 border border-gray-800 font-bold p-3 rounded-xl text-xs text-center";
-            }
-            updateQR();
-        }
-
-        function setAmount(val) {
-            document.getElementById('rechargeAmount').value = val;
-            updateQR();
-        }
-
-        document.getElementById('rechargeAmount').addEventListener('input', function() {
-            updateQR();
-        });
-
-        function copyUPI() {
-            navigator.clipboard.writeText(currentUpi);
-            alert('UPI ID Copied: ' + currentUpi);
-        }
-
-        function submitRecharge() {
-            const utr = document.getElementById('utrNumber').value.trim();
-            const amount = document.getElementById('rechargeAmount').value;
-
-            if (!utr || utr.length < 12) {
-                alert('Please enter a valid 12-Digit UTR/Ref Number!');
-                return;
-            }
-
-            alert(`Recharge request of ₹${amount} submitted successfully!\nUTR: ${utr}\nIt will be updated within 10 minutes.`);
-            window.location.href = "profile.html";
-        }
-    </script>
 </body>
 </html>
+
