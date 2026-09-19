@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TitanBuild - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
+            authDomain: "titanbuildlive.firebaseapp.com",
+            projectId: "titanbuildlive",
+            storageBucket: "titanbuildlive.firebasestorage.app",
+            messagingSenderId: "190147437260",
+            appId: "1:190147437260:web:2c8cc81a4180bb9ac09869",
+            measurementId: "G-TGB7V2M7XF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Simple Admin Login Check
+        window.checkAdminLogin = function() {
+            const pass = document.getElementById('adminPassInput').value;
+            if (pass === "admin123") { // Aap apna secure password yahan rakh sakte ho
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                loadAllUsers();
+            } else {
+                alert('Incorrect Admin Password!');
+            }
+        };
+
+        async function loadAllUsers() {
+            const userListContainer = document.getElementById('userListContainer');
+            userListContainer.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Loading users data...</p>';
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                let html = '';
+                
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const phone = docSnap.id;
+                    const balance = data.balance || 0;
+                    const locked = data.lockedEarnings || 0;
+
+                    html += `
+                        <div class="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase block">User Phone</span>
+                                    <h4 class="text-sm font-black text-yellow-400">${phone}</h4>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase block">Balance</span>
+                                    <h4 class="text-sm font-black text-green-400">₹${balance.toFixed(2)}</h4>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-2 border-t border-gray-900 text-xs">
+                                <span class="text-gray-400">Locked: <b>₹${locked.toFixed(2)}</b></span>
+                                <button onclick="addBonus('${phone}')" class="bg-yellow-500 hover:bg-yellow-600 text-black font-black px-3 py-1.5 rounded-xl text-[10px] uppercase transition">
+                                    + Add ₹500 Bonus
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                userListContainer.innerHTML = html || '<p class="text-xs text-gray-400 text-center py-4">No users found.</p>';
+            } catch (e) {
+                console.error("Error loading users:", e);
+                userListContainer.innerHTML = '<p class="text-xs text-red-400 text-center py-4">Failed to load users.</p>';
+            }
+        }
+
+        window.addBonus = async function(phone) {
+            try {
+                const userRef = doc(db, "users", phone);
+                await updateDoc(userRef, {
+                    balance: increment(500)
+                });
+                alert('Successfully added ₹500 to ' + phone);
+                loadAllUsers();
+            } catch (e) {
+                console.error("Error updating balance:", e);
+                alert('Failed to update balance.');
+            }
+        };
+    </script>
+</head>
+<body class="bg-gray-950 text-white min-h-screen p-4 font-sans">
+
+    <!-- Admin Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-900 border border-gray-800 p-6 rounded-3xl max-w-sm w-full space-y-4 text-center shadow-2xl">
+            <div class="w-14 h-14 bg-yellow-500/10 text-yellow-400 rounded-2xl flex items-center justify-center mx-auto text-2xl border border-yellow-500/30">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-black text-white">Admin Portal</h2>
+                <p class="text-xs text-gray-400 mt-1">Enter password to access dashboard</p>
+            </div>
+            <input type="password" id="adminPassInput" placeholder="Enter Admin Password" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-white text-center focus:border-yellow-500 outline-none">
+            <button onclick="checkAdminLogin()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-lg">
+                LOGIN TO ADMIN
+            </button>
+            <a href="index.html" class="block text-xs text-gray-500 hover:text-yellow-400 pt-2">← Back to Website</a>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Hidden until login) -->
+    <div id="adminDashboard" class="max-w-md mx-auto space-y-5" style="display: none;">
+        
+        <!-- Header -->
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-3xl flex justify-between items-center shadow-xl">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-gauge"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm font-black text-yellow-400 uppercase">Admin Dashboard</h1>
+                    <p class="text-[10px] text-gray-400">TitanBuild Management</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-gray-950 text-gray-400 hover:text-white px-3 py-1.5 rounded-xl border border-gray-800 text-xs font-bold">Exit</a>
+        </div>
+
+        <!-- Users Management Section -->
+        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-wide"><i class="fa-solid fa-users mr-1"></i> Registered Users & Wallets</h3>
+                <button onclick="loadAllUsers()" class="text-gray-400 hover:text-yellow-400 text-xs"><i class="fa-solid fa-rotate"></i></button>
+            </div>
+
+            <!-- Users List Container -->
+            <div id="userListContainer" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                <!-- Dynamic Users Loaded Here -->
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
