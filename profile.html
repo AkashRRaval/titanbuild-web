@@ -3,134 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - TitanBuild</title>
+    <title>Profile - TitanBuild</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC89zMGIcD6Gi-KuNzP7xlRsqfj0gtXhDo",
+            authDomain: "titanbuild-1509e.firebaseapp.com",
+            projectId: "safargo-55e25",
+            storageBucket: "titanbuild-1509e.firebasestorage.app",
+            messagingSenderId: "740130026137",
+            appId: "1:740130026137:web:ca74a4ca8c72b537efbe08",
+            measurementId: "G-70T3E080HM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         const loginTime = localStorage.getItem('loginTime');
+        const userPhone = localStorage.getItem('userPhone');
+
         if (!isLoggedIn || !loginTime || (Date.now() - parseInt(loginTime)) > 30 * 60 * 1000) {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('loginTime');
+            localStorage.removeItem('userPhone');
             window.location.href = "login.html";
         }
+
+        // Fetch live user data from Firestore
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (userPhone) {
+                document.getElementById('displayPhone').innerText = '+91 ' + userPhone;
+                try {
+                    const userRef = doc(db, "users", userPhone);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        document.getElementById('userBalance').innerText = '₹' + (data.balance || 0);
+                        document.getElementById('todayIncome').innerText = '₹' + (data.todayIncome || 0);
+                    }
+                } catch (e) {
+                    console.error("Error loading profile data:", e);
+                }
+            }
+        });
+
+        window.logout = function() {
+            localStorage.clear();
+            alert('Logged out successfully!');
+            window.location.href = 'login.html';
+        };
     </script>
 </head>
-<body class="bg-gray-950 text-white min-h-screen pb-24 font-sans">
+<body class="bg-gray-950 text-white min-h-screen pb-20 font-sans">
 
-    <!-- Profile Header Banner -->
-    <div class="bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 text-black p-5 rounded-b-3xl shadow-2xl relative">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-14 h-14 bg-black rounded-full flex items-center justify-center border-2 border-yellow-300 shadow">
-                    <i class="fa-solid fa-user-gear text-yellow-400 text-2xl"></i>
-                </div>
-                <div>
-                    <h2 class="text-lg font-black tracking-wide">+91 7359679116</h2>
-                    <span class="bg-black text-yellow-400 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">VIP 1 MEMBER</span>
-                </div>
-            </div>
-            <button onclick="logoutUser()" class="bg-black/20 hover:bg-black/40 text-black font-extrabold text-xs border border-black/30 px-3 py-1.5 rounded-lg transition">
-                <i class="fa-solid fa-right-from-bracket mr-1"></i>Logout
-            </button>
-        </div>
-
-        <!-- Wallet Summary -->
-        <div class="mt-5 bg-gray-900 text-white rounded-2xl p-4 border border-yellow-500/40 shadow-xl grid grid-cols-2 gap-4">
-            <div>
-                <p class="text-gray-400 text-xs font-semibold">Total Assets</p>
-                <h3 class="text-xl font-black text-yellow-400 mt-1">₹ 0.00</h3>
-            </div>
-            <div class="border-l border-gray-800 pl-4">
-                <p class="text-gray-400 text-xs font-semibold">Today Income</p>
-                <h3 class="text-xl font-black text-green-400 mt-1">₹ 0.00</h3>
-            </div>
-        </div>
+    <!-- Header -->
+    <div class="bg-gray-900 border-b border-gray-800 p-4 text-center sticky top-0 z-50">
+        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">My Profile</h1>
     </div>
 
-    <!-- Quick Actions (Recharge / Withdraw) -->
-    <div class="max-w-md mx-auto p-4 space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-            <a href="recharge.html" class="bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 text-sm transition">
-                <i class="fa-solid fa-wallet text-base"></i>
-                <span>Recharge</span>
-            </a>
-            <a href="withdraw.html" class="bg-gray-900 hover:bg-gray-800 text-gray-200 border border-gray-800 font-extrabold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 text-sm transition">
-                <i class="fa-solid fa-money-bill-transfer text-green-400 text-base"></i>
-                <span>Withdraw</span>
-            </a>
-        </div>
-                <!-- Menu List -->
-        <div class="bg-gray-900 rounded-2xl border border-gray-800 divide-y divide-gray-800 shadow-xl text-sm">
-            <a href="#" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-truck-monster text-yellow-400 text-base"></i>
-                    <span class="font-bold">My Machinery</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-            </a>
-
-            <a href="recharge.html" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-clock-rotate-left text-yellow-400 text-base"></i>
-                    <span class="font-bold">Recharge & Income Record</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-            </a>
-
-            <a href="team.html" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-users text-yellow-400 text-base"></i>
-                    <span class="font-bold">My Team / Referrals</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-            </a>
-
-            <a href="withdraw.html" class="p-4 flex justify-between items-center hover:bg-gray-800/50 transition">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-building-columns text-yellow-400 text-base"></i>
-                    <span class="font-bold">Bank Account Details</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-            </a>
-        </div>
-
-        <!-- Referral Link Share Box -->
-        <div class="bg-gray-900 p-4 rounded-2xl border border-yellow-500/20 shadow-xl space-y-2">
-            <label class="block text-xs font-bold text-gray-400 uppercase">Your Referral Code</label>
-            <div class="flex items-center space-x-2">
-                <input type="text" value="TITAN8899" readonly class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-yellow-400 font-mono font-bold text-sm focus:outline-none">
-                <button onclick="alert('Referral Code Copied!')" class="bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold px-4 py-2.5 rounded-lg text-xs transition">Copy</button>
+    <div class="max-w-md mx-auto p-4 space-y-5">
+        <!-- User Info Card -->
+        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl flex items-center space-x-4">
+            <div class="w-14 h-14 bg-yellow-500 text-black font-black text-2xl rounded-2xl flex items-center justify-center shadow-lg">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+                <p id="displayPhone" class="text-base font-black text-white">+91 9876543210</p>
+                <span class="bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block mt-1">
+                    Active Member
+                </span>
             </div>
         </div>
+
+        <!-- Balance & Income Box -->
+        <div class="grid grid-cols-2 gap-3">
+            <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-1">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Total Balance</p>
+                <h2 id="userBalance" class="text-xl font-black text-yellow-400">₹0</h2>
+            </div>
+            <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-1">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Today Income</p>
+                <h2 id="todayIncome" class="text-xl font-black text-green-400">₹0</h2>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="bg-gray-900 rounded-2xl border border-gray-800 shadow-xl overflow-hidden divide-y divide-gray-800">
+            <a href="recharge.html" class="flex items-center justify-between p-4 hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-wallet text-sm"></i>
+                    </div>
+                    <span class="text-sm font-bold text-white">Recharge Account</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+            </a>
+
+            <a href="withdraw.html" class="flex items-center justify-between p-4 hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+                    </div>
+                    <span class="text-sm font-bold text-white">Withdraw Money</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+            </a>
+        </div>
+
+        <!-- Logout Button -->
+        <button onclick="logout()" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-black py-3.5 rounded-2xl text-sm transition uppercase tracking-wide">
+            <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+        </button>
     </div>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-gray-950 border-t border-gray-800 flex justify-around p-3 text-center text-xs z-50">
-        <a href="index.html" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-house text-lg mb-0.5"></i>
-            <span>Home</span>
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-2 flex justify-around items-center z-50 max-w-md mx-auto">
+        <a href="index.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-house text-base"></i>
+            <span class="text-[10px] mt-0.5">Home</span>
         </a>
-        <a href="index.html#productsSection" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-truck-monster text-lg mb-0.5"></i>
-            <span>Products</span>
+        <a href="recharge.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-wallet text-base"></i>
+            <span class="text-[10px] mt-0.5">Recharge</span>
         </a>
-        <a href="team.html" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-users text-lg mb-0.5"></i>
-            <span>Team</span>
+        <a href="withdraw.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-arrow-right-arrow-left text-base"></i>
+            <span class="text-[10px] mt-0.5">Withdraw</span>
         </a>
-        <a href="profile.html" class="text-yellow-400 font-bold flex flex-col items-center">
-            <i class="fa-solid fa-user text-lg mb-0.5"></i>
-            <span>My</span>
+        <a href="profile.html" class="text-yellow-400 flex flex-col items-center py-1 text-xs font-bold">
+            <i class="fa-solid fa-user text-base"></i>
+            <span class="text-[10px] mt-0.5">Profile</span>
         </a>
-    </nav>
+    </div>
 
-    <script>
-        function logoutUser() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('loginTime');
-            window.location.href = "login.html";
-        }
-    </script>
 </body>
 </html>
