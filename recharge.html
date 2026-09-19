@@ -40,7 +40,6 @@
                     console.error("Error fetching balance:", e);
                 }
             } else {
-                // Agar login nahi hai toh login page par bhej do
                 window.location.href = 'login.html';
             }
         });
@@ -68,12 +67,10 @@
                 const userSnap = await getDoc(userRef);
 
                 if (userSnap.exists()) {
-                    // Database me balance update karo
                     await updateDoc(userRef, {
                         balance: increment(amount)
                     });
                 } else {
-                    // Agar document nahi hai toh naya banao
                     await setDoc(userRef, {
                         phone: userPhone,
                         balance: amount,
@@ -116,20 +113,18 @@
             </div>
         </div>
 
-        <!-- Payment QR / UPI Box -->
+        <!-- Payment QR / UPI Box with Real QR -->
         <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl space-y-4 text-center">
             <h3 class="text-sm font-black text-yellow-400 uppercase"><i class="fa-solid fa-qrcode mr-1"></i> Scan & Pay via UPI</h3>
-            <p class="text-xs text-gray-400">Scan this QR using any UPI app (GPay, PhonePe, Paytm)</p>
+            <p class="text-xs text-gray-400">Scan this QR using any UPI app (GPay, PhonePe, Paytm, Navi)</p>
             
-            <div class="bg-white p-4 rounded-2xl inline-block mx-auto shadow-inner">
-                <!-- Aapka UPI QR Placeholder -->
-                <div class="w-40 h-40 bg-gray-200 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-400 text-black text-xs font-bold text-center p-2">
-                    [ Company UPI QR Code ]
-                </div>
+            <div class="bg-white p-3 rounded-2xl inline-block mx-auto shadow-inner border border-yellow-500/50">
+                <!-- User's Real QR Image Display -->
+                <img src="1000083341.png" alt="UPI QR Code" class="w-48 h-48 object-contain rounded-xl mx-auto">
             </div>
 
             <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs text-yellow-400 font-bold">
-                UPI ID: <span class="text-white select-all">titanbuild@okhdfcbank</span>
+                UPI ID: <span class="text-white select-all">ravalrajubhai331@naviaxis</span>[span_1](start_span)[span_1](end_span)
             </div>
         </div>
 
@@ -162,7 +157,7 @@
             <i class="fa-solid fa-wallet text-base"></i>
             <span class="text-[10px] mt-0.5">Recharge</span>
         </a>
-        <a href="withdraw.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+        <a href="withdraw.html" class="text-gray-400 hover:text-gray-400 flex flex-col items-center py-1 text-xs">
             <i class="fa-solid fa-arrow-right-arrow-left text-base"></i>
             <span class="text-[10px] mt-0.5">Withdraw</span>
         </a>
