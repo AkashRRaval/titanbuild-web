@@ -3,182 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Industrial Fleet Leasing</title>
+    <title>TitanBuild - Heavy Equipment Fleet Lease</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        const loginTime = localStorage.getItem('loginTime');
-        if (!isLoggedIn || !loginTime || (Date.now() - parseInt(loginTime)) > 30 * 60 * 1000) {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('loginTime');
-            window.location.href = "login.html";
-        }
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
+            authDomain: "titanbuildlive.firebaseapp.com",
+            projectId: "titanbuildlive",
+            storageBucket: "titanbuildlive.firebasestorage.app",
+            messagingSenderId: "190147437260",
+            appId: "1:190147437260:web:2c8cc81a4180bb9ac09869",
+            measurementId: "G-TGB7V2M7XF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const userPhone = localStorage.getItem('userPhone');
+            if (userPhone) {
+                try {
+                    const userRef = doc(db, "users", userPhone);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        document.getElementById('walletBalance').innerText = '₹' + (data.balance || 0).toFixed(2);
+                    }
+                } catch (e) {
+                    console.error("Error fetching balance:", e);
+                }
+            }
+        });
+
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.product-tab').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabName + 'Section').classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-yellow-500', 'text-black', 'font-black');
+                btn.classList.add('text-gray-300');
+            });
+            event.currentTarget.classList.add('bg-yellow-500', 'text-black', 'font-black');
+            event.currentTarget.classList.remove('text-gray-300');
+        };
+
+        window.investProduct = function(name, amount) {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                alert('Please login first to invest!');
+                window.location.href = 'login.html';
+                return;
+            }
+            alert(`Selected: ${name}\nAmount: ₹${amount}\nPlease ensure you have sufficient balance or proceed via recharge.`);
+            window.location.href = 'recharge.html';
+        };
     </script>
 </head>
 <body class="bg-gray-950 text-white min-h-screen pb-24 font-sans">
 
-    <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center shadow-lg">
-        <div class="flex items-center space-x-2">
-            <i class="fa-solid fa-truck-pickup text-yellow-400 text-xl"></i>
-            <span class="font-black text-lg text-yellow-400 tracking-wider">TITANBUILD</span>
-        </div>
-        <button onclick="logoutUser()" class="text-xs bg-red-500/20 text-red-400 border border-red-500/50 px-3 py-1.5 rounded-lg font-bold">Logout</button>
+    <!-- Top Header -->
+    <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center max-w-md mx-auto">
+        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">TITANBUILD</h1>
+        <a href="profile.html" class="w-9 h-9 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center border border-yellow-500/30">
+            <i class="fa-solid fa-user text-sm"></i>
+        </a>
     </div>
 
-    <div class="max-w-md mx-auto p-4 space-y-6">
-
-        <div class="bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 rounded-2xl p-5 text-black shadow-xl">
-            <div class="flex justify-between items-start mb-2">
-                <span class="bg-black text-yellow-400 text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Official Asset Platform</span>
-                <i class="fa-solid fa-shield-halved text-black text-xl"></i>
-            </div>
-            <h2 class="text-xl font-black uppercase">HEAVY EQUIPMENT FLEET LEASING</h2>
-            <p class="text-xs font-semibold mt-1">Daily Yield Rentals & Premium Mining Assets</p>
+    <div class="max-w-md mx-auto p-4 space-y-5">
+        
+        <!-- Banner -->
+        <div class="bg-gradient-to-r from-amber-600 to-yellow-500 p-4 rounded-3xl text-black shadow-xl space-y-1">
+            <h2 class="text-base font-black uppercase tracking-wide">HEAVY EQUIPMENT FLEET LEASE</h2>
+            <p class="text-xs font-bold opacity-90">Daily Yield Rentals & Premium Mining Assets</p>
         </div>
 
-        <div class="bg-gray-900 border border-yellow-500/30 rounded-2xl p-5 flex justify-between items-center">
+        <!-- Wallet Card -->
+        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl flex justify-between items-center">
             <div>
-                <p class="text-gray-400 text-xs font-bold uppercase">Total Wallet Balance</p>
-                <h3 class="text-2xl font-black text-yellow-400 mt-1">₹0.00</h3>
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Total Wallet Balance</p>
+                <h2 id="walletBalance" class="text-2xl font-black text-yellow-400 mt-0.5">₹0.00</h2>
             </div>
-            <a href="recharge.html" class="bg-yellow-500 text-black font-extrabold px-5 py-2.5 rounded-xl text-xs flex items-center space-x-1.5">
-                <i class="fa-solid fa-wallet"></i>
-                <span>RECHARGE</span>
+            <a href="recharge.html" class="bg-yellow-500 hover:bg-yellow-600 text-black font-black px-4 py-2.5 rounded-xl text-xs shadow-lg uppercase tracking-wide transition">
+                <i class="fa-solid fa-wallet mr-1"></i> Recharge
             </a>
         </div>
 
-        <div id="productsSection" class="flex bg-gray-900 p-1.5 rounded-xl border border-gray-800 space-x-1">
-            <button id="tabStandard" onclick="switchCategory('standard')" class="flex-1 bg-yellow-500 text-black py-2 rounded-lg font-extrabold text-xs">STANDARD</button>
-            <button id="tabBeneficial" onclick="switchCategory('beneficial')" class="flex-1 bg-gray-900 text-gray-400 py-2 rounded-lg font-bold text-xs">BENEFICIAL</button>
-            <button id="tabVip" onclick="switchCategory('vip')" class="flex-1 bg-gray-900 text-yellow-400 py-2 rounded-lg font-bold text-xs border border-yellow-500/30">VIP ASSETS</button>
+        <!-- 4 Tabs Navigation -->
+        <div class="grid grid-cols-4 gap-1 bg-gray-900 p-1.5 rounded-2xl border border-gray-800 text-center">
+            <button onclick="switchTab('standard')" class="tab-btn bg-yellow-500 text-black font-black py-2 rounded-xl text-[11px] transition">Standard</button>
+            <button onclick="switchTab('beneficial')" class="tab-btn text-gray-300 py-2 rounded-xl text-[11px] transition">Beneficial</button>
+            <button onclick="switchTab('vip')" class="tab-btn text-gray-300 py-2 rounded-xl text-[11px] transition">VIP Assets</button>
+            <button onclick="switchTab('debit')" class="tab-btn text-gray-300 py-2 rounded-xl text-[11px] transition">Debit Card</button>
         </div>
 
-        <div id="standardList" class="space-y-5">
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
-                <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
+        <!-- PRODUCTS SECTIONS -->
+
+        <!-- 1. STANDARD SECTION (500, 800, 1000, 1200) -->
+        <div id="standardSection" class="product-tab space-y-4">
+            <!-- Product 500 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="bg-yellow-500 text-black px-4 py-2 flex justify-between items-center font-black text-xs">
                     <span>MINI EXCAVATOR CAT 302</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">VIP 0</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-[10px]">VIP 0</span>
                 </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹500</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹25</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">50 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹1,250</span></div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-yellow-400 text-sm">₹500</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm">₹25</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-yellow-400">₹1,250</strong></div>
                     </div>
-                    <button onclick="alert('Order Placed Successfully!')" class="w-full bg-yellow-500 text-black font-extrabold py-2.5 rounded-lg text-sm">Invest Standard</button>
+                    <button onclick="investProduct('MINI EXCAVATOR CAT 302', 500)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-md">
+                        Invest Standard
+                    </button>
                 </div>
             </div>
 
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-gray-700">
-                <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
+            <!-- Product 800 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="bg-yellow-500 text-black px-4 py-2 flex justify-between items-center font-black text-xs">
+                    <span>COMPACT WHEEL LOADER</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-[10px]">VIP 0</span>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-yellow-400 text-sm">₹800</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm">₹42</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-yellow-400">₹2,100</strong></div>
+                    </div>
+                    <button onclick="investProduct('COMPACT WHEEL LOADER', 800)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-md">
+                        Invest Standard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 1000 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="bg-yellow-500 text-black px-4 py-2 flex justify-between items-center font-black text-xs">
                     <span>BACKHOE LOADER JCB 3CX</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">VIP 0</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-[10px]">VIP 0</span>
                 </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹1,000</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹52</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">50 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹2,600</span></div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-yellow-400 text-sm">₹1,000</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm">₹52</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-yellow-400">₹2,600</strong></div>
                     </div>
-                    <button onclick="alert('Order Placed Successfully!')" class="w-full bg-yellow-500 text-black font-extrabold py-2.5 rounded-lg text-sm">Invest Standard</button>
+                    <button onclick="investProduct('BACKHOE LOADER JCB 3CX', 1000)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-md">
+                        Invest Standard
+                    </button>
                 </div>
             </div>
-        </div>
-                <div id="beneficialList" class="hidden space-y-5">
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-xl border border-green-500/50">
-                <div class="bg-green-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>SKID STEER LOADER BOBCAT</span>
-                    <span class="text-xs bg-black text-green-400 px-2 py-0.5 rounded">EXPRESS 1</span>
+
+            <!-- Product 1200 -->
+            <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
+                <div class="bg-yellow-500 text-black px-4 py-2 flex justify-between items-center font-black text-xs">
+                    <span>HYDRAULIC CRANE 20T</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-[10px]">VIP 1</span>
                 </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-lg mb-3 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-bold text-base">₹1,500</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-bold text-base">₹300</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">10 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-bold">₹3,000</span></div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-yellow-400 text-sm">₹1,200</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm">₹65</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-yellow-400">₹3,250</strong></div>
                     </div>
-                    <button onclick="alert('Order Placed Successfully!')" class="w-full bg-green-500 text-black font-extrabold py-2.5 rounded-lg text-sm">Invest Beneficial</button>
+                    <button onclick="investProduct('HYDRAULIC CRANE 20T', 1200)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-md">
+                        Invest Standard
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div id="vipList" class="hidden space-y-5">
-            <div class="bg-gray-800 rounded-2xl overflow-hidden border-2 border-yellow-500">
-                <div class="bg-yellow-500 text-black px-4 py-2 font-black text-sm flex justify-between items-center">
-                    <span>HEAVY TRACK BULLDOZER</span>
-                    <span class="text-xs bg-black text-yellow-400 px-2 py-0.5 rounded">VIP 1</span>
+        <!-- 2. BENEFICIAL SECTION (1500, 2000, 2500) -->
+        <div id="beneficialSection" class="product-tab hidden space-y-4">
+            <!-- Product 1500 -->
+            <div class="bg-gray-900 rounded-3xl border border-emerald-500/40 overflow-hidden shadow-xl">
+                <div class="bg-emerald-600 text-white px-4 py-2 flex justify-between items-center font-black text-xs">
+                    <span>SKID STEER LOADER BOBCAT</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-[10px]">EXPRESS 1</span>
                 </div>
-                <div class="p-4">
-                    <div class="grid grid-cols-2 gap-2 bg-gray-900 p-3 rounded-xl mb-3 text-xs">
-                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><span class="text-yellow-400 font-black text-base">₹6,000</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><span class="text-green-400 font-black text-base">₹900</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><span class="text-white font-bold">50 Days</span></div>
-                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><span class="text-green-400 font-black">₹45,000</span></div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-emerald-400 text-sm">₹1,500</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm">₹300</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>10 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-emerald-400">₹3,000</strong></div>
                     </div>
-                    <button onclick="alert('VIP Investment Placed!')" class="w-full bg-yellow-500 text-black font-black py-3 rounded-xl text-sm">INVEST VIP ASSET</button>
+                    <button onclick="investProduct('SKID STEER LOADER BOBCAT', 1500)" class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-md">
+                        Invest Beneficial
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 2000 -->
+            <div class="bg-gray-900 rounded-3xl border border-emerald-500/40 overflow-hidden shadow-xl">
+                <div class="bg-emerald-600 text-white px-4 py-2 flex justify-between items-center font-black text-xs">
+                    <span>ROAD ROLLER DYNAPAC</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-[10px]">EXPRESS 2</span>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-emerald-400 text-sm">₹2,000</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm">₹120</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>30 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-emerald-400">₹3,600</strong></div>
+                    </div>
+                    <button onclick="investProduct('ROAD ROLLER DYNAPAC', 2000)" class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-md">
+                        Invest Beneficial
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 2500 -->
+            <div class="bg-gray-900 rounded-3xl border border-emerald-500/40 overflow-hidden shadow-xl">
+                <div class="bg-emerald-600 text-white px-4 py-2 flex justify-between items-center font-black text-xs">
+                    <span>TELEHANDLER 4X4</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-[10px]">EXPRESS 3</span>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-emerald-400 text-sm">₹2,500</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm">₹155</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>30 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-emerald-400">₹4,650</strong></div>
+                    </div>
+                    <button onclick="investProduct('TELEHANDLER 4X4', 2500)" class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wide transition shadow-md">
+                        Invest Beneficial
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. VIP ASSETS SECTION (3000, 4000, 5000 - Golden Font Style) -->
+        <div id="vipSection" class="product-tab hidden space-y-4">
+            <!-- Product 3000 -->
+            <div class="bg-gray-900 rounded-3xl border border-amber-500/60 overflow-hidden shadow-2xl">
+                <div class="bg-gradient-to-r from-yellow-600 to-amber-500 text-black px-4 py-2.5 flex justify-between items-center font-black text-xs tracking-wider">
+                    <span><i class="fa-solid fa-crown mr-1"></i> HEAVY TRACK BULLDOZER</span>
+                    <span class="bg-black/30 text-amber-200 px-2 py-0.5 rounded text-[10px]">VIP 1</span>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-amber-500/30 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-amber-400 text-sm font-black">₹3,000</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm font-black">₹450</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-amber-400 font-black">₹22,500</strong></div>
+                    </div>
+                    <button onclick="investProduct('HEAVY TRACK BULLDOZER', 3000)" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-xl text-xs uppercase tracking-wide transition shadow-lg">
+                        INVEST VIP ASSET
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 4000 -->
+            <div class="bg-gray-900 rounded-3xl border border-amber-500/60 overflow-hidden shadow-2xl">
+                <div class="bg-gradient-to-r from-yellow-600 to-amber-500 text-black px-4 py-2.5 flex justify-between items-center font-black text-xs tracking-wider">
+                    <span><i class="fa-solid fa-crown mr-1"></i> LARGE CRAWLER EXCAVATOR</span>
+                    <span class="bg-black/30 text-amber-200 px-2 py-0.5 rounded text-[10px]">VIP 2</span>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-amber-500/30 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-amber-400 text-sm font-black">₹4,000</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm font-black">₹620</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-amber-400 font-black">₹31,000</strong></div>
+                    </div>
+                    <button onclick="investProduct('LARGE CRAWLER EXCAVATOR', 4000)" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-xl text-xs uppercase tracking-wide transition shadow-lg">
+                        INVEST VIP ASSET
+                    </button>
+                </div>
+            </div>
+
+                        <!-- Product 4000 -->
+            <div class="bg-gray-900 rounded-3xl border border-amber-500/60 overflow-hidden shadow-2xl">
+                <div class="bg-gradient-to-r from-yellow-600 to-amber-500 text-black px-4 py-2.5 flex justify-between items-center font-black text-xs tracking-wider">
+                    <span><i class="fa-solid fa-crown mr-1"></i> LARGE CRAWLER EXCAVATOR</span>
+                    <span class="bg-black/30 text-amber-200 px-2 py-0.5 rounded text-[10px]">VIP 2</span>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-amber-500/30 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-amber-400 text-sm font-black">₹4,000</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm font-black">₹620</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-amber-400 font-black">₹31,000</strong></div>
+                    </div>
+                    <button onclick="investProduct('LARGE CRAWLER EXCAVATOR', 4000)" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-xl text-xs uppercase tracking-wide transition shadow-lg">
+                        INVEST VIP ASSET
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 5000 -->
+            <div class="bg-gray-900 rounded-3xl border border-amber-500/60 overflow-hidden shadow-2xl">
+                <div class="bg-gradient-to-r from-yellow-600 to-amber-500 text-black px-4 py-2.5 flex justify-between items-center font-black text-xs tracking-wider">
+                    <span><i class="fa-solid fa-crown mr-1"></i> MINING DUMP TRUCK 100T</span>
+                    <span class="bg-black/30 text-amber-200 px-2 py-0.5 rounded text-[10px]">VIP 3</span>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-2 bg-gray-950 p-3 rounded-2xl border border-amber-500/30 text-xs">
+                        <div><span class="text-gray-400 block text-[10px]">Invest Amount</span><strong class="text-amber-400 text-sm font-black">₹5,000</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Daily Return</span><strong class="text-green-400 text-sm font-black">₹800</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Lease Cycle</span><strong>50 Days</strong></div>
+                        <div><span class="text-gray-400 block text-[10px]">Total Revenue</span><strong class="text-amber-400 font-black">₹40,000</strong></div>
+                    </div>
+                    <button onclick="investProduct('MINING DUMP TRUCK 100T', 5000)" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-xl text-xs uppercase tracking-wide transition shadow-lg">
+                        INVEST VIP ASSET
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. DEBIT CARD SECTION (Day-wise withdrawal limit & product benefits linkage) -->
+        <div id="debitSection" class="product-tab hidden space-y-4">
+            <div class="bg-gradient-to-br from-gray-900 via-gray-900 to-purple-950 rounded-3xl border border-purple-500/40 p-5 shadow-2xl space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-sm font-black text-purple-400 uppercase"><i class="fa-solid fa-credit-card mr-1.5"></i> VIP Debit Card & Limits</h3>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Unlock tiered daily withdrawal limits based on your active equipment lease.</p>
+                    </div>
+                    <span class="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-purple-500/30">Active</span>
+                </div>
+
+                <div class="space-y-2.5 bg-black/40 p-3.5 rounded-2xl border border-gray-800 text-xs">
+                    <div class="flex justify-between py-1 border-b border-gray-800">
+                        <span class="text-gray-400">Standard Tier (₹500 - ₹1200)</span>
+                        <span class="text-yellow-400 font-bold">Max Limit: ₹500 / Day</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-gray-800">
+                        <span class="text-gray-400">Beneficial Tier (₹1500 - ₹2500)</span>
+                        <span class="text-green-400 font-bold">Max Limit: ₹2,000 / Day</span>
+                    </div>
+                    <div class="flex justify-between py-1">
+                        <span class="text-gray-400">VIP Assets Tier (₹3000 - ₹5000+)</span>
+                        <span class="text-purple-400 font-bold">Unlimited / Instant</span>
+                    </div>
+                </div>
+
+                <div class="bg-purple-900/20 border border-purple-500/30 p-3 rounded-2xl text-[11px] text-purple-200 leading-relaxed">
+                    <i class="fa-solid fa-circle-info mr-1 text-purple-400"></i> Note: Users must purchase at least one Standard or VIP asset to activate full debit card withdrawal benefits and unlock daily profit claims.
                 </div>
             </div>
         </div>
 
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-gray-950 border-t border-gray-800 flex justify-around p-3 text-center text-xs z-50">
-        <a href="index.html" class="text-yellow-400 font-bold flex flex-col items-center">
-            <i class="fa-solid fa-house text-lg mb-0.5"></i>
-            <span>Home</span>
+    <!-- Bottom Navigation Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-2 flex justify-around items-center z-50 max-w-md mx-auto">
+        <a href="index.html" class="text-yellow-400 flex flex-col items-center py-1 text-xs font-bold">
+            <i class="fa-solid fa-house text-base"></i>
+            <span class="text-[10px] mt-0.5">Home</span>
         </a>
-        <a href="#productsSection" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-truck-monster text-lg mb-0.5"></i>
-            <span>Products</span>
+        <a href="recharge.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-wallet text-base"></i>
+            <span class="text-[10px] mt-0.5">Recharge</span>
         </a>
-        <a href="team.html" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-users text-lg mb-0.5"></i>
-            <span>Team</span>
+        <a href="withdraw.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-arrow-right-arrow-left text-base"></i>
+            <span class="text-[10px] mt-0.5">Withdraw</span>
         </a>
-        <a href="profile.html" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-user text-lg mb-0.5"></i>
-            <span>My</span>
+        <a href="profile.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-user text-base"></i>
+            <span class="text-[10px] mt-0.5">Profile</span>
         </a>
-    </nav>
+    </div>
 
-    <script>
-        function switchCategory(category) {
-            const standardList = document.getElementById('standardList');
-            const beneficialList = document.getElementById('beneficialList');
-            const vipList = document.getElementById('vipList');
-
-            const tabStandard = document.getElementById('tabStandard');
-            const tabBeneficial = document.getElementById('tabBeneficial');
-            const tabVip = document.getElementById('tabVip');
-
-            standardList.classList.add('hidden');
-            beneficialList.classList.add('hidden');
-            vipList.classList.add('hidden');
-
-            tabStandard.className = "flex-1 bg-gray-900 text-gray-400 py-2 rounded-lg text-center";
-            tabBeneficial.className = "flex-1 bg-gray-900 text-gray-400 py-2 rounded-lg text-center";
-            tabVip.className = "flex-1 bg-gray-900 text-yellow-400 py-2 rounded-lg text-center border border-yellow-500/30";
-
-            if (category === 'standard') {
-                standardList.classList.remove('hidden');
-                tabStandard.className = "flex-1 bg-yellow-500 text-black py-2 rounded-lg text-center font-extrabold";
-            } else if (category === 'beneficial') {
-                beneficialList.classList.remove('hidden');
-                tabBeneficial.className = "flex-1 bg-yellow-500 text-black py-2 rounded-lg text-center font-extrabold";
-            } else if (category === 'vip') {
-                vipList.classList.remove('hidden');
-                tabVip.className = "flex-1 bg-yellow-500 text-black py-2 rounded-lg text-center font-extrabold";
-            }
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('loginTime');
-            window.location.href = "login.html";
-        }
-    </script>
 </body>
 </html>
