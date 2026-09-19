@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - TitanBuild</title>
+    <title>TitanBuild - User Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -25,99 +25,106 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        const loginTime = localStorage.getItem('loginTime');
-        const userPhone = localStorage.getItem('userPhone');
-
-        if (!isLoggedIn || !loginTime || (Date.now() - parseInt(loginTime)) > 30 * 60 * 1000) {
-            localStorage.clear();
-            window.location.href = "login.html";
-        }
-
         window.addEventListener('DOMContentLoaded', async () => {
+            const userPhone = localStorage.getItem('userPhone');
             if (userPhone) {
-                document.getElementById('displayPhone').innerText = '+91 ' + userPhone;
+                document.getElementById('displayPhone').innerText = userPhone;
                 try {
                     const userRef = doc(db, "users", userPhone);
                     const userSnap = await getDoc(userRef);
                     if (userSnap.exists()) {
                         const data = userSnap.data();
-                        document.getElementById('userBalance').innerText = '₹' + (data.balance || 0);
-                        document.getElementById('todayIncome').innerText = '₹' + (data.todayIncome || 0);
+                        document.getElementById('profileBalance').innerText = '₹' + (data.balance || 0).toFixed(2);
+                        document.getElementById('profileLocked').innerText = '₹' + (data.lockedEarnings || 0).toFixed(2);
                     }
                 } catch (e) {
-                    console.error("Error loading profile data:", e);
+                    console.error("Error fetching profile data:", e);
                 }
+            } else {
+                document.getElementById('displayPhone').innerText = 'Not Logged In';
             }
         });
 
-        window.logout = function() {
-            localStorage.clear();
+        window.logoutUser = function() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userPhone');
+            localStorage.removeItem('hasDebitCard');
             alert('Logged out successfully!');
             window.location.href = 'login.html';
         };
     </script>
 </head>
-<body class="bg-gray-950 text-white min-h-screen pb-20 font-sans">
+<body class="bg-gray-950 text-white min-h-screen pb-24 font-sans">
 
-    <!-- Header -->
-    <div class="bg-gray-900 border-b border-gray-800 p-4 text-center sticky top-0 z-50">
-        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">My Profile</h1>
+    <!-- Top Header -->
+    <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center max-w-md mx-auto">
+        <a href="index.html" class="text-yellow-400 font-bold"><i class="fa-solid fa-arrow-left"></i> Home</a>
+        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">MY PROFILE</h1>
+        <div class="w-6"></div>
     </div>
 
     <div class="max-w-md mx-auto p-4 space-y-5">
+        
         <!-- User Info Card -->
-        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl flex items-center space-x-4">
-            <div class="w-14 h-14 bg-yellow-500 text-black font-black text-2xl rounded-2xl flex items-center justify-center shadow-lg">
-                <i class="fa-solid fa-user"></i>
+        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl space-y-4 text-center">
+            <div class="w-16 h-16 bg-yellow-500/10 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-2xl border border-yellow-500/30 shadow-inner">
+                <i class="fa-solid fa-user-tie"></i>
             </div>
             <div>
-                <p id="displayPhone" class="text-base font-black text-white">+91 9876543210</p>
-                <span class="bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block mt-1">
-                    Active Member
-                </span>
+                <h2 id="displayPhone" class="text-lg font-black text-white">Loading...</h2>
+                <p class="text-xs text-yellow-400 font-bold mt-0.5">TitanBuild Fleet Partner</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800">
+                <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 text-left">
+                    <span class="text-[10px] text-gray-400 block font-bold uppercase">Wallet Balance</span>
+                    <strong id="profileBalance" class="text-yellow-400 text-base font-black">₹0.00</strong>
+                </div>
+                <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 text-left">
+                    <span class="text-[10px] text-gray-400 block font-bold uppercase">Locked Lease</span>
+                    <strong id="profileLocked" class="text-amber-400 text-base font-black">₹0.00</strong>
+                </div>
             </div>
         </div>
 
-        <!-- Balance & Income Box -->
-        <div class="grid grid-cols-2 gap-3">
-            <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-1">
-                <p class="text-[10px] text-gray-400 font-bold uppercase">Total Balance</p>
-                <h2 id="userBalance" class="text-xl font-black text-yellow-400">₹0</h2>
-            </div>
-            <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-1">
-                <p class="text-[10px] text-gray-400 font-bold uppercase">Today Income</p>
-                <h2 id="todayIncome" class="text-xl font-black text-green-400">₹0</h2>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="bg-gray-900 rounded-2xl border border-gray-800 shadow-xl overflow-hidden divide-y divide-gray-800">
-            <a href="recharge.html" class="flex items-center justify-between p-4 hover:bg-gray-800/50 transition">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-wallet text-sm"></i>
+        <!-- Quick Actions / Menu Links -->
+        <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl divide-y divide-gray-800">
+            <a href="recharge.html" class="p-4 flex items-center justify-between hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3 text-xs font-bold">
+                    <div class="w-8 h-8 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-wallet"></i>
                     </div>
-                    <span class="text-sm font-bold text-white">Recharge Account</span>
+                    <span>Recharge Wallet</span>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+                <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
             </a>
 
-            <a href="withdraw.html" class="flex items-center justify-between p-4 hover:bg-gray-800/50 transition">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <a href="withdraw.html" class="p-4 flex items-center justify-between hover:bg-gray-800/50 transition">
+                <div class="flex items-center space-x-3 text-xs font-bold">
+                    <div class="w-8 h-8 bg-green-500/10 text-green-400 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
                     </div>
-                    <span class="text-sm font-bold text-white">Withdraw Money</span>
+                    <span>Withdraw Funds & QR</span>
                 </div>
-                <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+                <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
             </a>
+
+            <div class="p-4 flex items-center justify-between hover:bg-gray-800/50 transition cursor-pointer" onclick="alert('VIP Debit Card is required for activating higher daily withdrawal limits.')">
+                <div class="flex items-center space-x-3 text-xs font-bold">
+                    <div class="w-8 h-8 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+                    <span>My VIP Debit Cards</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
+            </div>
         </div>
 
         <!-- Logout Button -->
-        <button onclick="logout()" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-black py-3.5 rounded-2xl text-sm transition uppercase tracking-wide">
-            <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+        <button onclick="logoutUser()" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-black py-3.5 rounded-2xl text-xs uppercase tracking-wide transition shadow-md">
+            <i class="fa-solid fa-right-from-bracket mr-1"></i> LOGOUT ACCOUNT
         </button>
+
     </div>
 
     <!-- Bottom Navigation Bar -->
@@ -142,3 +149,4 @@
 
 </body>
 </html>
+
