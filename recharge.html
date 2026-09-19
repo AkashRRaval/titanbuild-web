@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recharge - TitanBuild</title>
+    <title>TitanBuild - Recharge Wallet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
@@ -25,65 +25,131 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        const userPhone = localStorage.getItem('userPhone');
+        window.addEventListener('DOMContentLoaded', async () => {
+            const userPhone = localStorage.getItem('userPhone');
+            if (userPhone) {
+                document.getElementById('displayUserPhone').innerText = userPhone;
+                try {
+                    const userRef = doc(db, "users", userPhone);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        document.getElementById('currentWalletBalance').innerText = '₹' + (data.balance || 0).toFixed(2);
+                    }
+                } catch (e) {
+                    console.error("Error fetching balance:", e);
+                }
+            } else {
+                // Agar login nahi hai toh login page par bhej do
+                window.location.href = 'login.html';
+            }
+        });
 
-        if (!isLoggedIn) {
-            window.location.href = "login.html";
-        }
+        window.submitRecharge = async function() {
+            const amount = parseFloat(document.getElementById('rechargeAmount').value);
+            const utr = document.getElementById('utrInput').value.trim();
+            const userPhone = localStorage.getItem('userPhone');
 
-        window.submitRecharge = async function(event) {
-            event.preventDefault();
-            const amount = document.getElementById('rechargeAmount').value.trim();
-            const utr = document.getElementById('utrNumber').value.trim();
-
-            if (!amount || !utr) {
-                alert('Please enter amount and UTR number!');
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid recharge amount.');
+                return;
+            }
+            if (!utr || utr.length < 6) {
+                alert('Please enter a valid 12-digit UTR / Transaction ID.');
                 return;
             }
 
-            try {
-                const rechargeId = 'RECH_' + Date.now();
-                await setDoc(doc(db, "recharges", rechargeId), {
-                    phone: userPhone,
-                    amount: parseFloat(amount),
-                    utrNumber: utr,
-                    status: 'Pending',
-                    createdAt: new Date().toISOString()
-                });
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "PROCESSING...";
+            btn.disabled = true;
 
-                alert('Recharge request submitted successfully! Pending verification.');
-                document.getElementById('rechargeForm').reset();
+            try {
+                const userRef = doc(db, "users", userPhone);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    // Database me balance update karo
+                    await updateDoc(userRef, {
+                        balance: increment(amount)
+                    });
+                } else {
+                    // Agar document nahi hai toh naya banao
+                    await setDoc(userRef, {
+                        phone: userPhone,
+                        balance: amount,
+                        lockedEarnings: 0
+                    });
+                }
+
+                alert('Recharge of ₹' + amount + ' successfully added to your wallet!');
+                window.location.href = 'index.html';
+
             } catch (error) {
-                console.error("Error submitting recharge: ", error);
-                alert('Firebase Error: ' + error.message);
+                console.error("Recharge error: ", error);
+                alert('Recharge failed. Please try again.');
+                btn.innerText = "SUBMIT RECHARGE & UTR";
+                btn.disabled = false;
             }
         };
     </script>
 </head>
-<body class="bg-gray-950 text-white min-h-screen pb-20 font-sans">
+<body class="bg-gray-950 text-white min-h-screen pb-24 font-sans">
 
-    <!-- Header -->
-    <div class="bg-gray-900 border-b border-gray-800 p-4 text-center sticky top-0 z-50">
-        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">Recharge Account</h1>
+    <!-- Top Header -->
+    <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center max-w-md mx-auto">
+        <a href="index.html" class="text-yellow-400 font-bold"><i class="fa-solid fa-arrow-left"></i> Back</a>
+        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">RECHARGE WALLET</h1>
+        <div class="w-6"></div>
     </div>
 
-    <div class="max-w-md mx-auto p-4 space-y-6">
-        <form id="rechargeForm" onsubmit="submitRecharge(event)" class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl space-y-4">
+    <div class="max-w-md mx-auto p-4 space-y-5">
+        
+        <!-- User & Balance Status -->
+        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl flex justify-between items-center">
             <div>
-                <label class="block text-xs font-bold text-gray-400 mb-1">Enter Amount (₹)</label>
-                <input type="number" id="rechargeAmount" placeholder="e.g. 500" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Logged In As</p>
+                <h3 id="displayUserPhone" class="text-sm font-black text-white">Loading...</h3>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Current Wallet</p>
+                <h3 id="currentWalletBalance" class="text-base font-black text-green-400">₹0.00</h3>
+            </div>
+        </div>
+
+        <!-- Payment QR / UPI Box -->
+        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl space-y-4 text-center">
+            <h3 class="text-sm font-black text-yellow-400 uppercase"><i class="fa-solid fa-qrcode mr-1"></i> Scan & Pay via UPI</h3>
+            <p class="text-xs text-gray-400">Scan this QR using any UPI app (GPay, PhonePe, Paytm)</p>
+            
+            <div class="bg-white p-4 rounded-2xl inline-block mx-auto shadow-inner">
+                <!-- Aapka UPI QR Placeholder -->
+                <div class="w-40 h-40 bg-gray-200 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-400 text-black text-xs font-bold text-center p-2">
+                    [ Company UPI QR Code ]
+                </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-gray-400 mb-1">12-Digit UTR / Transaction ID</label>
-                <input type="text" id="utrNumber" placeholder="Enter UTR number after payment" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
+            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs text-yellow-400 font-bold">
+                UPI ID: <span class="text-white select-all">titanbuild@okhdfcbank</span>
+            </div>
+        </div>
+
+        <!-- Recharge Submission Form -->
+        <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl space-y-4">
+            <div class="space-y-2">
+                <label class="text-[11px] text-gray-400 font-bold block">Enter Recharge Amount (₹)</label>
+                <input type="number" id="rechargeAmount" placeholder="e.g. 1000" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:border-yellow-500 outline-none">
             </div>
 
-            <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3.5 rounded-xl text-sm shadow-lg transition uppercase tracking-wide">
-                Submit UTR
+            <div class="space-y-2">
+                <label class="text-[11px] text-gray-400 font-bold block">Enter 12-Digit UTR / Transaction ID</label>
+                <input type="text" id="utrInput" placeholder="Enter UTR after payment" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-white focus:border-yellow-500 outline-none">
+            </div>
+
+            <button id="submitBtn" onclick="submitRecharge()" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-xl text-xs uppercase tracking-wide transition shadow-lg">
+                SUBMIT RECHARGE & UTR
             </button>
-        </form>
+        </div>
+
     </div>
 
     <!-- Bottom Navigation Bar -->
