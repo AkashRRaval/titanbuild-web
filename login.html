@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - TitanBuild</title>
+    <title>Login - TitanBuild</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC89zMGIcD6Gi-KuNzP7xlRsqfj0gtXhDo",
@@ -25,43 +25,42 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        window.handleRegister = async function(event) {
+        window.handleLogin = async function(event) {
             event.preventDefault();
-            const phone = document.getElementById('regPhone').value.trim();
-            const password = document.getElementById('regPassword').value.trim();
-            const invite = document.getElementById('regInvite').value.trim();
+            const phone = document.getElementById('loginPhone').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
 
             if (!phone || !password) {
-                alert('Please fill in all required fields!');
+                alert('Please enter phone number and password!');
                 return;
             }
 
             try {
-                // Check if user already exists in Firestore
                 const userRef = doc(db, "users", phone);
                 const userSnap = await getDoc(userRef);
 
-                if (userSnap.exists()) {
-                    alert('Phone number already registered! Please login.');
-                    window.location.href = 'login.html';
+                if (!userSnap.exists()) {
+                    alert('Phone number not registered! Please register first.');
+                    window.location.href = 'register.html';
                     return;
                 }
 
-                // Save new user to Firestore
-                await setDoc(userRef, {
-                    phone: phone,
-                    password: password,
-                    inviteCode: invite || 'NONE',
-                    balance: 0,
-                    todayIncome: 0,
-                    createdAt: new Date().toISOString()
-                });
+                const userData = userSnap.data();
 
-                alert('Registration Successful! Please login.');
-                window.location.href = 'login.html';
+                if (userData.password !== password) {
+                    alert('Incorrect password! Please try again.');
+                    return;
+                }
+
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userPhone', phone);
+                localStorage.setItem('loginTime', Date.now());
+
+                alert('Login Successful!');
+                window.location.href = 'index.html';
             } catch (error) {
-                console.error("Error registering user: ", error);
-                alert('Registration failed. Please check your internet connection.');
+                console.error("Login error: ", error);
+                alert('Login failed. Please check your internet connection.');
             }
         };
     </script>
@@ -71,37 +70,33 @@
     <div class="max-w-md w-full bg-gray-900 border border-gray-800 rounded-3xl p-6 shadow-2xl space-y-6">
         <div class="text-center space-y-2">
             <h1 class="text-2xl font-black text-yellow-400 tracking-wider">TITANBUILD</h1>
-            <p class="text-xs text-gray-400">Create a new account to start earning</p>
+            <p class="text-xs text-gray-400">Login to your account</p>
         </div>
 
-        <form onsubmit="handleRegister(event)" class="space-y-4">
+        <form onsubmit="handleLogin(event)" class="space-y-4">
             <div>
                 <label class="block text-xs font-bold text-gray-400 mb-1">Phone Number</label>
                 <div class="flex items-center bg-gray-950 border border-gray-800 rounded-xl px-3 focus-within:border-yellow-500">
                     <span class="text-gray-400 text-sm font-bold mr-2">+91</span>
-                    <input type="tel" id="regPhone" placeholder="Enter phone number" pattern="[0-9]{10}" maxlength="10" required class="w-full bg-transparent py-3 text-sm text-white focus:outline-none">
+                    <input type="tel" id="loginPhone" placeholder="Enter phone number" pattern="[0-9]{10}" maxlength="10" required class="w-full bg-transparent py-3 text-sm text-white focus:outline-none">
                 </div>
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-gray-400 mb-1">Password</label>
-                <input type="password" id="regPassword" placeholder="Create a password" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-400 mb-1">Invitation Code (Optional)</label>
-                <input type="text" id="regInvite" placeholder="Enter invite code if any" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
+                <input type="password" id="loginPassword" placeholder="Enter your password" required class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
             </div>
 
             <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3.5 rounded-xl text-sm shadow-lg transition uppercase tracking-wide">
-                Register
+                Login
             </button>
         </form>
 
         <div class="text-center text-xs text-gray-400">
-            Already have an account? <a href="login.html" class="text-yellow-400 font-bold hover:underline">Login here</a>
+            Don't have an account? <a href="register.html" class="text-yellow-400 font-bold hover:underline">Register here</a>
         </div>
     </div>
 
 </body>
 </html>
+
