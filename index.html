@@ -10,7 +10,7 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
@@ -70,12 +70,24 @@
                     return;
                 }
 
+                const orderNo = 'TB-ORD-' + Math.floor(100000 + Math.random() * 900000);
+
                 await updateDoc(userRef, {
                     balance: increment(-price),
                     lockedEarnings: increment(dailyReturn)
                 });
 
-                alert('Successfully leased ' + assetName + '!');
+                await addDoc(collection(db, "purchases"), {
+                    phone: userPhone,
+                    orderNo: orderNo,
+                    assetName: assetName,
+                    price: price,
+                    dailyReturn: dailyReturn,
+                    status: "Active",
+                    createdAt: serverTimestamp()
+                });
+
+                alert('Successfully leased ' + assetName + '! Order ID: ' + orderNo);
                 location.reload();
 
             } catch (e) {
@@ -239,8 +251,7 @@
                 </div>
             </div>
     </div>
-                                                                                                                                                                          
-        <!-- TAB 2: Heavy Machinery Products (₹2000 - ₹7000) -->
+            <!-- TAB 2: Heavy Machinery Products (₹2000 - ₹7000) -->
         <div id="content-heavy" class="tab-content hidden space-y-3">
             <div class="flex justify-between items-center px-1">
                 <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-tractor mr-1"></i> Heavy Machinery Assets (₹2000 - ₹7000)</h3>
@@ -415,5 +426,5 @@
     </div>
 
 </body>
-    </html>
-    
+                        </html>
+                        
