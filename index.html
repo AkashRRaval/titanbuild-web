@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Complete Dashboard</title>
+    <title>TitanBuild - Complete Platform Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -46,7 +46,6 @@
             }
         });
 
-        // Investment Function for all tiers
         window.investAsset = async function(price, dailyReturn, assetName) {
             const userPhone = localStorage.getItem('userPhone');
             if (!userPhone) {
@@ -85,7 +84,6 @@
             }
         };
 
-        // Tab Switching Logic for 4 Top Categories
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => {
@@ -331,8 +329,8 @@
                     </button>
                 </div>
             </div>
-                                </div>
-                                        <!-- TAB 3: Debit Cards Products -->
+                    </div>
+                           <!-- TAB 3: Debit Cards Products -->
         <div id="content-debit" class="tab-content hidden space-y-3">
             <div class="flex justify-between items-center px-1">
                 <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-credit-card mr-1"></i> Titan Financial Debit Cards</h3>
@@ -426,5 +424,4 @@
     </div>
 
 </body>
-    </html>
-                            
+</html>
