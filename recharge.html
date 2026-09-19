@@ -44,6 +44,26 @@
             }
         });
 
+        // Channel Switch Logic
+        window.switchChannel = function(channelNum) {
+            const qrImg = document.getElementById('qrImage');
+            const upiText = document.getElementById('upiIdText');
+            const btn1 = document.getElementById('btnChannel1');
+            const btn2 = document.getElementById('btnChannel2');
+
+            if (channelNum === 1) {
+                qrImg.src = "NaviQR_RAVAL RAJUBHAI MANGABHAI_18092026211409379.png";
+                upiText.innerText = "ravalrajubhai331@naviaxis";
+                btn1.className = "flex-1 py-2.5 rounded-xl text-xs font-black bg-yellow-500 text-black shadow-lg transition";
+                btn2.className = "flex-1 py-2.5 rounded-xl text-xs font-black bg-gray-950 text-gray-400 border border-gray-800 transition";
+            } else {
+                qrImg.src = "NaviQR_RAVAL RANJANBEN RAJUBHAI_18092026212538836.png";
+                upiText.innerText = "fastpaytes@naviaxis";
+                btn2.className = "flex-1 py-2.5 rounded-xl text-xs font-black bg-yellow-500 text-black shadow-lg transition";
+                btn1.className = "flex-1 py-2.5 rounded-xl text-xs font-black bg-gray-950 text-gray-400 border border-gray-800 transition";
+            }
+        };
+
         window.submitRecharge = async function() {
             const amount = parseFloat(document.getElementById('rechargeAmount').value);
             const utr = document.getElementById('utrInput').value.trim();
@@ -113,18 +133,28 @@
             </div>
         </div>
 
-        <!-- Payment QR / UPI Box with Real QR -->
+        <!-- Payment QR / UPI Box with Channel Switcher -->
         <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 shadow-xl space-y-4 text-center">
             <h3 class="text-sm font-black text-yellow-400 uppercase"><i class="fa-solid fa-qrcode mr-1"></i> Scan & Pay via UPI</h3>
-            <p class="text-xs text-gray-400">Scan this QR using any UPI app (GPay, PhonePe, Paytm, Navi)</p>
+            <p class="text-xs text-gray-400">Select payment channel and scan QR code</p>
             
+            <!-- Channel Selection Buttons -->
+            <div class="flex space-x-2 bg-gray-950 p-1.5 rounded-2xl border border-gray-800">
+                <button id="btnChannel1" onclick="switchChannel(1)" class="flex-1 py-2.5 rounded-xl text-xs font-black bg-yellow-500 text-black shadow-lg transition">
+                    Channel 1
+                </button>
+                <button id="btnChannel2" onclick="switchChannel(2)" class="flex-1 py-2.5 rounded-xl text-xs font-black bg-gray-950 text-gray-400 border border-gray-800 transition">
+                    Channel 2
+                </button>
+            </div>
+
+            <!-- QR Display Box -->
             <div class="bg-white p-3 rounded-2xl inline-block mx-auto shadow-inner border border-yellow-500/50">
-                <!-- Correct Image Name Set Here -->
-                <img src="NaviQR_RAVAL RAJUBHAI MANGABHAI_18092026211409379.png" alt="UPI QR Code" class="w-48 h-48 object-contain rounded-xl mx-auto">
+                <img id="qrImage" src="NaviQR_RAVAL RAJUBHAI MANGABHAI_18092026211409379.png" alt="UPI QR Code" class="w-48 h-48 object-contain rounded-xl mx-auto">
             </div>
 
             <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 text-xs text-yellow-400 font-bold">
-                UPI ID: <span class="text-white select-all">ravalrajubhai331@naviaxis</span>
+                UPI ID: <span id="upiIdText" class="text-white select-all">ravalrajubhai331@naviaxis</span>
             </div>
         </div>
 
