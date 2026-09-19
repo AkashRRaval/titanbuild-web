@@ -10,7 +10,7 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
@@ -27,6 +27,7 @@
 
         const userPhone = localStorage.getItem('userPhone');
         let userCurrentBalance = 0;
+        let userBankDetails = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
             if (!userPhone) {
@@ -39,17 +40,78 @@
                 const userRef = doc(db, "users", userPhone);
                 const userSnap = await getDoc(userRef);
                 if (userSnap.exists()) {
-                    userCurrentBalance = userSnap.data().balance || 0;
+                    const data = userSnap.data();
+                    userCurrentBalance = data.balance || 0;
                     document.getElementById('availableBalance').innerText = '₹' + userCurrentBalance.toFixed(2);
+
+                    // Check if bank is already bound
+                    if (data.bankAccount && data.ifsc && data.holderName) {
+                        userBankDetails = data;
+                        document.getElementById('bindBankSection').classList.add('hidden');
+                        document.getElementById('withdrawalFormSection').classList.remove('hidden');
+                        
+                        document.getElementById('displayHolder').innerText = data.holderName;
+                        document.getElementById('displayAccNo').innerText = data.bankAccount;
+                        document.getElementById('displayIfsc').innerText = data.ifsc;
+                    }
                 }
             } catch (e) {
-                console.error("Error fetching balance:", e);
+                console.error("Error loading user data:", e);
             }
         });
 
+        window.bindBankAccount = async function() {
+            const holderName = document.getElementById('holderName').value.trim();
+            const bankAccount = document.getElementById('bankAccount').value.trim();
+            const ifsc = document.getElementById('ifsc').value.trim().toUpperCase();
+
+            if (!holderName || !bankAccount || !ifsc) {
+                alert('Please fill all bank details.');
+                return;
+            }
+
+            if (bankAccount.length < 9) {
+                alert('Please enter a valid bank account number.');
+                return;
+            }
+
+            try {
+                // Check if this bank account is already registered with ANY OTHER user
+                const usersRef = collection(db, "users");
+                const q = query(usersRef, where("bankAccount", "==", bankAccount));
+                const querySnapshot = await getDocs(q);
+
+                let isAlreadyUsed = false;
+                querySnapshot.forEach((docSnap) => {
+                    if (docSnap.id !== userPhone) {
+                        isAlreadyUsed = true;
+                    }
+                });
+
+                if (isAlreadyUsed) {
+                    alert('This bank account is already linked with another registered mobile number! Duplicate accounts are not allowed.');
+                    return;
+                }
+
+                // Save Bank details to user document
+                const userRef = doc(db, "users", userPhone);
+                await updateDoc(userRef, {
+                    holderName: holderName,
+                    bankAccount: bankAccount,
+                    ifsc: ifsc
+                });
+
+                alert('Bank account successfully bound!');
+                window.location.reload();
+
+            } catch (e) {
+                console.error("Error binding bank:", e);
+                alert('Failed to bind bank account. Try again.');
+            }
+        };
+
         window.submitWithdrawal = async function() {
             const amountInput = document.getElementById('withdrawAmount').value;
-            const upiId = document.getElementById('upiId').value.trim();
             const amount = parseFloat(amountInput);
 
             if (!amount || amount <= 0) {
@@ -67,8 +129,8 @@
                 return;
             }
 
-            if (!upiId || !upiId.includes('@')) {
-                alert('Please enter a valid UPI ID (e.g., paytm@upi or number@ybl).');
+            if (!userBankDetails) {
+                alert('Please bind your bank account first.');
                 return;
             }
 
@@ -81,12 +143,14 @@
                     balance: increment(-amount)
                 });
 
-                // Save Withdrawal History
+                // Save Withdrawal History with Bank Details
                 await addDoc(collection(db, "withdrawals"), {
                     phone: userPhone,
                     orderNo: orderNo,
                     amount: amount,
-                    upiId: upiId,
+                    bankAccount: userBankDetails.bankAccount,
+                    ifsc: userBankDetails.ifsc,
+                    holderName: userBankDetails.holderName,
                     status: "Pending",
                     createdAt: serverTimestamp()
                 });
@@ -107,9 +171,9 @@
     <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center max-w-md mx-auto">
         <div class="flex items-center space-x-2">
             <div class="w-8 h-8 bg-gradient-to-tr from-yellow-600 to-amber-400 rounded-xl flex items-center justify-center text-black font-black shadow-lg">
-                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <i class="fa-solid fa-building-columns"></i>
             </div>
-            <h1 class="text-base font-black tracking-wider text-yellow-400 uppercase">WITHDRAW FUNDS</h1>
+            <h1 class="text-base font-black tracking-wider text-yellow-400 uppercase">BANK WITHDRAWAL</h1>
         </div>
         <div class="text-right">
             <span id="displayPhone" class="text-[10px] text-gray-400 block font-bold">Loading...</span>
@@ -124,31 +188,54 @@
             <p class="text-[10px] text-gray-500 font-medium">Minimum withdrawal limit: <strong class="text-white">₹200</strong></p>
         </div>
 
-        <!-- Withdrawal Form -->
-        <div class="bg-gray-900 border border-gray-800 p-5 rounded-3xl shadow-xl space-y-4">
-            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-building-columns mr-1"></i> Bank / UPI Payout Details</h3>
+        <!-- Section 1: Bind Bank Account (Visible only if not bound) -->
+        <div id="bindBankSection" class="bg-gray-900 border border-gray-800 p-5 rounded-3xl shadow-xl space-y-4">
+            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-lock mr-1"></i> Bind Bank Account (One-Time)</h3>
+            <p class="text-[11px] text-gray-400">Please link your bank account. Note: A bank account can only be linked to a single registered user ID.</p>
 
             <div class="space-y-3">
                 <div>
-                    <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Withdrawal Amount (₹)</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-3 text-yellow-400 font-bold text-sm">₹</span>
-                        <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold">
-                    </div>
+                    <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Account Holder Name</label>
+                    <input type="text" id="holderName" placeholder="Enter name as in bank passbook" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold">
                 </div>
 
                 <div>
-                    <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Receiver UPI ID / VPA</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-3 text-gray-500 text-sm"><i class="fa-solid fa-at"></i></span>
-                        <input type="text" id="upiId" placeholder="e.g. mobile@paytm or UPI ID" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold">
-                    </div>
+                    <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Bank Account Number</label>
+                    <input type="text" id="bankAccount" placeholder="Enter account number" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">IFSC Code</label>
+                    <input type="text" id="ifsc" placeholder="Enter bank IFSC code" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold uppercase">
                 </div>
             </div>
 
-            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800/80 text-[11px] text-gray-400 space-y-1">
-                <p><i class="fa-solid fa-circle-info text-yellow-400 mr-1"></i> Payouts are usually processed within 24 hours.</p>
-                <p><i class="fa-solid fa-shield-halved text-yellow-400 mr-1"></i> Ensure your UPI ID is correct to prevent transaction failure.</p>
+            <button onclick="bindBankAccount()" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg mt-2">
+                BIND BANK ACCOUNT
+            </button>
+        </div>
+
+        <!-- Section 2: Withdrawal Form (Visible only AFTER bank is bound) -->
+        <div id="withdrawalFormSection" class="hidden bg-gray-900 border border-gray-800 p-5 rounded-3xl shadow-xl space-y-4">
+            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-money-bill-transfer mr-1"></i> Request Withdrawal</h3>
+
+            <!-- Bound Bank Summary Card -->
+            <div class="bg-gray-950 p-3.5 rounded-2xl border border-gray-800 space-y-1">
+                <div class="flex justify-between items-center text-xs">
+                    <span class="text-gray-400 uppercase text-[10px] font-bold">Linked Bank Account</span>
+                    <span class="text-green-400 text-[10px] font-bold"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                </div>
+                <div class="text-xs font-bold text-yellow-400" id="displayHolder">Loading...</div>
+                <div class="text-[11px] text-gray-300 font-mono" id="displayAccNo">Loading...</div>
+                <div class="text-[10px] text-gray-500 font-mono">IFSC: <span id="displayIfsc">Loading...</span></div>
+            </div>
+
+            <div>
+                <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Withdrawal Amount (₹)</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-3 text-yellow-400 font-bold text-sm">₹</span>
+                    <input type="number" id="withdrawAmount" placeholder="Enter amount (Min ₹200)" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold">
+                </div>
             </div>
 
             <button onclick="submitWithdrawal()" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg mt-2">
@@ -169,7 +256,7 @@
             <span class="text-[10px] mt-0.5">Recharge</span>
         </a>
         <a href="withdraw.html" class="text-yellow-400 flex flex-col items-center py-1 text-xs font-bold">
-            <i class="fa-solid fa-arrow-right-arrow-left text-base"></i>
+            <i class="fa-solid fa-building-columns text-base"></i>
             <span class="text-[10px] mt-0.5">Withdraw</span>
         </a>
         <a href="profile.html" class="text-gray-400 hover:text-gray-200 flex flex-col items-center py-1 text-xs">
