@@ -45,24 +45,20 @@
 
             if (channelNum === 1) {
                 ch1Btn.className = "bg-gradient-to-br from-yellow-500/20 to-amber-500/10 border border-yellow-500/50 p-3 rounded-2xl text-center cursor-pointer shadow-lg";
-                ch1Btn.querySelector('i').className = "fa-solid fa-qrcode text-yellow-400 text-base mb-1";
-                ch1Btn.querySelector('.font-black').className = "text-xs font-black text-yellow-400";
+                ch1Btn.querySelector('.ch1-title').className = "text-xs font-black text-yellow-400 ch1-title";
                 
                 ch2Btn.className = "bg-gray-900 border border-gray-800 p-3 rounded-2xl text-center cursor-pointer hover:border-gray-700 transition";
-                ch2Btn.querySelector('i').className = "fa-solid fa-bolt text-gray-400 text-base mb-1";
-                ch2Btn.querySelector('.font-bold').className = "text-xs font-bold text-gray-300";
+                ch2Btn.querySelector('.ch2-title').className = "text-xs font-bold text-gray-300 ch2-title";
 
                 qrImage.src = "NaviQR_RAVAL RANJANBEN RAJUBHAI_18092026212538836.png";
                 accountHolderName.innerText = "RAVAL RANJANBEN RAJUBHAI";
                 upiIdText.innerText = "UPI ID: fastpaytes@naviaxis";
             } else {
                 ch2Btn.className = "bg-gradient-to-br from-yellow-500/20 to-amber-500/10 border border-yellow-500/50 p-3 rounded-2xl text-center cursor-pointer shadow-lg";
-                ch2Btn.querySelector('i').className = "fa-solid fa-qrcode text-yellow-400 text-base mb-1";
-                ch2Btn.querySelector('.font-bold').className = "text-xs font-black text-yellow-400";
+                ch2Btn.querySelector('.ch2-title').className = "text-xs font-black text-yellow-400 ch2-title";
                 
                 ch1Btn.className = "bg-gray-900 border border-gray-800 p-3 rounded-2xl text-center cursor-pointer hover:border-gray-700 transition";
-                ch1Btn.querySelector('i').className = "fa-solid fa-bolt text-gray-400 text-base mb-1";
-                ch1Btn.querySelector('.font-black').className = "text-xs font-bold text-gray-300";
+                ch1Btn.querySelector('.ch1-title').className = "text-xs font-bold text-gray-300 ch1-title";
 
                 qrImage.src = "NaviQR_RAVAL RAJUBHAI MANGABHAI_10092026211409379.png";
                 accountHolderName.innerText = "RAVAL RAJUBHAI MANGABHAI";
@@ -133,12 +129,12 @@
         <div class="grid grid-cols-2 gap-3">
             <div id="ch1Btn" onclick="switchChannel(1)" class="bg-gradient-to-br from-yellow-500/20 to-amber-500/10 border border-yellow-500/50 p-3 rounded-2xl text-center cursor-pointer shadow-lg">
                 <i class="fa-solid fa-qrcode text-yellow-400 text-base mb-1"></i>
-                <div class="text-xs font-black text-yellow-400">Channel 1</div>
+                <div class="text-xs font-black text-yellow-400 ch1-title">Channel 1</div>
                 <div class="text-[9px] text-gray-400">Ranjanben</div>
             </div>
             <div id="ch2Btn" onclick="switchChannel(2)" class="bg-gray-900 border border-gray-800 p-3 rounded-2xl text-center cursor-pointer hover:border-gray-700 transition">
                 <i class="fa-solid fa-bolt text-gray-400 text-base mb-1"></i>
-                <div class="text-xs font-bold text-gray-300">Channel 2</div>
+                <div class="text-xs font-bold text-gray-300 ch2-title">Channel 2</div>
                 <div class="text-[9px] text-gray-500">Rajubhai</div>
             </div>
         </div>
