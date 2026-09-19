@@ -3,17 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdraw Funds - TitanBuild</title>
+    <title>Withdraw - TitanBuild</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC89zMGIcD6Gi-KuNzP7xlRsqfj0gtXhDo",
+            authDomain: "titanbuild-1509e.firebaseapp.com",
+            projectId: "safargo-55e25",
+            storageBucket: "titanbuild-1509e.firebasestorage.app",
+            messagingSenderId: "740130026137",
+            appId: "1:740130026137:web:ca74a4ca8c72b537efbe08",
+            measurementId: "G-70T3E080HM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         const loginTime = localStorage.getItem('loginTime');
+        const userPhone = localStorage.getItem('userPhone');
+
         if (!isLoggedIn || !loginTime || (Date.now() - parseInt(loginTime)) > 30 * 60 * 1000) {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('loginTime');
+            localStorage.removeItem('userPhone');
             window.location.href = "login.html";
         }
+
+        // Fetch user live balance on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (userPhone) {
+                try {
+                    const userRef = doc(db, "users", userPhone);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        document.getElementById('userBalance').innerText = '₹' + (data.balance || 0);
+                    }
+                } catch (e) {
+                    console.error("Error fetching balance:", e);
+                }
+            }
+        });
+
+        window.submitWithdrawal = async function() {
+            const amount = Number(document.getElementById('withdrawAmount').value);
+            const upiId = document.getElementById('withdrawUpi').value.trim();
+
+            if (!amount || amount < 200) {
+                alert('Minimum withdrawal amount is ₹200!');
+                return;
+            }
+
+            if (!upiId) {
+                alert('Please enter your UPI ID or Bank details!');
+                return;
+            }
+
+            try {
+                const userRef = doc(db, "users", userPhone);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    alert('User not found!');
+                    return;
+                }
+
+                const userData = userSnap.data();
+                const currentBalance = userData.balance || 0;
+
+                if (currentBalance < amount) {
+                    alert('Insufficient balance in your account!');
+                    return;
+                }
+
+                // Deduct balance and save withdrawal request
+                const newBalance = currentBalance - amount;
+                await setDoc(userRef, { balance: newBalance }, { merge: true });
+
+                const withdrawId = 'WD_' + Date.now();
+                const withdrawRef = doc(db, "withdrawals", withdrawId);
+                await setDoc(withdrawRef, {
+                    phone: userPhone,
+                    amount: amount,
+                    upiId: upiId,
+                    status: 'Pending',
+                    timestamp: new Date().toISOString()
+                });
+
+                alert(`Withdrawal request of ₹${amount} submitted successfully!`);
+                window.location.href = "profile.html";
+            } catch (error) {
+                console.error("Withdrawal error:", error);
+                alert('Withdrawal failed. Please check your internet connection.');
+            }
+        };
     </script>
 </head>
 <body class="bg-gray-950 text-white min-h-screen pb-10 font-sans">
@@ -23,82 +113,39 @@
         <a href="profile.html" class="text-yellow-400 text-xl font-bold">
             <i class="fa-solid fa-arrow-left"></i>
         </a>
-        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">Withdraw Funds</h1>
+        <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">Withdraw Money</h1>
         <div class="w-5"></div>
     </div>
 
     <div class="max-w-md mx-auto p-4 space-y-5">
-
         <!-- Balance Card -->
-        <div class="bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 rounded-2xl p-5 text-black shadow-xl flex justify-between items-center">
+        <div class="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-xl flex items-center justify-between">
             <div>
-                <p class="text-xs font-bold uppercase opacity-80">Withdrawable Balance</p>
-                <h2 class="text-3xl font-black mt-1">₹ 0.00</h2>
+                <p class="text-xs text-gray-400 font-bold uppercase">Available Balance</p>
+                <h2 id="userBalance" class="text-2xl font-black text-yellow-400">₹0</h2>
             </div>
-            <i class="fa-solid fa-building-columns text-3xl opacity-80"></i>
-        </div>
-
-        <!-- Bank Details Form -->
-        <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-3">
-            <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wide flex items-center space-x-2">
-                <i class="fa-solid fa-id-card"></i>
-                <span>Bank Account Details</span>
-            </h3>
-
-            <div>
-                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Account Holder Name</label>
-                <input type="text" id="bankNameHolder" placeholder="Full name in bank" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
-            </div>
-
-            <div>
-                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Bank Account Number</label>
-                <input type="number" id="bankAccNo" placeholder="Enter account number" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
-            </div>
-
-            <div>
-                <label class="block text-[11px] font-semibold text-gray-400 mb-1">IFSC Code</label>
-                <input type="text" id="bankIfsc" placeholder="e.g. SBIN0001234" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-yellow-400 uppercase focus:outline-none focus:border-yellow-500">
+            <div class="bg-yellow-500/10 p-3 rounded-xl border border-yellow-500/30 text-yellow-400">
+                <i class="fa-solid fa-wallet text-xl"></i>
             </div>
         </div>
-      
-        <!-- Withdrawal Amount Input -->
-        <div class="bg-gray-900 p-4 rounded-2xl border border-gray-800 shadow-xl space-y-3">
-            <label class="block text-xs font-bold text-gray-400 uppercase">Enter Amount (Min ₹110)</label>
-            <input type="number" id="withdrawAmount" placeholder="Min ₹110" class="w-full bg-gray-950 border border-yellow-500/50 rounded-xl p-3 text-2xl font-black text-yellow-400 text-center focus:outline-none">
 
-            <div class="bg-gray-950 p-3 rounded-xl text-[11px] text-gray-400 space-y-1">
-                <p>• Minimum withdrawal: <span class="text-yellow-400 font-bold">₹110</span></p>
-                <p>• Withdrawal timing: <span class="text-yellow-400 font-bold">09:00 AM - 06:00 PM</span></p>
-                <p>• Handling fee: <span class="text-green-400 font-bold">0% tax</span></p>
+        <!-- Withdrawal Form -->
+        <div class="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-xl space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Enter Amount to Withdraw</label>
+                <input type="number" id="withdrawAmount" placeholder="Min ₹200" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-yellow-400 font-bold focus:outline-none focus:border-yellow-500">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Enter UPI ID / Bank Details</label>
+                <input type="text" id="withdrawUpi" placeholder="e.g. yourname@paytm" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">
             </div>
 
             <button onclick="submitWithdrawal()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3.5 rounded-xl text-sm shadow-lg transition uppercase tracking-wide">
-                Confirm Withdrawal
+                Submit Withdrawal
             </button>
         </div>
-
     </div>
 
-    <script>
-        function submitWithdrawal() {
-            const holder = document.getElementById('bankNameHolder').value.trim();
-            const acc = document.getElementById('bankAccNo').value.trim();
-            const ifsc = document.getElementById('bankIfsc').value.trim();
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
-
-            if (!holder || !acc || !ifsc) {
-                alert('Please fill all bank details correctly!');
-                return;
-            }
-
-            if (!amount || amount < 110) {
-                alert('Minimum withdrawal amount is ₹110!');
-                return;
-            }
-
-            alert(`Withdrawal Request Submitted!\nAmount: ₹${amount}\nAccount: ${acc}\nStatus: Processing (1-24 Hours)`);
-            window.location.href = "profile.html";
-        }
-    </script>
 </body>
 </html>
