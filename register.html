@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Register</title>
+    <title>TitanBuild - Recharge Wallet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
@@ -25,103 +25,193 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        window.handleRegister = async function() {
-            const phone = document.getElementById('regPhone').value.trim();
-            const password = document.getElementById('regPassword').value.trim();
-            const inviteCode = document.getElementById('inviteCode').value.trim();
+        // Session Check
+        const userPhone = localStorage.getItem('titanUserPhone') || localStorage.getItem('userPhone');
 
-            if (!phone || !password) {
-                alert('Please enter both phone number and password.');
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (!userPhone) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('displayPhone').innerText = userPhone;
+        });
+
+        window.switchChannel = function(channelNum) {
+            const ch1Btn = document.getElementById('ch1Btn');
+            const ch2Btn = document.getElementById('ch2Btn');
+            const qrImage = document.getElementById('qrImage');
+            const upiIdText = document.getElementById('upiIdText');
+            const accountHolderName = document.getElementById('accountHolderName');
+
+            if (channelNum === 1) {
+                ch1Btn.className = "bg-gradient-to-br from-yellow-500/20 to-amber-500/10 border border-yellow-500/50 p-3 rounded-2xl text-center cursor-pointer shadow-lg";
+                ch1Btn.querySelector('i').className = "fa-solid fa-qrcode text-yellow-400 text-base mb-1";
+                ch1Btn.querySelector('.font-black').className = "text-xs font-black text-yellow-400";
+                
+                ch2Btn.className = "bg-gray-900 border border-gray-800 p-3 rounded-2xl text-center cursor-pointer hover:border-gray-700 transition";
+                ch2Btn.querySelector('i').className = "fa-solid fa-bolt text-gray-400 text-base mb-1";
+                ch2Btn.querySelector('.font-bold').className = "text-xs font-bold text-gray-300";
+
+                qrImage.src = "NaviQR_RAVAL RANJANBEN RAJUBHAI_18092026212538836.png";
+                accountHolderName.innerText = "RAVAL RANJANBEN RAJUBHAI";
+                upiIdText.innerText = "UPI ID: fastpaytes@naviaxis";
+            } else {
+                ch2Btn.className = "bg-gradient-to-br from-yellow-500/20 to-amber-500/10 border border-yellow-500/50 p-3 rounded-2xl text-center cursor-pointer shadow-lg";
+                ch2Btn.querySelector('i').className = "fa-solid fa-qrcode text-yellow-400 text-base mb-1";
+                ch2Btn.querySelector('.font-bold').className = "text-xs font-black text-yellow-400";
+                
+                ch1Btn.className = "bg-gray-900 border border-gray-800 p-3 rounded-2xl text-center cursor-pointer hover:border-gray-700 transition";
+                ch1Btn.querySelector('i').className = "fa-solid fa-bolt text-gray-400 text-base mb-1";
+                ch1Btn.querySelector('.font-black').className = "text-xs font-bold text-gray-300";
+
+                qrImage.src = "NaviQR_RAVAL RAJUBHAI MANGABHAI_10092026211409379.png";
+                accountHolderName.innerText = "RAVAL RAJUBHAI MANGABHAI";
+                upiIdText.innerText = "UPI ID: ravalrajubhai331@naviaxis";
+            }
+        };
+
+        window.selectAmount = function(amount) {
+            document.getElementById('rechargeAmount').value = amount;
+        }
+
+        window.submitRecharge = async function() {
+            const amountInput = document.getElementById('rechargeAmount').value;
+            const utrNumber = document.getElementById('utrNumber').value.trim();
+            const amount = parseFloat(amountInput);
+
+            if (!amount || amount <= 0) {
+                alert('Please select or enter a valid recharge amount.');
                 return;
             }
 
-            if (phone.length !== 10) {
-                alert('Please enter a valid 10-digit mobile number.');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters long.');
+            if (!utrNumber || utrNumber.length < 10) {
+                alert('Please enter a valid 12-digit UTR / Reference number.');
                 return;
             }
 
             try {
-                const userRef = doc(db, "users", phone);
-                const userSnap = await getDoc(userRef);
+                const orderNo = 'TB-REC-' + Math.floor(100000 + Math.random() * 900000);
 
-                if (userSnap.exists()) {
-                    alert('This phone number is already registered! Please login.');
-                    window.location.href = 'login.html';
-                    return;
-                }
-
-                // Create User Document in Firestore
-                await setDoc(userRef, {
-                    phone: phone,
-                    password: password,
-                    balance: 0.00,
-                    inviteCode: inviteCode || 'NONE',
+                // Save Recharge Order to Firestore
+                await addDoc(collection(db, "recharges"), {
+                    phone: userPhone,
+                    orderNo: orderNo,
+                    amount: amount,
+                    utrNumber: utrNumber,
+                    status: "Pending",
                     createdAt: serverTimestamp()
                 });
 
-                alert('Registration successful! Please login to continue.');
-                window.location.href = 'login.html';
+                alert('Recharge order submitted successfully! Order ID: ' + orderNo + '\nFunds will reflect after admin verification.');
+                window.location.href = 'profile.html';
 
             } catch (e) {
-                console.error("Registration error:", e);
-                alert('Registration failed. Please try again.');
+                console.error("Recharge submission error:", e);
+                alert('Failed to submit recharge. Please try again.');
             }
         };
     </script>
 </head>
-<body class="bg-gray-950 text-white min-h-screen flex items-center justify-center p-4 font-sans">
-        <div class="max-w-md w-full bg-gray-900 border border-gray-800 p-6 rounded-3xl shadow-2xl space-y-5">
-        
-        <!-- Header -->
-        <div class="text-center space-y-2">
-            <div class="w-12 h-12 bg-gradient-to-tr from-yellow-600 to-amber-400 rounded-2xl flex items-center justify-center text-black font-black mx-auto shadow-lg text-xl">
-                <i class="fa-solid fa-helmet-safety"></i>
+<body class="bg-gray-950 text-white min-h-screen pb-24 font-sans">
+
+    <!-- Top Header -->
+    <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center max-w-md mx-auto">
+        <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-tr from-yellow-600 to-amber-400 rounded-xl flex items-center justify-center text-black font-black shadow-lg">
+                <i class="fa-solid fa-wallet"></i>
             </div>
-            <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">Create Account</h1>
-            <p class="text-xs text-gray-400">Join TitanBuild & Start Leasing Assets</p>
+            <h1 class="text-base font-black tracking-wider text-yellow-400 uppercase">RECHARGE WALLET</h1>
+        </div>
+        <div class="text-right">
+            <span id="displayPhone" class="text-[10px] text-gray-400 block font-bold">Loading...</span>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto p-4 space-y-5">
+        
+        <!-- Payment Channels Selection (Channel 1 & Channel 2) -->
+        <div class="grid grid-cols-2 gap-3">
+            <div id="ch1Btn" onclick="switchChannel(1)" class="bg-gradient-to-br from-yellow-500/20 to-amber-500/10 border border-yellow-500/50 p-3 rounded-2xl text-center cursor-pointer shadow-lg">
+                <i class="fa-solid fa-qrcode text-yellow-400 text-base mb-1"></i>
+                <div class="text-xs font-black text-yellow-400">Channel 1</div>
+                <div class="text-[9px] text-gray-400">Ranjanben</div>
+            </div>
+            <div id="ch2Btn" onclick="switchChannel(2)" class="bg-gray-900 border border-gray-800 p-3 rounded-2xl text-center cursor-pointer hover:border-gray-700 transition">
+                <i class="fa-solid fa-bolt text-gray-400 text-base mb-1"></i>
+                <div class="text-xs font-bold text-gray-300">Channel 2</div>
+                <div class="text-[9px] text-gray-500">Rajubhai</div>
+            </div>
         </div>
 
-        <!-- Form Inputs -->
-        <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Mobile Number</label>
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-500 text-xs font-bold">+91</span>
-                    <input type="tel5" id="regPhone" maxlength="10" placeholder="Enter 10-digit mobile number" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-yellow-500 font-bold">
+        <!-- QR / Payment Info Box -->
+        <div class="bg-gradient-to-br from-gray-900 to-gray-900 p-5 rounded-3xl border border-yellow-500/30 shadow-2xl text-center space-y-3">
+            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-qrcode mr-1"></i> Scan & Pay via UPI</h3>
+            
+            <div class="w-44 h-44 bg-white p-2 rounded-2xl mx-auto shadow-inner flex items-center justify-center">
+                <img id="qrImage" src="NaviQR_RAVAL RANJANBEN RAJUBHAI_18092026212538836.png" alt="Real QR Code" class="w-full h-full object-contain">
+            </div>
+
+            <div id="accountHolderName" class="text-xs font-black text-yellow-400 uppercase">RAVAL RANJANBEN RAJUBHAI</div>
+            <p class="text-[11px] text-gray-400 font-medium">Scan using Google Pay, PhonePe, Paytm, or BHIM.</p>
+            
+            <div id="upiIdText" class="bg-gray-950 p-2.5 rounded-xl border border-gray-800 text-xs text-yellow-400 font-bold tracking-wider select-all">
+                UPI ID: fastpaytes@naviaxis
+            </div>
+        </div>
+
+        <!-- Recharge Form -->
+        <div class="bg-gray-900 border border-gray-800 p-5 rounded-3xl shadow-xl space-y-4">
+            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-money-bill-transfer mr-1"></i> Enter Transaction Details</h3>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Select / Enter Amount (₹)</label>
+                    <div class="grid grid-cols-4 gap-2 mb-2">
+                        <button type="button" onclick="selectAmount(500)" class="bg-gray-950 border border-gray-800 hover:border-yellow-500 text-yellow-400 font-black py-2 rounded-xl text-xs transition">₹500</button>
+                        <button type="button" onclick="selectAmount(1000)" class="bg-gray-950 border border-gray-800 hover:border-yellow-500 text-yellow-400 font-black py-2 rounded-xl text-xs transition">₹1,000</button>
+                        <button type="button" onclick="selectAmount(2000)" class="bg-gray-950 border border-gray-800 hover:border-yellow-500 text-yellow-400 font-black py-2 rounded-xl text-xs transition">₹2,000</button>
+                        <button type="button" onclick="selectAmount(5000)" class="bg-gray-950 border border-gray-800 hover:border-yellow-500 text-yellow-400 font-black py-2 rounded-xl text-xs transition">₹5,000</button>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3 text-yellow-400 font-bold text-sm">₹</span>
+                        <input type="number" id="rechargeAmount" placeholder="Enter custom amount" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">12-Digit UTR / Reference Number</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3 text-gray-500 text-sm"><i class="fa-solid fa-receipt"></i></span>
+                        <input type="text" id="utrNumber" placeholder="Enter UTR after payment" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-yellow-500 font-bold">
+                    </div>
                 </div>
             </div>
 
-            <div>
-                <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Create Password</label>
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-500 text-xs"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" id="regPassword" placeholder="Minimum 6 characters" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-yellow-500 font-bold">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Invitation Code (Optional)</label>
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-500 text-xs"><i class="fa-solid fa-ticket"></i></span>
-                    <input type="text" id="inviteCode" placeholder="Enter invite code if any" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-yellow-500 font-bold">
-                </div>
-            </div>
-
-            <button onclick="handleRegister()" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg mt-2">
-                REGISTER NOW
+            <button onclick="submitRecharge()" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg mt-2">
+                SUBMIT RECHARGE ORDER
             </button>
         </div>
 
-        <!-- Footer Link -->
-        <div class="text-center pt-2 border-t border-gray-800">
-            <p class="text-xs text-gray-400">Already have an account? <a href="login.html" class="text-yellow-400 font-bold hover:underline">Login here</a></p>
-        </div>
+    </div>
 
+    <!-- Bottom Navigation Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-2 flex justify-around items-center z-50 max-w-md mx-auto shadow-2xl">
+        <a href="index.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-house text-base"></i>
+            <span class="text-[10px] mt-0.5">Home</span>
+        </a>
+        <a href="recharge.html" class="text-yellow-400 flex flex-col items-center py-1 text-xs font-bold">
+            <i class="fa-solid fa-wallet text-base"></i>
+            <span class="text-[10px] mt-0.5">Recharge</span>
+        </a>
+        <a href="withdraw.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-building-columns text-base"></i>
+            <span class="text-[10px] mt-0.5">Withdraw</span>
+        </a>
+        <a href="profile.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
+            <i class="fa-solid fa-user text-base"></i>
+            <span class="text-[10px] mt-0.5">Profile</span>
+        </a>
     </div>
 
 </body>
