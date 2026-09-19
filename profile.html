@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - User Profile</title>
+    <title>TitanBuild - User Profile & History</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
@@ -25,28 +25,109 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        const userPhone = localStorage.getItem('userPhone');
+
         window.addEventListener('DOMContentLoaded', async () => {
-            const userPhone = localStorage.getItem('userPhone');
             if (!userPhone) {
                 window.location.href = 'login.html';
                 return;
             }
+            document.getElementById('displayPhone').innerText = userPhone;
+            document.getElementById('userPhoneCard').innerText = userPhone;
 
-            document.getElementById('profilePhone').innerText = userPhone;
             try {
+                // Fetch User Balance
                 const userRef = doc(db, "users", userPhone);
                 const userSnap = await getDoc(userRef);
                 if (userSnap.exists()) {
-                    const data = userSnap.data();
-                    document.getElementById('profileBalance').innerText = '₹' + (data.balance || 0).toFixed(2);
-                    document.getElementById('profileLocked').innerText = '₹' + (data.lockedEarnings || 0).toFixed(2);
+                    const balance = userSnap.data().balance || 0;
+                    document.getElementById('walletBalance').innerText = '₹' + balance.toFixed(2);
                 }
+
+                // Fetch User Purchases / Investments
+                const purchasesRef = collection(db, "purchases");
+                const qPurchases = query(purchasesRef, where("phone", "==", userPhone));
+                const purchaseSnapshot = await getDocs(qPurchases);
+                const purchasesList = document.getElementById('purchasesList');
+                purchasesList.innerHTML = "";
+
+                if (purchaseSnapshot.empty) {
+                    purchasesList.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">No active asset leases found.</div>`;
+                } else {
+                    purchaseSnapshot.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        purchasesList.innerHTML += `
+                            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 space-y-1">
+                                <div class="flex justify-between items-center text-xs">
+                                    <strong class="text-yellow-400">${data.assetName}</strong>
+                                    <span class="text-[10px] text-green-400 bg-green-950/40 px-2 py-0.5 rounded-full border border-green-500/30">${data.status || 'Active'}</span>
+                                </div>
+                                <div class="flex justify-between text-[11px] text-gray-400">
+                                    <span>Price: ₹${data.price}</span>
+                                    <span class="text-green-400 font-bold">+₹${data.dailyReturn} / day</span>
+                                </div>
+                                <div class="text-[9px] text-gray-500 font-mono">Order ID: ${data.orderNo || 'N/A'}</div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Fetch Recharges History
+                const rechargesRef = collection(db, "recharges");
+                const qRecharges = query(rechargesRef, where("phone", "==", userPhone));
+                const rechargeSnapshot = await getDocs(qRecharges);
+                const rechargesList = document.getElementById('rechargesList');
+                rechargesList.innerHTML = "";
+
+                if (rechargeSnapshot.empty) {
+                    rechargesList.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">No recharge history found.</div>`;
+                } else {
+                    rechargeSnapshot.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        rechargesList.innerHTML += `
+                            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 flex justify-between items-center text-xs">
+                                <div>
+                                    <strong class="text-yellow-400 block">+₹${data.amount}</strong>
+                                    <span class="text-[9px] text-gray-500 font-mono">UTR: ${data.utrNumber}</span>
+                                    <span class="text-[9px] text-gray-600 block font-mono">ID: ${data.orderNo}</span>
+                                </div>
+                                <span class="text-[10px] text-green-400 bg-green-950/40 px-2 py-0.5 rounded-full border border-green-500/30">${data.status}</span>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Fetch Withdrawals History
+                const withdrawalsRef = collection(db, "withdrawals");
+                const qWithdrawals = query(withdrawalsRef, where("phone", "==", userPhone));
+                const withdrawalSnapshot = await getDocs(qWithdrawals);
+                const withdrawalsList = document.getElementById('withdrawalsList');
+                withdrawalsList.innerHTML = "";
+
+                if (withdrawalSnapshot.empty) {
+                    withdrawalsList.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">No withdrawal history found.</div>`;
+                } else {
+                    withdrawalSnapshot.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        withdrawalsList.innerHTML += `
+                            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 flex justify-between items-center text-xs">
+                                <div>
+                                    <strong class="text-red-400 block">-₹${data.amount}</strong>
+                                    <span class="text-[9px] text-gray-500 font-mono">UPI: ${data.upiId}</span>
+                                    <span class="text-[9px] text-gray-600 block font-mono">ID: ${data.orderNo}</span>
+                                </div>
+                                <span class="text-[10px] text-yellow-400 bg-yellow-950/40 px-2 py-0.5 rounded-full border border-yellow-500/30">${data.status}</span>
+                            </div>
+                        `;
+                    });
+                }
+
             } catch (e) {
                 console.error("Error loading profile data:", e);
             }
         });
 
-        window.logoutUser = function() {
+        window.logout = function() {
             localStorage.removeItem('userPhone');
             window.location.href = 'login.html';
         };
@@ -58,74 +139,54 @@
     <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center max-w-md mx-auto">
         <div class="flex items-center space-x-2">
             <div class="w-8 h-8 bg-gradient-to-tr from-yellow-600 to-amber-400 rounded-xl flex items-center justify-center text-black font-black shadow-lg">
-                <i class="fa-solid fa-user-shield"></i>
+                <i class="fa-solid fa-user"></i>
             </div>
-            <h1 class="text-base font-black tracking-wider text-yellow-400 uppercase">MY PROFILE</h1>
+            <h1 class="text-base font-black tracking-wider text-yellow-400 uppercase">USER PROFILE</h1>
         </div>
-        <button onclick="logoutUser()" class="bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-xl text-xs font-bold transition">
-            <i class="fa-solid fa-power-off mr-1"></i> Logout
-        </button>
+        <div class="text-right">
+            <span id="displayPhone" class="text-[10px] text-gray-400 block font-bold">Loading...</span>
+        </div>
     </div>
-       <div class="max-w-md mx-auto p-4 space-y-5">
+        <div class="max-w-md mx-auto p-4 space-y-5">
         
         <!-- User Info Card -->
-        <div class="bg-gray-900 border border-gray-800 p-5 rounded-3xl shadow-xl space-y-4">
-            <div class="flex items-center space-x-4">
-                <div class="w-14 h-14 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-2xl flex items-center justify-center text-2xl font-black">
-                    <i class="fa-solid fa-user"></i>
+        <div class="bg-gradient-to-br from-gray-900 to-gray-900 p-5 rounded-3xl border border-yellow-500/30 shadow-2xl flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-yellow-500/20 border border-yellow-500/40 rounded-2xl flex items-center justify-center text-yellow-400 text-xl font-black">
+                    <i class="fa-solid fa-user-shield"></i>
                 </div>
                 <div>
-                    <span class="text-[9px] text-gray-500 font-bold uppercase block tracking-wider">Registered Account</span>
-                    <h2 id="profilePhone" class="text-base font-black text-white mt-0.5">Loading...</h2>
-                    <span class="inline-block bg-green-500/10 border border-green-500/30 text-green-400 text-[9px] px-2 py-0.5 rounded-full font-bold mt-1">Verified Member</span>
+                    <span class="text-[9px] text-gray-400 uppercase tracking-wider block font-bold">Account Phone</span>
+                    <h3 id="userPhoneCard" class="text-sm font-black text-white">Loading...</h3>
+                    <p id="walletBalance" class="text-xs font-black text-yellow-400 mt-0.5">₹0.00</p>
                 </div>
             </div>
+            <button onclick="logout()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-2 rounded-xl text-xs font-black transition uppercase">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
 
-            <div class="grid grid-cols-2 gap-3 pt-3 border-t border-gray-800">
-                <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800/60">
-                    <span class="text-[9px] text-gray-500 font-bold uppercase block">Main Wallet</span>
-                    <h3 id="profileBalance" class="text-lg font-black text-yellow-400 mt-0.5">₹0.00</h3>
-                </div>
-                <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800/60">
-                    <span class="text-[9px] text-gray-500 font-bold uppercase block">Locked Earnings</span>
-                    <h3 id="profileLocked" class="text-lg font-black text-amber-400 mt-0.5">₹0.00</h3>
-                </div>
+        <!-- Active Leased Assets History -->
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-3xl shadow-xl space-y-3">
+            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-toolbox mr-1"></i> My Leased Assets</h3>
+            <div id="purchasesList" class="space-y-2">
+                <div class="text-center py-3 text-gray-500 text-xs">Loading assets...</div>
             </div>
         </div>
 
-        <!-- Quick Options Menu -->
-        <div class="bg-gray-900 border border-gray-800 rounded-3xl overflow-hidden shadow-xl">
-            <a href="recharge.html" class="flex items-center justify-between p-4 border-b border-gray-800/80 hover:bg-gray-800/40 transition">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-yellow-500/10 text-yellow-400 rounded-xl flex items-center justify-center text-sm">
-                        <i class="fa-solid fa-wallet"></i>
-                    </div>
-                    <span class="text-xs font-bold text-white">Recharge Funds</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
-            </a>
+        <!-- Recharge History -->
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-3xl shadow-xl space-y-3">
+            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-wallet mr-1"></i> Recharge History</h3>
+            <div id="rechargesList" class="space-y-2">
+                <div class="text-center py-3 text-gray-500 text-xs">Loading recharges...</div>
+            </div>
+        </div>
 
-            <a href="withdraw.html" class="flex items-center justify-between p-4 border-b border-gray-800/80 hover:bg-gray-800/40 transition">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-green-500/10 text-green-400 rounded-xl flex items-center justify-center text-sm">
-                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                    </div>
-                    <span class="text-xs font-bold text-white">Withdraw Earnings</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
-            </a>
-
-            <div class="flex items-center justify-between p-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center text-sm">
-                        <i class="fa-solid fa-headset"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-bold text-white block">Customer Support</span>
-                        <span class="text-[10px] text-gray-500">Available 24/7 via Telegram</span>
-                    </div>
-                </div>
-                <span class="text-[10px] font-bold text-yellow-400 bg-yellow-500/10 px-2.5 py-1 rounded-xl border border-yellow-500/20">Online</span>
+        <!-- Withdrawal History -->
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-3xl shadow-xl space-y-3">
+            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-arrow-right-arrow-left mr-1"></i> Withdrawal History</h3>
+            <div id="withdrawalsList" class="space-y-2">
+                <div class="text-center py-3 text-gray-500 text-xs">Loading withdrawals...</div>
             </div>
         </div>
 
@@ -152,5 +213,4 @@
     </div>
 
 </body>
-                </html>
-                
+</html>
