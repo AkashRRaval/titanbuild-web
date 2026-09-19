@@ -13,13 +13,12 @@
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyC89zMGIcD6Gi-KuNzP7xlRsqfj0gtXhDo",
-            authDomain: "titanbuild-1509e.firebaseapp.com",
+            apiKey: "AIzaSyD5TOY2RYSYrxvugtDF1F2x79GMAjyzPYw",
+            authDomain: "safargo-55e25.firebaseapp.com",
             projectId: "safargo-55e25",
-            storageBucket: "titanbuild-1509e.firebasestorage.app",
-            messagingSenderId: "740130026137",
-            appId: "1:740130026137:web:ca74a4ca8c72b537efbe08",
-            measurementId: "G-70T3E080HM"
+            storageBucket: "safargo-55e25.firebasestorage.app",
+            messagingSenderId: "812165464390",
+            appId: "1:812165464390:web:cfb18865e8af5f5b24a547"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -31,7 +30,7 @@
             const password = document.getElementById('loginPassword').value.trim();
 
             if (!phone || !password) {
-                alert('Please enter phone number and password!');
+                alert('Please enter both phone number and password!');
                 return;
             }
 
@@ -46,7 +45,6 @@
                 }
 
                 const userData = userSnap.data();
-
                 if (userData.password !== password) {
                     alert('Incorrect password! Please try again.');
                     return;
@@ -59,8 +57,8 @@
                 alert('Login Successful!');
                 window.location.href = 'index.html';
             } catch (error) {
-                console.error("Login error: ", error);
-                alert('Login failed. Please check your internet connection.');
+                console.error("Error logging in: ", error);
+                alert('Firebase Error: ' + error.message);
             }
         };
     </script>
@@ -70,7 +68,7 @@
     <div class="max-w-md w-full bg-gray-900 border border-gray-800 rounded-3xl p-6 shadow-2xl space-y-6">
         <div class="text-center space-y-2">
             <h1 class="text-2xl font-black text-yellow-400 tracking-wider">TITANBUILD</h1>
-            <p class="text-xs text-gray-400">Login to your account</p>
+            <p class="text-xs text-gray-400">Login to your account to continue</p>
         </div>
 
         <form onsubmit="handleLogin(event)" class="space-y-4">
@@ -99,4 +97,3 @@
 
 </body>
 </html>
-
