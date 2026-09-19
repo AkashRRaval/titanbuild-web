@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Fleet & VIP Assets</title>
+    <title>TitanBuild - Platform Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -46,6 +46,7 @@
             }
         });
 
+        // Investment Function supporting multiple types
         window.investAsset = async function(price, dailyReturn, assetName) {
             const userPhone = localStorage.getItem('userPhone');
             if (!userPhone) {
@@ -75,13 +76,27 @@
                     lockedEarnings: increment(dailyReturn)
                 });
 
-                alert('Successfully leased ' + assetName + '! Daily returns added to your account.');
+                alert('Successfully purchased/leased ' + assetName + '!');
                 location.reload();
 
             } catch (e) {
                 console.error("Investment error:", e);
                 alert('Transaction failed. Please try again.');
             }
+        };
+
+        // Tab Switching Logic for Categories (Standard, VIP, Debit Card, etc.)
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('border-yellow-400', 'text-yellow-400', 'bg-yellow-500/10');
+                el.classList.add('border-gray-800', 'text-gray-400');
+            });
+            
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('border-gray-800', 'text-gray-400');
+            activeBtn.classList.add('border-yellow-400', 'text-yellow-400', 'bg-yellow-500/10');
         };
     </script>
 </head>
@@ -113,34 +128,50 @@
                 </a>
             </div>
             <div class="flex justify-between items-center pt-3 border-t border-gray-800/80 text-xs">
-                <span class="text-gray-400">Locked Lease Earnings:</span>
+                <span class="text-gray-400">Total Locked Returns:</span>
                 <strong id="lockedBalance" class="text-amber-400 font-black">₹0.00</strong>
             </div>
         </div>
 
-        <!-- Section 1: Standard Fleet & Equipment Assets (Real Images) -->
-        <div class="space-y-3">
+        <!-- Category Tabs (Standard Fleet, Debit Card, VIP Options) -->
+        <div class="grid grid-cols-3 gap-2">
+            <button id="btn-standard" onclick="switchTab('standard')" class="tab-btn border border-yellow-400 bg-yellow-500/10 text-yellow-400 py-2.5 rounded-2xl text-[11px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
+                <i class="fa-solid fa-truck-fast text-sm"></i>
+                <span>Fleet</span>
+            </button>
+            <button id="btn-debit" onclick="switchTab('debit')" class="tab-btn border border-gray-800 text-gray-400 bg-gray-900 py-2.5 rounded-2xl text-[11px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
+                <i class="fa-solid fa-credit-card text-sm"></i>
+                <span>Debit Card</span>
+            </button>
+            <button id="btn-vip" onclick="switchTab('vip')" class="tab-btn border border-gray-800 text-gray-400 bg-gray-900 py-2.5 rounded-2xl text-[11px] font-black uppercase transition flex flex-col items-center justify-center space-y-1">
+                <i class="fa-solid fa-crown text-sm"></i>
+                <span>VIP Gold</span>
+            </button>
+        </div>
+
+        <!-- TAB 1: Standard Fleet Products -->
+        <div id="content-standard" class="tab-content space-y-3">
             <div class="flex justify-between items-center px-1">
-                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-truck-fast mr-1"></i> Fleet & Equipment Assets</h3>
-                <span class="text-[10px] text-gray-500 font-bold">Verified Units</span>
+                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-toolbox mr-1"></i> Fleet & Equipment Assets</h3>
+                <span class="text-[10px] text-gray-500 font-bold">Standard Tier</span>
             </div>
 
             <!-- Asset Card 1 -->
             <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
                 <div class="h-40 bg-gray-950 relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Heavy Crane" class="w-full h-full object-cover opacity-80 hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Heavy Crane" class="w-full h-full object-cover opacity-80">
                     <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">
-                        Standard Lease
+                        Standard Unit
                     </div>
                 </div>
                 <div class="p-4 space-y-3">
                     <div>
                         <h4 class="text-sm font-black text-white">Titan Heavy Crane X1</h4>
-                        <p class="text-[11px] text-gray-400 mt-0.5">Daily high-yield industrial deployment unit.</p>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Daily industrial deployment unit.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800/60 text-xs">
                         <div>
-                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Lease Price</span>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
                             <strong class="text-yellow-400 font-black">₹1,000</strong>
                         </div>
                         <div>
@@ -148,8 +179,8 @@
                             <strong class="text-green-400 font-black">+₹250 / day</strong>
                         </div>
                     </div>
-                    <button onclick="investAsset(1000, 250, 'Titan Heavy Crane X1')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-3 rounded-2xl text-xs uppercase tracking-wide transition shadow-md">
-                        LEASE ASSET NOW
+                    <button onclick="investAsset(1000, 250, 'Titan Heavy Crane X1')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-3 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET
                     </button>
                 </div>
             </div>
@@ -157,7 +188,7 @@
             <!-- Asset Card 2 -->
             <div class="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden shadow-xl">
                 <div class="h-40 bg-gray-950 relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1541888946425-d0fbb18f0296?auto=format&fit=crop&w=600&q=80" alt="Construction Excavator" class="w-full h-full object-cover opacity-80 hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1541888946425-d0fbb18f0296?auto=format&fit=crop&w=600&q=80" alt="Excavator" class="w-full h-full object-cover opacity-80">
                     <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-yellow-500/30 text-[10px] font-black text-yellow-400 uppercase">
                         High Yield
                     </div>
@@ -165,11 +196,11 @@
                 <div class="p-4 space-y-3">
                     <div>
                         <h4 class="text-sm font-black text-white">Titan Pro Excavator 300</h4>
-                        <p class="text-[11px] text-gray-400 mt-0.5">Heavy-duty commercial earthmoving asset.</p>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Commercial earthmoving asset.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800/60 text-xs">
                         <div>
-                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Lease Price</span>
+                            <span class="text-[9px] text-gray-500 uppercase block font-bold">Price</span>
                             <strong class="text-yellow-400 font-black">₹3,000</strong>
                         </div>
                         <div>
@@ -177,29 +208,60 @@
                             <strong class="text-green-400 font-black">+₹800 / day</strong>
                         </div>
                     </div>
-                    <button onclick="investAsset(3000, 800, 'Titan Pro Excavator 300')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-3 rounded-2xl text-xs uppercase tracking-wide transition shadow-md">
-                        LEASE ASSET NOW
+                    <button onclick="investAsset(3000, 800, 'Titan Pro Excavator 300')" class="w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-black py-3 rounded-2xl text-xs uppercase tracking-wide transition">
+                        LEASE ASSET
                     </button>
                 </div>
             </div>
         </div>
-                <!-- Section 2: Premium Golden-Themed VIP Assets (Royal Font & Styling) -->
-        <div class="space-y-3 pt-2">
+                <!-- TAB 2: Debit Card / Financial Assets -->
+        <div id="content-debit" class="tab-content hidden space-y-3">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-credit-card mr-1"></i> Titan Financial Debit Cards</h3>
+                <span class="text-[10px] text-gray-500 font-bold">Secure Cards</span>
+            </div>
+
+            <!-- Debit Card Item -->
+            <div class="bg-gradient-to-r from-gray-900 via-gray-900 to-yellow-950/30 rounded-3xl border border-yellow-500/40 p-5 space-y-4 shadow-xl">
+                <div class="flex justify-between items-center">
+                    <span class="text-[9px] font-black tracking-widest text-black bg-yellow-400 px-2.5 py-0.5 rounded-full uppercase">TITAN BLACK CARD</span>
+                    <i class="fa-brands fa-cc-visa text-2xl text-yellow-400"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-black text-white">Titan Metal Debit Card</h4>
+                    <p class="text-[11px] text-gray-400 mt-0.5">Physical metal card with daily financial rewards & cashback.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 bg-gray-950 p-2.5 rounded-2xl border border-gray-800 text-xs">
+                    <div>
+                        <span class="text-[9px] text-gray-500 uppercase block font-bold">Card Activation Fee</span>
+                        <strong class="text-yellow-400 font-black">₹2,500</strong>
+                    </div>
+                    <div>
+                        <span class="text-[9px] text-gray-500 uppercase block font-bold">Daily Cashback</span>
+                        <strong class="text-green-400 font-black">+₹600 / day</strong>
+                    </div>
+                </div>
+                <button onclick="investAsset(2500, 600, 'Titan Metal Debit Card')" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg">
+                    ORDER DEBIT CARD
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 3: VIP Gold Options -->
+        <div id="content-vip" class="tab-content hidden space-y-3">
             <div class="flex justify-between items-center px-1">
                 <h3 class="text-xs font-black text-amber-300 uppercase tracking-widest"><i class="fa-solid fa-crown mr-1"></i> VIP Golden Tier Assets</h3>
                 <span class="text-[10px] text-amber-500 font-bold">Exclusive</span>
             </div>
 
-            <!-- VIP Card 1 (Golden Styled Typography & Border) -->
+            <!-- VIP Card Item -->
             <div class="bg-gradient-to-b from-gray-900 via-gray-900 to-amber-950/20 rounded-3xl border-2 border-amber-500/50 p-5 shadow-2xl space-y-4 relative overflow-hidden">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
-                
                 <div class="flex justify-between items-start">
                     <div>
                         <span class="text-[9px] font-black tracking-widest text-amber-400 uppercase bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/30">VIP EXCLUSIVE</span>
                         <h4 class="text-base font-black text-amber-200 mt-2 tracking-wide font-serif">Titan Emperor VIP Syndicate</h4>
                     </div>
-                    <div class="w-10 h-10 bg-amber-500/20 rounded-2xl border border-amber-500/40 flex items-center justify-center text-amber-400 text-lg shadow-inner">
+                    <div class="w-10 h-10 bg-amber-500/20 rounded-2xl border border-amber-500/40 flex items-center justify-center text-amber-400 text-lg">
                         <i class="fa-solid fa-gem"></i>
                     </div>
                 </div>
@@ -225,7 +287,7 @@
 
     </div>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (4 Options: Home, Recharge, Withdraw, Profile) -->
     <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-2 flex justify-around items-center z-50 max-w-md mx-auto">
         <a href="index.html" class="text-yellow-400 flex flex-col items-center py-1 text-xs font-bold">
             <i class="fa-solid fa-house text-base"></i>
