@@ -28,13 +28,18 @@
             border-radius: 10px 10px 0 0;
             margin-bottom: 20px;
         }
+        .admin-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
         .admin-section {
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 10px;
             padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
         }
         .admin-header h3 {
             color: #fbbf24;
@@ -44,18 +49,19 @@
             gap: 8px;
             border-bottom: 1px solid #374151;
             padding-bottom: 10px;
+            margin-bottom: 15px;
         }
+        /* Grid for Live Chat & Complaints */
         .admin-content-grid {
             display: flex;
             gap: 15px;
-            margin-top: 15px;
         }
         .users-list-box {
             width: 35%;
             background: #1f2937;
             border-radius: 8px;
             padding: 12px;
-            max-height: 450px;
+            max-height: 400px;
             overflow-y: auto;
             border: 1px solid #374151;
         }
@@ -90,7 +96,7 @@
             flex-direction: column;
             justify-content: space-between;
             border: 1px solid #374151;
-            height: 450px;
+            height: 400px;
         }
         #chatHeaderInfo {
             font-size: 13px;
@@ -131,42 +137,108 @@
             text-align: right;
             margin-top: 2px;
         }
+        .admin-reply-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            border-top: 1px solid #374151;
+            padding-top: 10px;
+        }
+        .admin-reply-area input {
+            flex: 1;
+            background: #111827;
+            border: 1px solid #374151;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 12px;
+            outline: none;
+        }
+        .admin-reply-area button {
+            background: #fbbf24;
+            color: #111827;
+            border: none;
+            padding: 0 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        /* Existing sections styling */
+        .legacy-data-box {
+            font-size: 13px;
+            color: #94a3b8;
+            padding: 10px;
+            background: #1f2937;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border: 1px solid #374151;
+        }
     </style>
 </head>
 <body>
 
-    <div class="admin-section">
-        <div class="header" style="margin: 0 0 15px 0; border-radius: 6px;">
-            TitanBuild Admin Panel
+    <div class="admin-container">
+        <div class="header">
+            TitanBuild Admin Dashboard
         </div>
 
-        <div class="admin-header">
-            <h3><i class="fas fa-headset"></i> User Complaints & Live Chats</h3>
-        </div>
-        
-        <div class="admin-content-grid">
-            <!-- Left Side: User IDs List -->
-            <div class="users-list-box">
-                <h4>Active Users</h4>
-                <div id="adminUsersList">
-                    <div style="color: #64748b; font-size: 12px; text-align: center; padding: 20px;">Loading...</div>
+        <!-- 1. NEW: User Complaints & Live Chats Section -->
+        <div class="admin-section">
+            <div class="admin-header">
+                <h3><i class="fas fa-headset"></i> User Complaints & Live Chats</h3>
+            </div>
+            
+            <div class="admin-content-grid">
+                <!-- Left Side: User IDs List -->
+                <div class="users-list-box">
+                    <h4>Active Users</h4>
+                    <div id="adminUsersList">
+                        <div style="color: #64748b; font-size: 12px; text-align: center; padding: 20px;">Loading chats...</div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Selected User Chat Thread -->
+                <div class="chat-thread-box">
+                    <div>
+                        <div id="chatHeaderInfo">Select a user to view chat & reply</div>
+                        <div id="adminChatMessages">
+                            <div style="color: #64748b; text-align: center; margin-top: 100px; font-size: 13px;">No chat selected</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Reply Box -->
+                    <div class="admin-reply-area" id="replyArea" style="display: none;">
+                        <input type="text" id="adminReplyInput" placeholder="Type reply to user...">
+                        <button onclick="sendAdminReply()">Send</button>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Right Side: Selected User Chat Thread -->
-            <div class="chat-thread-box">
-                <div id="chatHeaderInfo">
-                    Select a user to view chat
-                </div>
-                
-                <div id="adminChatMessages">
-                    <div style="color: #64748b; text-align: center; margin-top: 150px; font-size: 13px;">No chat selected</div>
-                </div>
+        <!-- 2. EXISTING/PREVIOUS SECTIONS (Recharge & Withdrawals Management) -->
+        <div class="admin-section">
+            <div class="admin-header">
+                <h3><i class="fas fa-wallet"></i> Recharge Requests Management</h3>
+            </div>
+            <div class="legacy-data-box">
+                <p>Pending / Approved Recharge UTR records will appear here as usual.</p>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <div class="admin-header">
+                <h3><i class="fas fa-exchange-alt"></i> Withdrawal Orders Management</h3>
+            </div>
+            <div class="legacy-data-box">
+                <p>User withdrawal requests and bank/UPI details will appear here as usual.</p>
             </div>
         </div>
     </div>
 
     <script>
+        let currentSelectedUser = null;
+
         function loadAdminComplaints() {
             const complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
             const usersListDiv = document.getElementById('adminUsersList');
@@ -187,17 +259,22 @@
         }
 
         function openUserChat(thread) {
+            currentSelectedUser = thread.userId;
             document.getElementById('chatHeaderInfo').innerHTML = `Chat with: <span style="color: #fbbf24; font-weight: bold;">${thread.userId}</span>`;
+            document.getElementById('replyArea').style.display = 'flex';
+            renderMessages(thread);
+        }
+
+        function renderMessages(thread) {
             const chatBox = document.getElementById('adminChatMessages');
             chatBox.innerHTML = '';
 
             thread.messages.forEach(msg => {
                 const msgDiv = document.createElement('div');
-                // Check if message is from user or bot/admin
                 if (msg.sender === 'user') {
                     msgDiv.className = 'msg-bubble user';
                 } else {
-                    msgDiv.className = 'msg-bubble bot';
+                    msgDiv.className = 'msg-bubble bot'; // bot or admin replies
                 }
                 msgDiv.innerHTML = `${msg.text} <div class="time-text">${msg.time}</div>`;
                 chatBox.appendChild(msgDiv);
@@ -206,7 +283,25 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Load list on page start
+        function sendAdminReply() {
+            const input = document.getElementById('adminReplyInput');
+            const replyText = input.value.trim();
+            if(!replyText || !currentSelectedUser) return;
+
+            let complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
+            let userThread = complaints.find(c => c.userId === currentSelectedUser);
+
+            if(userThread) {
+                let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                userThread.messages.push({ sender: 'bot', text: replyText, time: timeStr });
+                localStorage.setItem('admin_complaints', JSON.stringify(complaints));
+
+                input.value = '';
+                renderMessages(userThread);
+            }
+        }
+
+        // Auto load on start
         window.onload = function() {
             loadAdminComplaints();
         };
