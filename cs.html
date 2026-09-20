@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Customer Service</title>
+    <title>TitanBuild - Customer Support</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -22,10 +22,10 @@
         .header {
             background: #111827;
             color: #fbbf24;
-            padding: 14px 16px;
+            padding: 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
             font-size: 16px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
@@ -34,89 +34,101 @@
             cursor: pointer;
             font-size: 18px;
         }
+        /* Chat Box Container */
         .chat-container {
             flex: 1;
             padding: 15px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
+            padding-bottom: 70px;
         }
-        .msg {
+        .message {
             max-width: 80%;
             padding: 10px 14px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 13px;
             line-height: 1.4;
+            word-wrap: break-word;
         }
-        .msg.bot {
-            background: #1f2937;
-            color: #e2e8f0;
-            align-self: flex-start;
-            border: 1px solid #374151;
-        }
-        .msg.user {
+        .message.user {
             background: #fbbf24;
             color: #111827;
             align-self: flex-end;
-            font-weight: 500;
+            border-bottom-right-radius: 2px;
         }
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 5px 0;
-        }
-        .option-btn {
-            background: #1f2937;
-            color: #fbbf24;
-            border: 1px solid #fbbf24;
-            padding: 10px 14px;
-            border-radius: 8px;
-            text-align: left;
-            cursor: pointer;
-            font-size: 13px;
-            transition: 0.2s;
-        }
-        .option-btn:hover {
-            background: #fbbf24;
-            color: #111827;
-        }
-        .chat-input-area {
+        .message.admin {
             background: #111827;
-            padding: 12px 15px;
-            display: flex;
-            gap: 10px;
-            border-top: 1px solid #1f2937;
+            color: #fff;
+            align-self: flex-start;
+            border: 1px solid #1f2937;
+            border-bottom-left-radius: 2px;
         }
-        .chat-input-area input {
+        .message img, .message video {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+        .file-attachment {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 5px;
+            color: inherit;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        /* Chat Input Bar */
+        .chat-input-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-top: 1px solid #1f2937;
+            gap: 10px;
+        }
+        .chat-input-bar label {
+            color: #fbbf24;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .chat-input-bar input[type="file"] {
+            display: none;
+        }
+        .chat-input-bar input[type="text"] {
             flex: 1;
-            background: #1f2937;
+            background: #0b0f19;
             border: 1px solid #374151;
             padding: 10px 14px;
-            border-radius: 8px;
+            border-radius: 20px;
             color: #fff;
-            outline: none;
             font-size: 13px;
+            outline: none;
         }
-        .chat-input-area input:focus {
+        .chat-input-bar input[type="text"]:focus {
             border-color: #fbbf24;
         }
-        .chat-input-area button {
+        .send-btn {
             background: #fbbf24;
             color: #111827;
             border: none;
-            padding: 0 16px;
-            border-radius: 8px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            font-weight: bold;
             font-size: 14px;
-        }
-        .time-stamp {
-            font-size: 9px;
-            opacity: 0.6;
-            margin-top: 4px;
-            text-align: right;
         }
     </style>
 </head>
@@ -124,93 +136,116 @@
 
     <div class="header">
         <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
-        <span>Customer Service Support</span>
+        <span>Customer Support Chat</span>
+        <i class="fas fa-headset"></i>
     </div>
 
+    <!-- Messages Container -->
     <div class="chat-container" id="chatContainer">
-        <!-- Messages will load dynamically here -->
+        <div class="message admin">
+            Hello! Welcome to TitanBuild support. How can we help you today? Send your queries or documents here.
+        </div>
     </div>
 
-    <div class="chat-input-area">
-        <input type="text" id="userInput" placeholder="Type your message here...">
-        <button onclick="sendUserMessage()"><i class="fas fa-paper-plane"></i></button>
+    <!-- Chat Input Form -->
+    <div class="chat-input-bar">
+        <!-- Attachment Option for Photos, Videos, PDFs -->
+        <label for="fileInput" title="Attach Photo, Video or PDF">
+            <i class="fas fa-paperclip"></i>
+        </label>
+        <input type="file" id="fileInput" accept="image/*,video/*,.pdf" onchange="handleFileUpload(event)">
+        
+        <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+        
+        <button class="send-btn" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
     </div>
 
     <script>
-        const userId = localStorage.getItem('user_phone') || 'User_7359679116';
+        // Load existing messages from localStorage
+        window.onload = function() {
+            loadMessages();
+        };
 
-        // Load existing chat history including admin replies when page opens
-        function loadUserChatHistory() {
-            const complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
-            let userThread = complaints.find(c => c.userId === userId);
-            const chatContainer = document.getElementById('chatContainer');
-            chatContainer.innerHTML = '';
-
-            if (!userThread || userThread.messages.length === 0) {
-                // Default Welcome Message & Options if no chat started
-                chatContainer.innerHTML = `
-                    <div class="msg bot">
-                        Hello! Welcome to TitanBuild Support. Please select your issue below:
-                        <div class="time-stamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                        <div class="options-container" id="optionsBox">
-                            <button class="option-btn" onclick="selectOption('Recharge Problem (Amount not added)')">1. Recharge Problem (Amount not added)</button>
-                            <button class="option-btn" onclick="selectOption('Withdrawal Problem (Not received yet)')">2. Withdrawal Problem (Not received yet)</button>
-                            <button class="option-btn" onclick="selectOption('Other Issue / General Support')">3. Other Issue / General Support</button>
-                        </div>
-                    </div>
-                `;
-            } else {
-                // Render all previous messages
-                userThread.messages.forEach(msg => {
-                    const div = document.createElement('div');
-                    div.className = `msg ${msg.sender}`;
-                    div.innerHTML = `${msg.text} <div class="time-stamp">${msg.time}</div>`;
-                    chatContainer.appendChild(div);
-                });
-            }
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+        function loadMessages() {
+            const container = document.getElementById('chatContainer');
+            let messages = JSON.parse(localStorage.getItem('titan_support_chats')) || [];
+            
+            // Keep default welcome message, append stored ones
+            messages.forEach(msg => {
+                appendMessageToUI(msg);
+            });
         }
 
-        function saveMessageToStorage(sender, text) {
-            let complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
-            let userThread = complaints.find(c => c.userId === userId);
-            if (!userThread) {
-                userThread = { userId: userId, messages: [] };
-                complaints.push(userThread);
-            }
-            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            userThread.messages.push({ sender: sender, text: text, time: timeStr });
-            localStorage.setItem('admin_complaints', JSON.stringify(complaints));
-        }
-
-        function selectOption(optionText) {
-            saveMessageToStorage('user', optionText);
-            saveMessageToStorage('bot', 'Please show your problem in detail.');
-            loadUserChatHistory();
-        }
-
-        function sendUserMessage() {
-            const inputField = document.getElementById('userInput');
-            const text = inputField.value.trim();
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
             if (!text) return;
 
-            saveMessageToStorage('user', text);
-            inputField.value = '';
-            loadUserChatHistory();
+            const msgObj = {
+                sender: 'user',
+                type: 'text',
+                content: text,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            saveAndDisplayMessage(msgObj);
+            input.value = '';
         }
 
-        document.getElementById('userInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendUserMessage();
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                let fileType = 'file';
+                if (file.type.startsWith('image/')) fileType = 'image';
+                else if (file.type.startsWith('video/')) fileType = 'video';
+                else if (file.type === 'application/pdf') fileType = 'pdf';
+
+                const msgObj = {
+                    sender: 'user',
+                    type: fileType,
+                    content: base64Data,
+                    fileName: file.name,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+
+                saveAndDisplayMessage(msgObj);
+            };
+            reader.readAsDataURL(file);
+            event.target.value = ''; // Reset input
+        }
+
+        function saveAndDisplayMessage(msgObj) {
+            let messages = JSON.parse(localStorage.getItem('titan_support_chats')) || [];
+            messages.push(msgObj);
+            localStorage.setItem('titan_support_chats', JSON.stringify(messages));
+
+            appendMessageToUI(msgObj);
+        }
+
+        function appendMessageToUI(msg) {
+            const container = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.className = `message ${msg.sender}`;
+
+            if (msg.type === 'text') {
+                div.innerHTML = `${msg.content} <div style="font-size:9px; color:#94a3b8; text-align:right; margin-top:2px;">${msg.time}</div>`;
+            } else if (msg.type === 'image') {
+                div.innerHTML = `<img src="${msg.content}" alt="Image"><div style="font-size:9px; color:#94a3b8; text-align:right; margin-top:2px;">${msg.time}</div>`;
+            } else if (msg.type === 'video') {
+                div.innerHTML = `<video controls src="${msg.content}"></video><div style="font-size:9px; color:#94a3b8; text-align:right; margin-top:2px;">${msg.time}</div>`;
+            } else if (msg.type === 'pdf' || msg.type === 'file') {
+                div.innerHTML = `<a href="${msg.content}" target="_blank" class="file-attachment"><i class="fas fa-file-pdf" style="font-size:18px; color:#ef4444;"></i> <span>${msg.fileName || 'View Document'}</span></a><div style="font-size:9px; color:#94a3b8; text-align:right; margin-top:2px;">${msg.time}</div>`;
             }
-        });
 
-        // Auto refresh chat every 2 seconds to see admin replies live
-        setInterval(loadUserChatHistory, 2000);
-
-        window.onload = function() {
-            loadUserChatHistory();
-        };
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
     </script>
 </body>
 </html>
