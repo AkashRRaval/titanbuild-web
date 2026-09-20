@@ -128,18 +128,7 @@
     </div>
 
     <div class="chat-container" id="chatContainer">
-        <!-- Default Welcome Message -->
-        <div class="msg bot">
-            Hello! Welcome to TitanBuild Support. Please select your issue below:
-            <div class="time-stamp" id="welcomeTime"></div>
-        </div>
-
-        <!-- 3 Option Buttons -->
-        <div class="options-container" id="optionsBox">
-            <button class="option-btn" onclick="selectOption('Recharge Problem (Amount not added)')">1. Recharge Problem (Amount not added)</button>
-            <button class="option-btn" onclick="selectOption('Withdrawal Problem (Not received yet)')">2. Withdrawal Problem (Not received yet)</button>
-            <button class="option-btn" onclick="selectOption('Other Issue / General Support')">3. Other Issue / General Support</button>
-        </div>
+        <!-- Messages will load dynamically here -->
     </div>
 
     <div class="chat-input-area">
@@ -148,85 +137,80 @@
     </div>
 
     <script>
-        const userId = localStorage.getItem('user_phone') || 'User_' + Math.floor(Math.random() * 10000);
-        
-        // Set welcome message timestamp
-        document.getElementById('welcomeTime').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const userId = localStorage.getItem('user_phone') || 'User_7359679116';
 
-        function getChatHistory() {
+        // Load existing chat history including admin replies when page opens
+        function loadUserChatHistory() {
+            const complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
+            let userThread = complaints.find(c => c.userId === userId);
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.innerHTML = '';
+
+            if (!userThread || userThread.messages.length === 0) {
+                // Default Welcome Message & Options if no chat started
+                chatContainer.innerHTML = `
+                    <div class="msg bot">
+                        Hello! Welcome to TitanBuild Support. Please select your issue below:
+                        <div class="time-stamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                        <div class="options-container" id="optionsBox">
+                            <button class="option-btn" onclick="selectOption('Recharge Problem (Amount not added)')">1. Recharge Problem (Amount not added)</button>
+                            <button class="option-btn" onclick="selectOption('Withdrawal Problem (Not received yet)')">2. Withdrawal Problem (Not received yet)</button>
+                            <button class="option-btn" onclick="selectOption('Other Issue / General Support')">3. Other Issue / General Support</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Render all previous messages
+                userThread.messages.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = `msg ${msg.sender}`;
+                    div.innerHTML = `${msg.text} <div class="time-stamp">${msg.time}</div>`;
+                    chatContainer.appendChild(div);
+                });
+            }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function saveMessageToStorage(sender, text) {
             let complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
             let userThread = complaints.find(c => c.userId === userId);
             if (!userThread) {
                 userThread = { userId: userId, messages: [] };
                 complaints.push(userThread);
-                localStorage.setItem('admin_complaints', JSON.stringify(complaints));
             }
-            return { complaints, userThread };
-        }
-
-        function saveMessageToStorage(sender, text) {
-            let data = getChatHistory();
             let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            data.userThread.messages.push({ sender: sender, text: text, time: timeStr });
-            localStorage.setItem('admin_complaints', JSON.stringify(data.complaints));
+            userThread.messages.push({ sender: sender, text: text, time: timeStr });
+            localStorage.setItem('admin_complaints', JSON.stringify(complaints));
         }
 
-        // Jab user un 3 buttons me se kisi par click karega
         function selectOption(optionText) {
-            const chatContainer = document.getElementById('chatContainer');
-            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            // 1. Show user selected option as a message
-            appendMessageToUI('user', optionText, timeStr);
             saveMessageToStorage('user', optionText);
-
-            // Hide options buttons after selection
-            document.getElementById('optionsBox').style.display = 'none';
-
-            // 2. Automated Bot Reply for options
-            setTimeout(() => {
-                const botReply = "Please show your problem in detail.";
-                appendMessageToUI('bot', botReply, timeStr);
-                saveMessageToStorage('bot', botReply);
-            }, 500);
+            saveMessageToStorage('bot', 'Please show your problem in detail.');
+            loadUserChatHistory();
         }
 
-        // Jab user custom message type karke bhejega
         function sendUserMessage() {
             const inputField = document.getElementById('userInput');
             const text = inputField.value.trim();
             if (!text) return;
 
-            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
-            // Show user custom message
-            appendMessageToUI('user', text, timeStr);
             saveMessageToStorage('user', text);
-
             inputField.value = '';
-            
-            // Hide options if still visible
-            const optBox = document.getElementById('optionsBox');
-            if(optBox) optBox.style.display = 'none';
-
-            // NOTE: Yahan koi auto-reply nahi jayega. Yeh message seedha admin panel mein save ho jayega taaki aap wahan se dekh kar reply kar sako.
+            loadUserChatHistory();
         }
 
-        function appendMessageToUI(sender, text, time) {
-            const chatContainer = document.getElementById('chatContainer');
-            const div = document.createElement('div');
-            div.className = `msg ${sender}`;
-            div.innerHTML = `${text} <div class="time-stamp">${time}</div>`;
-            chatContainer.appendChild(div);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        // Allow enter key to send message
         document.getElementById('userInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 sendUserMessage();
             }
         });
+
+        // Auto refresh chat every 2 seconds to see admin replies live
+        setInterval(loadUserChatHistory, 2000);
+
+        window.onload = function() {
+            loadUserChatHistory();
+        };
     </script>
 </body>
 </html>
