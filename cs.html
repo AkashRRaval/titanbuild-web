@@ -59,12 +59,11 @@
             border-bottom-right-radius: 2px;
             font-weight: 500;
         }
-        /* Quick Option Buttons */
         .options-container {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-top: 5px;
+            margin-top: 8px;
         }
         .option-btn {
             background: #1e293b;
@@ -82,7 +81,6 @@
             background: #229ed9;
             color: #fff;
         }
-        /* Chat Input Footer */
         .chat-footer {
             background: #111827;
             padding: 12px;
@@ -124,9 +122,8 @@
     </div>
 
     <div class="chat-container" id="chatContainer">
-        <!-- Initial Bot Greeting with Options -->
         <div class="message bot">
-            Hello! Welcome to TitanBuild Support. Please select your issue below so we can assist you quickly:
+            Hello! Welcome to TitanBuild Support. Please select your issue below:
             <div class="options-container">
                 <button class="option-btn" onclick="sendOption('Withdrawal Issue')">💸 Withdrawal Issue</button>
                 <button class="option-btn" onclick="sendOption('Product Buy Issue')">🛒 Product Buy Issue</button>
@@ -141,7 +138,6 @@
     </div>
 
     <script>
-        // Get User ID from localStorage (or set a dummy demo ID if not logged in)
         const userId = localStorage.getItem('user_phone') || 'User_7359679116';
 
         function appendMessage(text, sender) {
@@ -155,27 +151,19 @@
 
         function saveToAdminComplaints(text) {
             let complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
-            
-            // Check if user thread already exists, else create new
             let userThread = complaints.find(c => c.userId === userId);
             if (!userThread) {
                 userThread = { userId: userId, messages: [] };
                 complaints.push(userThread);
             }
-            
             userThread.messages.push({ sender: 'user', text: text, time: new Date().toLocaleTimeString() });
-            
-            // Bot auto-reply logic
             userThread.messages.push({ sender: 'bot', text: 'Please show your problem in detail.', time: new Date().toLocaleTimeString() });
-
             localStorage.setItem('admin_complaints', JSON.stringify(complaints));
         }
 
         function sendOption(optionText) {
             appendMessage(optionText, 'user');
             saveToAdminComplaints(optionText);
-
-            // Trigger bot auto-reply after a short delay
             setTimeout(() => {
                 appendMessage('Please show your problem in detail.', 'bot');
             }, 600);
