@@ -13,59 +13,56 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #f4f6f9;
-            color: #333;
-            padding-bottom: 40px;
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            padding-bottom: 80px;
         }
         .header {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #fff;
-            padding: 20px;
+            background: #111827;
+            color: #fbbf24;
+            padding: 16px;
             text-align: center;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #1f2937;
         }
         .container {
             max-width: 480px;
-            margin: 20px auto;
-            background: #fff;
+            margin: 15px auto;
+            background: #111827;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #1e293b;
+            border: 1px solid #1f2937;
         }
         .telegram-box {
-            background: linear-gradient(135deg, #229ed9, #1b87bd);
-            color: white;
-            padding: 15px;
+            background: #1e293b;
+            border: 1px solid #229ed9;
+            color: #e2e8f0;
+            padding: 12px;
             border-radius: 10px;
             text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(34, 158, 217, 0.3);
+            margin-bottom: 20px;
         }
         .telegram-box p {
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #94a3b8;
         }
         .telegram-btn {
             display: inline-block;
-            background: #fff;
-            color: #229ed9;
-            padding: 10px 20px;
+            background: #229ed9;
+            color: white;
+            padding: 8px 16px;
             border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 14px;
-            transition: 0.3s;
+            font-size: 13px;
         }
-        .telegram-btn:hover {
-            background: #f1f5f9;
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fbbf24;
         }
         .channel-options {
             display: flex;
@@ -74,58 +71,108 @@
         }
         .channel-btn {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            background: #f8fafc;
+            padding: 10px;
+            border: 1px solid #374151;
+            background: #1f2937;
+            color: #94a3b8;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            transition: all 0.3s ease;
         }
         .channel-btn.active {
-            border-color: #229ed9;
-            background: #e0f2fe;
-            color: #0369a1;
+            border-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+        }
+        .qr-section {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #374151;
+        }
+        .qr-box {
+            width: 150px;
+            height: 150px;
+            background: #fff;
+            margin: 0 auto 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        .qr-box img {
+            width: 140px;
+            height: 140px;
+        }
+        .upi-id {
+            font-size: 13px;
+            color: #fbbf24;
+            font-weight: bold;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .form-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            color: #64748b;
-            margin-bottom: 8px;
+            color: #94a3b8;
+            margin-bottom: 6px;
         }
         .form-control {
             width: 100%;
             padding: 12px;
-            border: 1px solid #cbd5e1;
+            background: #1f2937;
+            border: 1px solid #374151;
+            color: #fff;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
-            transition: border-color 0.3s;
         }
         .form-control:focus {
-            border-color: #229ed9;
+            border-color: #fbbf24;
         }
         .submit-btn {
             width: 100%;
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: white;
+            background: #fbbf24;
+            color: #111827;
             border: none;
             padding: 14px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
-            transition: 0.3s;
+            margin-top: 10px;
         }
-        .submit-btn:hover {
-            opacity: 0.9;
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #1f2937;
+        }
+        .nav-item {
+            text-align: center;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 11px;
+        }
+        .nav-item i {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #fbbf24;
         }
     </style>
 </head>
@@ -136,11 +183,11 @@
     </div>
 
     <div class="container">
-        <!-- Direct Telegram Channel Link Integration -->
+        <!-- Telegram Channel Box -->
         <div class="telegram-box">
-            <p><i class="fab fa-telegram-plane"></i> Join our official Telegram channel for daily proofs & updates!</p>
+            <p><i class="fab fa-telegram-plane"></i> Join our official Telegram channel for updates</p>
             <a href="https://t.me/titanbuid" target="_blank" class="telegram-btn">
-                Open Telegram (t.me/titanbuid)
+                Open Telegram
             </a>
         </div>
 
@@ -148,6 +195,15 @@
         <div class="channel-options">
             <div class="channel-btn active" onclick="selectChannel(1)">Channel 1 (Ranjanben)</div>
             <div class="channel-btn" onclick="selectChannel(2)">Channel 2 (Rajubhai)</div>
+        </div>
+
+        <!-- UPI QR Code Section -->
+        <div class="qr-section">
+            <div class="qr-box">
+                <!-- Replace with your actual QR code image path -->
+                <img src="qr-code.png" alt="UPI QR Code" id="qrImage">
+            </div>
+            <div class="upi-id" id="upiText">UPI ID: merchant@upi</div>
         </div>
 
         <div class="form-group">
@@ -163,11 +219,34 @@
         <button class="submit-btn" onclick="submitRecharge()">Submit Recharge</button>
     </div>
 
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="recharge.html" class="nav-item active">
+            <i class="fas fa-wallet"></i> Recharge
+        </a>
+        <a href="withdraw.html" class="nav-item">
+            <i class="fas fa-exchange-alt"></i> Withdraw
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i> Profile
+        </a>
+    </div>
+
     <script>
         function selectChannel(ch) {
             const btns = document.querySelectorAll('.channel-btn');
             btns.forEach(b => b.classList.remove('active'));
             btns[ch - 1].classList.add('active');
+            
+            // Channel change hone par QR ya UPI ID change karne ka logic yahan daal sakte hain
+            if(ch === 1) {
+                document.getElementById('upiText').innerText = "UPI ID: ranjanben@upi";
+            } else {
+                document.getElementById('upiText').innerText = "UPI ID: rajubhai@upi";
+            }
         }
 
         function submitRecharge() {
@@ -184,7 +263,7 @@
                 return;
             }
 
-            alert('Recharge request submitted successfully! Verification in progress.');
+            alert('Recharge request submitted successfully!');
         }
     </script>
 </body>
