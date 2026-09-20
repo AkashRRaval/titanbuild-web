@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Professional Admin Panel</title>
+    <title>TitanBuild - Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,369 +15,232 @@
         body {
             background-color: #0b0f19;
             color: #e2e8f0;
-            padding: 15px;
         }
         .header {
             background: #111827;
             color: #fbbf24;
-            padding: 15px;
-            text-align: center;
-            font-size: 18px;
+            padding: 16px;
+            font-size: 16px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
-            border-radius: 10px 10px 0 0;
-            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        /* Admin Navigation Tabs */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        /* Admin Tabs */
         .admin-tabs {
             display: flex;
-            gap: 8px;
+            background: #111827;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #1f2937;
             margin-bottom: 15px;
-            overflow-x: auto;
-            padding-bottom: 5px;
         }
         .tab-btn {
-            background: #111827;
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
             color: #94a3b8;
-            border: 1px solid #1f2937;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
+            cursor: pointer;
+            text-align: center;
         }
         .tab-btn.active {
             background: #fbbf24;
             color: #111827;
-            border-color: #fbbf24;
         }
-        /* Tab Contents */
         .tab-content {
             display: none;
         }
         .tab-content.active {
             display: block;
         }
-        .admin-section {
+        /* Live Chat Admin Box */
+        .chat-box-admin {
             background: #111827;
             border: 1px solid #1f2937;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 15px;
-            margin-bottom: 15px;
-        }
-        .section-title {
-            color: #fbbf24;
-            font-size: 14px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #374151;
-            padding-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        /* Live Chat Layout */
-        .chat-layout {
-            display: flex;
-            gap: 12px;
-            height: 450px;
-        }
-        .users-list {
-            width: 35%;
-            background: #1f2937;
-            border-radius: 8px;
-            padding: 10px;
-            overflow-y: auto;
-            border: 1px solid #374151;
-        }
-        .user-item {
-            padding: 10px;
-            background: #111827;
-            margin-bottom: 6px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            border: 1px solid #374151;
-        }
-        .user-item.active, .user-item:hover {
-            border-color: #fbbf24;
-            background: #1a2234;
-        }
-        .chat-box-area {
-            width: 65%;
-            background: #1f2937;
-            border-radius: 8px;
-            padding: 12px;
+            height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border: 1px solid #374151;
         }
-        .messages-view {
+        .messages-list {
             flex: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             padding-right: 5px;
         }
-        .msg-bubble {
-            padding: 8px 12px;
-            border-radius: 6px;
+        .admin-msg {
             max-width: 80%;
-            font-size: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
             line-height: 1.4;
+            word-wrap: break-word;
         }
-        .msg-bubble.user {
-            background: #374151;
-            color: #e2e8f0;
+        .admin-msg.user {
+            background: #1f2937;
+            color: #fff;
             align-self: flex-start;
+            border: 1px solid #374151;
         }
-        .msg-bubble.admin {
+        .admin-msg.admin {
             background: #fbbf24;
             color: #111827;
             align-self: flex-end;
-            font-weight: 500;
         }
-        .msg-time {
-            font-size: 9px;
-            opacity: 0.7;
-            text-align: right;
-            margin-top: 2px;
+        .admin-msg img, .admin-msg video {
+            max-width: 100%;
+            border-radius: 6px;
+            margin-top: 5px;
         }
-        .reply-box {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            border-top: 1px solid #374151;
-            padding-top: 10px;
-        }
-        .reply-box input {
-            flex: 1;
-            background: #111827;
-            border: 1px solid #374151;
-            padding: 8px 12px;
+        .file-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.3);
+            padding: 6px 10px;
             border-radius: 6px;
             color: #fff;
+            text-decoration: none;
             font-size: 12px;
+            margin-top: 5px;
+        }
+        /* Reply Bar */
+        .reply-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            border-top: 1px solid #1f2937;
+            padding-top: 10px;
+        }
+        .reply-bar input {
+            flex: 1;
+            background: #0b0f19;
+            border: 1px solid #374151;
+            padding: 10px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
             outline: none;
         }
-        .reply-box button {
+        .reply-bar button {
             background: #fbbf24;
             color: #111827;
             border: none;
-            padding: 0 14px;
-            border-radius: 6px;
+            padding: 0 16px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 12px;
-        }
-        /* Order Card Style (Sample jaisa dark card) */
-        .order-card {
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #374151;
-            padding-bottom: 6px;
-        }
-        .order-badge {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .order-badge.completed {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-        }
-        .order-details p {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .order-details p span {
-            color: #fff;
-            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        TitanBuild Admin Control Panel
+        <span>Admin Control Panel</span>
+        <span style="font-size: 12px; color: #10b981;"><i class="fas fa-circle" style="font-size: 8px;"></i> Online</span>
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="admin-tabs">
-        <button class="tab-btn active" onclick="switchTab('chatTab', this)"><i class="fas fa-headset"></i> Live Chats</button>
-        <button class="tab-btn" onclick="switchTab('rechargeTab', this)"><i class="fas fa-wallet"></i> Recharge Orders</button>
-        <button class="tab-btn" onclick="switchTab('withdrawTab', this)"><i class="fas fa-exchange-alt"></i> Withdrawal Orders</button>
-    </div>
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchAdminTab('chatTab', this)">Live Support Chats</button>
+            <button class="tab-btn" onclick="switchAdminTab('ordersTab', this)">Orders / History</button>
+        </div>
 
-    <!-- TAB 1: LIVE CHATS -->
-    <div id="chatTab" class="tab-content active">
-        <div class="admin-section">
-            <div class="section-title"><i class="fas fa-comments"></i> User Support & Live Chat Management</div>
-            <div class="chat-layout">
-                <div class="users-list" id="adminUsersList">
-                    <div style="color: #64748b; font-size: 12px; text-align: center; padding: 20px;">Loading users...</div>
+        <!-- TAB 1: LIVE CHATS WITH MEDIA SUPPORT -->
+        <div id="chatTab" class="tab-content active">
+            <div class="chat-box-admin">
+                <div class="messages-list" id="adminMessagesList">
+                    <!-- Dynamic Messages will load here -->
                 </div>
-                <div class="chat-box-area">
-                    <div>
-                        <div id="chatHeaderInfo" style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Select a user to chat</div>
-                        <div class="messages-view" id="adminChatMessages">
-                            <div style="color: #64748b; text-align: center; margin-top: 120px; font-size: 12px;">No chat selected</div>
-                        </div>
-                    </div>
-                    <div class="reply-box" id="replyArea" style="display: none;">
-                        <input type="text" id="adminReplyInput" placeholder="Type reply...">
-                        <button onclick="sendAdminReply()">Send</button>
-                    </div>
+                <div class="reply-bar">
+                    <input type="text" id="adminReplyInput" placeholder="Type reply as admin..." onkeypress="if(event.key === 'Enter') sendAdminReply()">
+                    <button onclick="sendAdminReply()">Send</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- TAB 2: RECHARGE ORDERS -->
-    <div id="rechargeTab" class="tab-content">
-        <div class="admin-section">
-            <div class="section-title"><i class="fas fa-wallet"></i> Recharge Requests History</div>
-            <div id="rechargeOrdersList">
-                <!-- Sample Card Format -->
-                <div class="order-card">
-                    <div class="order-header">
-                        <span style="font-size: 12px; color: #fbbf24; font-weight: bold;">Recharge Request</span>
-                        <span class="order-badge completed">SUCCESS</span>
-                    </div>
-                    <div class="order-details">
-                        <p>User Phone: <span>7359679116</span></p>
-                        <p>Amount: <span style="color: #10b981;">₹500.00</span></p>
-                        <p>UTR Number: <span>UTR9876543210</span></p>
-                        <p>Time: <span>2026-09-20 14:30:15</span></p>
-                        <p>Order Number: <span>R5120260920143015001</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TAB 3: WITHDRAWAL ORDERS -->
-    <div id="withdrawTab" class="tab-content">
-        <div class="admin-section">
-            <div class="section-title"><i class="fas fa-exchange-alt"></i> Withdrawal Orders History</div>
-            <div id="withdrawOrdersList">
-                <!-- Sample Card Format matching user requirement -->
-                <div class="order-card">
-                    <div class="order-header">
-                        <span style="font-size: 12px; color: #fbbf24; font-weight: bold;">Withdraw</span>
-                        <span class="order-badge completed">Completed</span>
-                    </div>
-                    <div class="order-details">
-                        <p>Balance: <span style="color: #fbbf24;">₹150</span></p>
-                        <p>Type: <span>BANK CARD</span></p>
-                        <p>Time: <span>2026-09-16 14:31:17</span></p>
-                        <p>Order number: <span>W51202609161431164990001</span></p>
-                    </div>
-                </div>
+        <!-- TAB 2: ORDERS SECTION -->
+        <div id="ordersTab" class="tab-content">
+            <div style="background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; text-align: center; color: #94a3b8;">
+                <p>Recharge & Withdrawal orders management dashboard.</p>
             </div>
         </div>
     </div>
 
     <script>
-        let currentSelectedUser = null;
+        window.onload = function() {
+            loadAdminChats();
+        };
 
-        function switchTab(tabId, btn) {
+        function switchAdminTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
         }
 
-        function loadAdminComplaints() {
-            const complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
-            const usersListDiv = document.getElementById('adminUsersList');
-            usersListDiv.innerHTML = '';
-
-            if (complaints.length === 0) {
-                usersListDiv.innerHTML = '<div style="color: #64748b; font-size: 12px; text-align: center; padding: 20px;">No complaints</div>';
+        function loadAdminChats() {
+            const listContainer = document.getElementById('adminMessagesList');
+            let messages = JSON.parse(localStorage.getItem('titan_support_chats')) || [];
+            
+            listContainer.innerHTML = '';
+            if(messages.length === 0) {
+                listContainer.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">No messages from users yet.</div>';
                 return;
             }
 
-            complaints.forEach((thread) => {
-                const userBtn = document.createElement('div');
-                userBtn.className = `user-item ${currentSelectedUser === thread.userId ? 'active' : ''}`;
-                userBtn.innerHTML = `<i class="fas fa-user" style="color: #fbbf24; margin-right: 5px;"></i> ${thread.userId}`;
-                userBtn.onclick = () => openUserChat(thread.userId);
-                usersListDiv.appendChild(userBtn);
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `admin-msg ${msg.sender}`;
+
+                if (msg.type === 'text') {
+                    div.innerHTML = `${msg.content} <div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
+                } else if (msg.type === 'image') {
+                    div.innerHTML = `<img src="${msg.content}" alt="User Photo"><div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
+                } else if (msg.type === 'video') {
+                    div.innerHTML = `<video controls src="${msg.content}"></video><div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
+                } else if (msg.type === 'pdf' || msg.type === 'file') {
+                    div.innerHTML = `<a href="${msg.content}" target="_blank" class="file-link"><i class="fas fa-file-pdf" style="color:#ef4444; font-size:16px;"></i> <span>${msg.fileName || 'View Document'}</span></a><div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
+                }
+
+                listContainer.appendChild(div);
             });
-
-            if (currentSelectedUser) {
-                let activeThread = complaints.find(c => c.userId === currentSelectedUser);
-                if (activeThread) renderMessages(activeThread);
-            }
-        }
-
-        function openUserChat(userId) {
-            currentSelectedUser = userId;
-            const complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
-            let thread = complaints.find(c => c.userId === userId);
-
-            if(thread) {
-                document.getElementById('chatHeaderInfo').innerHTML = `Chat with: <span style="color: #fbbf24;">${thread.userId}</span>`;
-                document.getElementById('replyArea').style.display = 'flex';
-                renderMessages(thread);
-                loadAdminComplaints();
-            }
-        }
-
-        function renderMessages(thread) {
-            const chatBox = document.getElementById('adminChatMessages');
-            chatBox.innerHTML = '';
-
-            thread.messages.forEach(msg => {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = `msg-bubble ${msg.sender === 'user' ? 'user' : 'admin'}`;
-                msgDiv.innerHTML = `${msg.text} <div class="msg-time">${msg.time}</div>`;
-                chatBox.appendChild(msgDiv);
-            });
-            chatBox.scrollTop = chatBox.scrollHeight;
+            listContainer.scrollTop = listContainer.scrollHeight;
         }
 
         function sendAdminReply() {
             const input = document.getElementById('adminReplyInput');
-            const replyText = input.value.trim();
-            if(!replyText || !currentSelectedUser) return;
+            const text = input.value.trim();
+            if (!text) return;
 
-            let complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
-            let userThread = complaints.find(c => c.userId === currentSelectedUser);
+            const replyObj = {
+                sender: 'admin',
+                type: 'text',
+                content: text,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
 
-            if(userThread) {
-                let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                userThread.messages.push({ sender: 'admin', text: replyText, time: timeStr });
-                localStorage.setItem('admin_complaints', JSON.stringify(complaints));
-                input.value = '';
-                renderMessages(userThread);
-            }
+            let messages = JSON.parse(localStorage.getItem('titan_support_chats')) || [];
+            messages.push(replyObj);
+            localStorage.setItem('titan_support_chats', JSON.stringify(messages));
+
+            input.value = '';
+            loadAdminChats();
         }
-
-        setInterval(loadAdminComplaints, 2000);
-        window.onload = loadAdminComplaints;
     </script>
 </body>
 </html>
