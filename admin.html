@@ -32,7 +32,7 @@
             margin: 20px auto;
             padding: 0 15px;
         }
-        /* Admin Tabs */
+        /* Admin Main Tabs */
         .admin-tabs {
             display: flex;
             background: #111827;
@@ -62,16 +62,39 @@
         .tab-content.active {
             display: block;
         }
-        /* Live Chat Admin Box */
-        .chat-box-admin {
+        /* Chat Layout: User List + Chat Window */
+        .chat-layout {
+            display: flex;
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 12px;
-            padding: 15px;
-            height: 400px;
+            height: 450px;
+            overflow: hidden;
+        }
+        .user-list-pane {
+            width: 40%;
+            border-right: 1px solid #1f2937;
+            overflow-y: auto;
+            background: #0d1322;
+        }
+        .user-list-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #1f2937;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+        .user-list-item:hover, .user-list-item.active {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+        }
+        .chat-pane {
+            width: 60%;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            padding: 12px;
         }
         .messages-list {
             flex: 1;
@@ -82,10 +105,10 @@
             padding-right: 5px;
         }
         .admin-msg {
-            max-width: 80%;
-            padding: 10px 14px;
+            max-width: 85%;
+            padding: 8px 12px;
             border-radius: 10px;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.4;
             word-wrap: break-word;
         }
@@ -114,35 +137,87 @@
             border-radius: 6px;
             color: #fff;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 11px;
             margin-top: 5px;
         }
-        /* Reply Bar */
         .reply-bar {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: 10px;
             border-top: 1px solid #1f2937;
-            padding-top: 10px;
+            padding-top: 8px;
         }
         .reply-bar input {
             flex: 1;
             background: #0b0f19;
             border: 1px solid #374151;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px 10px;
+            border-radius: 6px;
             color: #fff;
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
         }
         .reply-bar button {
             background: #fbbf24;
             color: #111827;
             border: none;
-            padding: 0 16px;
+            padding: 0 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        /* Sub-Tabs for Orders */
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .sub-tab-btn {
+            flex: 1;
+            padding: 8px;
+            background: #111827;
+            border: 1px solid #1f2937;
             border-radius: 8px;
+            color: #94a3b8;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+        }
+        .sub-tab-btn.active {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+            border-color: #fbbf24;
+        }
+        .order-card-admin {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #94a3b8;
+        }
+        .order-row span {
+            color: #fff;
+            font-weight: 500;
+        }
+        .action-btn {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -154,36 +229,58 @@
     </div>
 
     <div class="container">
-        <!-- Navigation Tabs -->
+        <!-- Main Navigation Tabs -->
         <div class="admin-tabs">
             <button class="tab-btn active" onclick="switchAdminTab('chatTab', this)">Live Support Chats</button>
             <button class="tab-btn" onclick="switchAdminTab('ordersTab', this)">Orders / History</button>
         </div>
 
-        <!-- TAB 1: LIVE CHATS WITH MEDIA SUPPORT -->
+        <!-- TAB 1: LIVE CHATS WITH USER ID LIST -->
         <div id="chatTab" class="tab-content active">
-            <div class="chat-box-admin">
-                <div class="messages-list" id="adminMessagesList">
-                    <!-- Dynamic Messages will load here -->
+            <div class="chat-layout">
+                <div class="user-list-pane" id="userListPane">
+                    <!-- User IDs list will load here -->
                 </div>
-                <div class="reply-bar">
-                    <input type="text" id="adminReplyInput" placeholder="Type reply as admin..." onkeypress="if(event.key === 'Enter') sendAdminReply()">
-                    <button onclick="sendAdminReply()">Send</button>
+                <div class="chat-pane" id="chatPane">
+                    <div style="text-align:center; color:#94a3b8; margin-top:150px; font-size:12px;">Select a user to view chat</div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 2: ORDERS SECTION -->
+        <!-- TAB 2: ORDERS SECTION (Recharge & Withdrawal Sub-tabs) -->
         <div id="ordersTab" class="tab-content">
-            <div style="background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; text-align: center; color: #94a3b8;">
-                <p>Recharge & Withdrawal orders management dashboard.</p>
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" onclick="switchSubTab('rechargeOrders', this)">Recharge Orders</button>
+                <button class="sub-tab-btn" onclick="switchSubTab('withdrawOrders', this)">Withdrawal Orders</button>
+            </div>
+
+            <!-- Recharge Orders Section -->
+            <div id="rechargeOrders" class="sub-order-section">
+                <div class="order-card-admin">
+                    <div class="order-row">User: <span>User_7359</span></div>
+                    <div class="order-row">Amount: <span style="color: #10b981;">₹500.00</span></div>
+                    <div class="order-row">UTR: <span>UTR9876543210</span></div>
+                    <div class="order-row">Status: <span style="color: #10b981;">SUCCESS</span></div>
+                </div>
+            </div>
+
+            <!-- Withdrawal Orders Section -->
+            <div id="withdrawOrders" class="sub-order-section" style="display:none;">
+                <div class="order-card-admin">
+                    <div class="order-row">User: <span>User_7359</span></div>
+                    <div class="order-row">Amount: <span style="color: #fbbf24;">₹150.00</span></div>
+                    <div class="order-row">Type: <span>BANK CARD</span></div>
+                    <div class="order-row">Status: <span style="color: #10b981;">Completed</span></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        let activeUserId = null;
+
         window.onload = function() {
-            loadAdminChats();
+            loadUserList();
         };
 
         function switchAdminTab(tabId, btn) {
@@ -193,39 +290,84 @@
             btn.classList.add('active');
         }
 
-        function loadAdminChats() {
-            const listContainer = document.getElementById('adminMessagesList');
-            let messages = JSON.parse(localStorage.getItem('titan_support_chats')) || [];
+        function switchSubTab(subId, btn) {
+            document.querySelectorAll('.sub-order-section').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(subId).style.display = 'block';
+            btn.classList.add('active');
+        }
+
+        function loadUserList() {
+            const userListPane = document.getElementById('userListPane');
+            let chatsData = JSON.parse(localStorage.getItem('titan_support_chats_map')) || { "User_7359": [{sender:'user', type:'text', content:'Hello admin, please check my recharge.', time:'14:30'}] };
             
-            listContainer.innerHTML = '';
-            if(messages.length === 0) {
-                listContainer.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">No messages from users yet.</div>';
+            userListPane.innerHTML = '';
+            const users = Object.keys(chatsData);
+
+            if(users.length === 0) {
+                userListPane.innerHTML = '<div style="padding:15px; font-size:12px; color:#94a3b8;">No users found.</div>';
                 return;
             }
 
-            messages.forEach(msg => {
+            users.forEach(userId => {
                 const div = document.createElement('div');
-                div.className = `admin-msg ${msg.sender}`;
-
-                if (msg.type === 'text') {
-                    div.innerHTML = `${msg.content} <div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
-                } else if (msg.type === 'image') {
-                    div.innerHTML = `<img src="${msg.content}" alt="User Photo"><div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
-                } else if (msg.type === 'video') {
-                    div.innerHTML = `<video controls src="${msg.content}"></video><div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
-                } else if (msg.type === 'pdf' || msg.type === 'file') {
-                    div.innerHTML = `<a href="${msg.content}" target="_blank" class="file-link"><i class="fas fa-file-pdf" style="color:#ef4444; font-size:16px;"></i> <span>${msg.fileName || 'View Document'}</span></a><div style="font-size:9px; opacity:0.7; text-align:right; margin-top:2px;">${msg.time}</div>`;
-                }
-
-                listContainer.appendChild(div);
+                div.className = `user-list-item ${activeUserId === userId ? 'active' : ''}`;
+                div.innerHTML = `<i class="fas fa-user-circle"></i> ${userId}`;
+                div.onclick = () => selectUserChat(userId);
+                userListPane.appendChild(div);
             });
-            listContainer.scrollTop = listContainer.scrollHeight;
+
+            if(!activeUserId && users.length > 0) {
+                selectUserChat(users[0]);
+            }
+        }
+
+        function selectUserChat(userId) {
+            activeUserId = userId;
+            loadUserList();
+
+            const chatPane = document.getElementById('chatPane');
+            let chatsData = JSON.parse(localStorage.getItem('titan_support_chats_map')) || {};
+            let userMessages = chatsData[userId] || [];
+
+            let html = `
+                <div style="font-size:12px; font-weight:bold; color:#fbbf24; border-bottom:1px solid #1f2937; padding-bottom:8px; margin-bottom:8px;">
+                    Chat with ${userId}
+                </div>
+                <div class="messages-list" id="activeMessagesList">
+            `;
+
+            if(userMessages.length === 0) {
+                html += `<div style="text-align:center; color:#94a3b8; font-size:11px; margin-top:50px;">No messages in this chat.</div>`;
+            } else {
+                userMessages.forEach(msg => {
+                    if (msg.type === 'text') {
+                        html += `<div class="admin-msg ${msg.sender}">${msg.content} <div style="font-size:8px; opacity:0.7; text-align:right;">${msg.time}</div></div>`;
+                    } else if (msg.type === 'image') {
+                        html += `<div class="admin-msg ${msg.sender}"><img src="${msg.content}"><div style="font-size:8px; opacity:0.7; text-align:right;">${msg.time}</div></div>`;
+                    } else if (msg.type === 'pdf' || msg.type === 'file') {
+                        html += `<div class="admin-msg ${msg.sender}"><a href="${msg.content}" target="_blank" class="file-link"><i class="fas fa-file-pdf" style="color:#ef4444;"></i> <span>${msg.fileName || 'View File'}</span></a><div style="font-size:8px; opacity:0.7; text-align:right;">${msg.time}</div></div>`;
+                    }
+                });
+            }
+
+            html += `
+                </div>
+                <div class="reply-bar">
+                    <input type="text" id="adminReplyInput" placeholder="Reply to ${userId}..." onkeypress="if(event.key === 'Enter') sendAdminReply()">
+                    <button onclick="sendAdminReply()">Send</button>
+                </div>
+            `;
+
+            chatPane.innerHTML = html;
+            const msgList = document.getElementById('activeMessagesList');
+            if(msgList) msgList.scrollTop = msgList.scrollHeight;
         }
 
         function sendAdminReply() {
             const input = document.getElementById('adminReplyInput');
             const text = input.value.trim();
-            if (!text) return;
+            if (!text || !activeUserId) return;
 
             const replyObj = {
                 sender: 'admin',
@@ -234,12 +376,12 @@
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
 
-            let messages = JSON.parse(localStorage.getItem('titan_support_chats')) || [];
-            messages.push(replyObj);
-            localStorage.setItem('titan_support_chats', JSON.stringify(messages));
-
-            input.value = '';
-            loadAdminChats();
+            let chatsData = JSON.parse(localStorage.getItem('titan_support_chats_map')) || {};
+            if(!chatsData[activeUserId]) chatsData[activeUserId] = [];
+            chatsData[activeUserId].push(replyObj);
+            
+            localStorage.setItem('titan_support_chats_map', JSON.stringify(chatsData));
+            selectUserChat(activeUserId);
         }
     </script>
 </body>
