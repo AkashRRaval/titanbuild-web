@@ -3,214 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - User Profile & History</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TitanBuild - User Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
-            authDomain: "titanbuildlive.firebaseapp.com",
-            projectId: "titanbuildlive",
-            storageBucket: "titanbuildlive.firebasestorage.app",
-            messagingSenderId: "190147437260",
-            appId: "1:190147437260:web:2c8cc81a4180bb9ac09869",
-            measurementId: "G-TGB7V2M7XF"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const userPhone = localStorage.getItem('userPhone');
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            if (!userPhone) {
-                window.location.href = 'login.html';
-                return;
-            }
-            document.getElementById('displayPhone').innerText = userPhone;
-            document.getElementById('userPhoneCard').innerText = userPhone;
-
-            try {
-                // Fetch User Balance
-                const userRef = doc(db, "users", userPhone);
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists()) {
-                    const balance = userSnap.data().balance || 0;
-                    document.getElementById('walletBalance').innerText = '₹' + balance.toFixed(2);
-                }
-
-                // Fetch User Purchases / Investments
-                const purchasesRef = collection(db, "purchases");
-                const qPurchases = query(purchasesRef, where("phone", "==", userPhone));
-                const purchaseSnapshot = await getDocs(qPurchases);
-                const purchasesList = document.getElementById('purchasesList');
-                purchasesList.innerHTML = "";
-
-                if (purchaseSnapshot.empty) {
-                    purchasesList.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">No active asset leases found.</div>`;
-                } else {
-                    purchaseSnapshot.forEach((docSnap) => {
-                        const data = docSnap.data();
-                        purchasesList.innerHTML += `
-                            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 space-y-1">
-                                <div class="flex justify-between items-center text-xs">
-                                    <strong class="text-yellow-400">${data.assetName}</strong>
-                                    <span class="text-[10px] text-green-400 bg-green-950/40 px-2 py-0.5 rounded-full border border-green-500/30">${data.status || 'Active'}</span>
-                                </div>
-                                <div class="flex justify-between text-[11px] text-gray-400">
-                                    <span>Price: ₹${data.price}</span>
-                                    <span class="text-green-400 font-bold">+₹${data.dailyReturn} / day</span>
-                                </div>
-                                <div class="text-[9px] text-gray-500 font-mono">Order ID: ${data.orderNo || 'N/A'}</div>
-                            </div>
-                        `;
-                    });
-                }
-
-                // Fetch Recharges History
-                const rechargesRef = collection(db, "recharges");
-                const qRecharges = query(rechargesRef, where("phone", "==", userPhone));
-                const rechargeSnapshot = await getDocs(qRecharges);
-                const rechargesList = document.getElementById('rechargesList');
-                rechargesList.innerHTML = "";
-
-                if (rechargeSnapshot.empty) {
-                    rechargesList.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">No recharge history found.</div>`;
-                } else {
-                    rechargeSnapshot.forEach((docSnap) => {
-                        const data = docSnap.data();
-                        rechargesList.innerHTML += `
-                            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 flex justify-between items-center text-xs">
-                                <div>
-                                    <strong class="text-yellow-400 block">+₹${data.amount}</strong>
-                                    <span class="text-[9px] text-gray-500 font-mono">UTR: ${data.utrNumber}</span>
-                                    <span class="text-[9px] text-gray-600 block font-mono">ID: ${data.orderNo}</span>
-                                </div>
-                                <span class="text-[10px] text-green-400 bg-green-950/40 px-2 py-0.5 rounded-full border border-green-500/30">${data.status}</span>
-                            </div>
-                        `;
-                    });
-                }
-
-                // Fetch Withdrawals History
-                const withdrawalsRef = collection(db, "withdrawals");
-                const qWithdrawals = query(withdrawalsRef, where("phone", "==", userPhone));
-                const withdrawalSnapshot = await getDocs(qWithdrawals);
-                const withdrawalsList = document.getElementById('withdrawalsList');
-                withdrawalsList.innerHTML = "";
-
-                if (withdrawalSnapshot.empty) {
-                    withdrawalsList.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">No withdrawal history found.</div>`;
-                } else {
-                    withdrawalSnapshot.forEach((docSnap) => {
-                        const data = docSnap.data();
-                        withdrawalsList.innerHTML += `
-                            <div class="bg-gray-950 p-3 rounded-2xl border border-gray-800 flex justify-between items-center text-xs">
-                                <div>
-                                    <strong class="text-red-400 block">-₹${data.amount}</strong>
-                                    <span class="text-[9px] text-gray-500 font-mono">UPI: ${data.upiId}</span>
-                                    <span class="text-[9px] text-gray-600 block font-mono">ID: ${data.orderNo}</span>
-                                </div>
-                                <span class="text-[10px] text-yellow-400 bg-yellow-950/40 px-2 py-0.5 rounded-full border border-yellow-500/30">${data.status}</span>
-                            </div>
-                        `;
-                    });
-                }
-
-            } catch (e) {
-                console.error("Error loading profile data:", e);
-            }
-        });
-
-        window.logout = function() {
-            localStorage.removeItem('userPhone');
-            window.location.href = 'login.html';
-        };
-    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            padding-bottom: 80px;
+        }
+        .header {
+            background: #111827;
+            color: #fbbf24;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+        /* Top Corner Customer Service Button */
+        .cs-top-btn {
+            background: #1f2937;
+            color: #fbbf24;
+            border: 1px solid #374151;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .cs-top-btn:hover {
+            border-color: #fbbf24;
+            background: #252f42;
+        }
+        .container {
+            max-width: 480px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+        .profile-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .profile-info h3 {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+        .profile-info p {
+            font-size: 16px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .section-box {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .section-box h3 {
+            font-size: 14px;
+            color: #fbbf24;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 8px;
+        }
+        .history-placeholder {
+            color: #64748b;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+        }
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #1f2937;
+            z-index: 100;
+        }
+        .nav-item {
+            text-align: center;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 11px;
+        }
+        .nav-item i {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #fbbf24;
+        }
+    </style>
 </head>
-<body class="bg-gray-950 text-white min-h-screen pb-24 font-sans">
+<body>
 
-    <!-- Top Header -->
-    <div class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center max-w-md mx-auto">
-        <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-gradient-to-tr from-yellow-600 to-amber-400 rounded-xl flex items-center justify-center text-black font-black shadow-lg">
-                <i class="fa-solid fa-user"></i>
-            </div>
-            <h1 class="text-base font-black tracking-wider text-yellow-400 uppercase">USER PROFILE</h1>
-        </div>
-        <div class="text-right">
-            <span id="displayPhone" class="text-[10px] text-gray-400 block font-bold">Loading...</span>
-        </div>
-    </div>
-        <div class="max-w-md mx-auto p-4 space-y-5">
-        
-        <!-- User Info Card -->
-        <div class="bg-gradient-to-br from-gray-900 to-gray-900 p-5 rounded-3xl border border-yellow-500/30 shadow-2xl flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-yellow-500/20 border border-yellow-500/40 rounded-2xl flex items-center justify-center text-yellow-400 text-xl font-black">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-                <div>
-                    <span class="text-[9px] text-gray-400 uppercase tracking-wider block font-bold">Account Phone</span>
-                    <h3 id="userPhoneCard" class="text-sm font-black text-white">Loading...</h3>
-                    <p id="walletBalance" class="text-xs font-black text-yellow-400 mt-0.5">₹0.00</p>
-                </div>
-            </div>
-            <button onclick="logout()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-2 rounded-xl text-xs font-black transition uppercase">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </button>
-        </div>
-
-        <!-- Active Leased Assets History -->
-        <div class="bg-gray-900 border border-gray-800 p-4 rounded-3xl shadow-xl space-y-3">
-            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-toolbox mr-1"></i> My Leased Assets</h3>
-            <div id="purchasesList" class="space-y-2">
-                <div class="text-center py-3 text-gray-500 text-xs">Loading assets...</div>
-            </div>
-        </div>
-
-        <!-- Recharge History -->
-        <div class="bg-gray-900 border border-gray-800 p-4 rounded-3xl shadow-xl space-y-3">
-            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-wallet mr-1"></i> Recharge History</h3>
-            <div id="rechargesList" class="space-y-2">
-                <div class="text-center py-3 text-gray-500 text-xs">Loading recharges...</div>
-            </div>
-        </div>
-
-        <!-- Withdrawal History -->
-        <div class="bg-gray-900 border border-gray-800 p-4 rounded-3xl shadow-xl space-y-3">
-            <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest"><i class="fa-solid fa-arrow-right-arrow-left mr-1"></i> Withdrawal History</h3>
-            <div id="withdrawalsList" class="space-y-2">
-                <div class="text-center py-3 text-gray-500 text-xs">Loading withdrawals...</div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Bottom Navigation Bar -->
-    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 p-2 flex justify-around items-center z-50 max-w-md mx-auto shadow-2xl">
-        <a href="index.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
-            <i class="fa-solid fa-house text-base"></i>
-            <span class="text-[10px] mt-0.5">Home</span>
-        </a>
-        <a href="recharge.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
-            <i class="fa-solid fa-wallet text-base"></i>
-            <span class="text-[10px] mt-0.5">Recharge</span>
-        </a>
-        <a href="withdraw.html" class="text-gray-400 hover:text-yellow-400 flex flex-col items-center py-1 text-xs">
-            <i class="fa-solid fa-arrow-right-arrow-left text-base"></i>
-            <span class="text-[10px] mt-0.5">Withdraw</span>
-        </a>
-        <a href="profile.html" class="text-yellow-400 flex flex-col items-center py-1 text-xs font-bold">
-            <i class="fa-solid fa-user text-base"></i>
-            <span class="text-[10px] mt-0.5">Profile</span>
+    <!-- Header with Top Corner CS Button -->
+    <div class="header">
+        <span>USER PROFILE</span>
+        <a href="cs.html" class="cs-top-btn">
+            <i class="fas fa-headset"></i> Support
         </a>
     </div>
 
+    <div class="container">
+        <!-- Account Info Card -->
+        <div class="profile-card">
+            <div class="profile-info">
+                <h3>ACCOUNT PHONE</h3>
+                <p id="userPhoneDisplay">7359679116</p>
+                <p style="font-size: 13px; color: #fbbf24; margin-top: 4px;">₹0.00</p>
+            </div>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+
+        <!-- Leased Assets Section -->
+        <div class="section-box">
+            <h3>MY LEASED ASSETS</h3>
+            <div class="history-placeholder">Loading assets...</div>
+        </div>
+
+        <!-- Recharge History Section -->
+        <div class="section-box">
+            <h3>RECHARGE HISTORY</h3>
+            <div class="history-placeholder">Loading recharges...</div>
+        </div>
+
+        <!-- Withdrawal History Section -->
+        <div class="section-box">
+            <h3>WITHDRAWAL HISTORY</h3>
+            <div class="history-placeholder">Loading withdrawals...</div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="recharge.html" class="nav-item">
+            <i class="fas fa-wallet"></i> Recharge
+        </a>
+        <a href="withdraw.html" class="nav-item">
+            <i class="fas fa-exchange-alt"></i> Withdraw
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i> Profile
+        </a>
+    </div>
+
+    <script>
+        // Load user phone from localStorage if available
+        const savedPhone = localStorage.getItem('user_phone');
+        if(savedPhone) {
+            document.getElementById('userPhoneDisplay').innerText = savedPhone;
+        }
+
+        function logout() {
+            localStorage.removeItem('user_phone');
+            alert('Logged out successfully!');
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
