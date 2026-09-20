@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Live Support</title>
+    <title>TitanBuild - Customer Service</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -22,11 +22,17 @@
         .header {
             background: #111827;
             color: #fbbf24;
-            padding: 16px;
-            text-align: center;
-            font-size: 18px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
+        }
+        .header i {
+            cursor: pointer;
+            font-size: 18px;
         }
         .chat-container {
             flex: 1;
@@ -34,154 +40,193 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-width: 480px;
-            width: 100%;
-            margin: 0 auto;
+            gap: 10px;
         }
-        .message {
+        .msg {
             max-width: 80%;
             padding: 10px 14px;
             border-radius: 10px;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.4;
         }
-        .message.bot {
+        .msg.bot {
             background: #1f2937;
             color: #e2e8f0;
             align-self: flex-start;
-            border-bottom-left-radius: 2px;
+            border: 1px solid #374151;
         }
-        .message.user {
+        .msg.user {
             background: #fbbf24;
             color: #111827;
             align-self: flex-end;
-            border-bottom-right-radius: 2px;
             font-weight: 500;
         }
         .options-container {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-top: 8px;
+            margin: 5px 0;
         }
         .option-btn {
-            background: #1e293b;
-            color: #229ed9;
-            border: 1px solid #229ed9;
+            background: #1f2937;
+            color: #fbbf24;
+            border: 1px solid #fbbf24;
             padding: 10px 14px;
             border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
             text-align: left;
+            cursor: pointer;
+            font-size: 13px;
             transition: 0.2s;
         }
         .option-btn:hover {
-            background: #229ed9;
-            color: #fff;
+            background: #fbbf24;
+            color: #111827;
         }
-        .chat-footer {
+        .chat-input-area {
             background: #111827;
-            padding: 12px;
+            padding: 12px 15px;
             display: flex;
             gap: 10px;
-            max-width: 480px;
-            width: 100%;
-            margin: 0 auto;
             border-top: 1px solid #1f2937;
         }
-        .chat-input {
+        .chat-input-area input {
             flex: 1;
-            padding: 10px 14px;
             background: #1f2937;
             border: 1px solid #374151;
-            color: #fff;
+            padding: 10px 14px;
             border-radius: 8px;
-            font-size: 14px;
+            color: #fff;
             outline: none;
+            font-size: 13px;
         }
-        .chat-input:focus {
+        .chat-input-area input:focus {
             border-color: #fbbf24;
         }
-        .send-btn {
+        .chat-input-area button {
             background: #fbbf24;
             color: #111827;
             border: none;
             padding: 0 16px;
             border-radius: 8px;
-            font-weight: bold;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .time-stamp {
+            font-size: 9px;
+            opacity: 0.6;
+            margin-top: 4px;
+            text-align: right;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        TitanBuild Live Support
+        <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
+        <span>Customer Service Support</span>
     </div>
 
     <div class="chat-container" id="chatContainer">
-        <div class="message bot">
+        <!-- Default Welcome Message -->
+        <div class="msg bot">
             Hello! Welcome to TitanBuild Support. Please select your issue below:
-            <div class="options-container">
-                <button class="option-btn" onclick="sendOption('Withdrawal Issue')">💸 Withdrawal Issue</button>
-                <button class="option-btn" onclick="sendOption('Product Buy Issue')">🛒 Product Buy Issue</button>
-                <button class="option-btn" onclick="sendOption('Other Problem')">⚙️ Other Problem</button>
-            </div>
+            <div class="time-stamp" id="welcomeTime"></div>
+        </div>
+
+        <!-- 3 Option Buttons -->
+        <div class="options-container" id="optionsBox">
+            <button class="option-btn" onclick="selectOption('Recharge Problem (Amount not added)')">1. Recharge Problem (Amount not added)</button>
+            <button class="option-btn" onclick="selectOption('Withdrawal Problem (Not received yet)')">2. Withdrawal Problem (Not received yet)</button>
+            <button class="option-btn" onclick="selectOption('Other Issue / General Support')">3. Other Issue / General Support</button>
         </div>
     </div>
 
-    <div class="chat-footer">
-        <input type="text" class="chat-input" id="messageInput" placeholder="Type your message...">
-        <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="Type your message here...">
+        <button onclick="sendUserMessage()"><i class="fas fa-paper-plane"></i></button>
     </div>
 
     <script>
-        const userId = localStorage.getItem('user_phone') || 'User_7359679116';
+        const userId = localStorage.getItem('user_phone') || 'User_' + Math.floor(Math.random() * 10000);
+        
+        // Set welcome message timestamp
+        document.getElementById('welcomeTime').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        function appendMessage(text, sender) {
-            const container = document.getElementById('chatContainer');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${sender}`;
-            msgDiv.innerText = text;
-            container.appendChild(msgDiv);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function saveToAdminComplaints(text) {
+        function getChatHistory() {
             let complaints = JSON.parse(localStorage.getItem('admin_complaints')) || [];
             let userThread = complaints.find(c => c.userId === userId);
             if (!userThread) {
                 userThread = { userId: userId, messages: [] };
                 complaints.push(userThread);
+                localStorage.setItem('admin_complaints', JSON.stringify(complaints));
             }
-            userThread.messages.push({ sender: 'user', text: text, time: new Date().toLocaleTimeString() });
-            userThread.messages.push({ sender: 'bot', text: 'Please show your problem in detail.', time: new Date().toLocaleTimeString() });
-            localStorage.setItem('admin_complaints', JSON.stringify(complaints));
+            return { complaints, userThread };
         }
 
-        function sendOption(optionText) {
-            appendMessage(optionText, 'user');
-            saveToAdminComplaints(optionText);
+        function saveMessageToStorage(sender, text) {
+            let data = getChatHistory();
+            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            data.userThread.messages.push({ sender: sender, text: text, time: timeStr });
+            localStorage.setItem('admin_complaints', JSON.stringify(data.complaints));
+        }
+
+        // Jab user un 3 buttons me se kisi par click karega
+        function selectOption(optionText) {
+            const chatContainer = document.getElementById('chatContainer');
+            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // 1. Show user selected option as a message
+            appendMessageToUI('user', optionText, timeStr);
+            saveMessageToStorage('user', optionText);
+
+            // Hide options buttons after selection
+            document.getElementById('optionsBox').style.display = 'none';
+
+            // 2. Automated Bot Reply for options
             setTimeout(() => {
-                appendMessage('Please show your problem in detail.', 'bot');
-            }, 600);
+                const botReply = "Please show your problem in detail.";
+                appendMessageToUI('bot', botReply, timeStr);
+                saveMessageToStorage('bot', botReply);
+            }, 500);
         }
 
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const text = input.value.trim();
-            if(!text) return;
+        // Jab user custom message type karke bhejega
+        function sendUserMessage() {
+            const inputField = document.getElementById('userInput');
+            const text = inputField.value.trim();
+            if (!text) return;
 
-            appendMessage(text, 'user');
-            saveToAdminComplaints(text);
-            input.value = '';
+            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Show user custom message
+            appendMessageToUI('user', text, timeStr);
+            saveMessageToStorage('user', text);
 
-            setTimeout(() => {
-                appendMessage('Please show your problem in detail.', 'bot');
-            }, 600);
+            inputField.value = '';
+            
+            // Hide options if still visible
+            const optBox = document.getElementById('optionsBox');
+            if(optBox) optBox.style.display = 'none';
+
+            // NOTE: Yahan koi auto-reply nahi jayega. Yeh message seedha admin panel mein save ho jayega taaki aap wahan se dekh kar reply kar sako.
         }
+
+        function appendMessageToUI(sender, text, time) {
+            const chatContainer = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.className = `msg ${sender}`;
+            div.innerHTML = `${text} <div class="time-stamp">${time}</div>`;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Allow enter key to send message
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendUserMessage();
+            }
+        });
     </script>
 </body>
 </html>
