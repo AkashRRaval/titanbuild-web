@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Recharge</title>
+    <title>TitanBuild - Recharge History</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -21,132 +21,61 @@
             background: #111827;
             color: #fbbf24;
             padding: 16px;
-            text-align: center;
-            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 16px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
+        }
+        .header i {
+            cursor: pointer;
+            font-size: 18px;
         }
         .container {
             max-width: 480px;
             margin: 15px auto;
+            padding: 0 15px;
+        }
+        /* Sample jaisa Dark Order Card */
+        .order-card {
             background: #111827;
-            padding: 20px;
-            border-radius: 12px;
             border: 1px solid #1f2937;
-        }
-        .telegram-box {
-            background: #1e293b;
-            border: 1px solid #229ed9;
-            color: #e2e8f0;
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .telegram-box p {
-            font-size: 13px;
-            margin-bottom: 8px;
-            color: #94a3b8;
-        }
-        .telegram-btn {
-            display: inline-block;
-            background: #229ed9;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #fbbf24;
-        }
-        .channel-options {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .channel-btn {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #374151;
-            background: #1f2937;
-            color: #94a3b8;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-        }
-        .channel-btn.active {
-            border-color: #fbbf24;
-            background: rgba(251, 191, 36, 0.1);
-            color: #fbbf24;
-        }
-        .qr-section {
-            background: #1f2937;
+            border-radius: 12px;
             padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid #374151;
+            margin-bottom: 12px;
         }
-        .qr-box {
-            width: 150px;
-            height: 150px;
-            background: #fff;
-            margin: 0 auto 10px auto;
+        .order-card-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            border-radius: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 8px;
         }
-        .qr-box img {
-            width: 140px;
-            height: 140px;
-        }
-        .upi-id {
-            font-size: 13px;
-            color: #fbbf24;
+        .type-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: bold;
         }
-        .form-group {
-            margin-bottom: 15px;
+        .status-badge {
+            color: #10b981;
+            font-size: 13px;
+            font-weight: bold;
         }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
+        .order-info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
             color: #94a3b8;
             margin-bottom: 6px;
         }
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            background: #1f2937;
-            border: 1px solid #374151;
+        .order-info-row span {
             color: #fff;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-        }
-        .form-control:focus {
-            border-color: #fbbf24;
-        }
-        .submit-btn {
-            width: 100%;
-            background: #fbbf24;
-            color: #111827;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
+            font-weight: 500;
         }
         /* Bottom Navigation Bar */
         .bottom-nav {
@@ -159,6 +88,7 @@
             justify-content: space-around;
             padding: 10px 0;
             border-top: 1px solid #1f2937;
+            z-index: 100;
         }
         .nav-item {
             text-align: center;
@@ -179,49 +109,55 @@
 <body>
 
     <div class="header">
-        TitanBuild Recharge Portal
+        <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
+        <span>Recharge History</span>
+        <a href="cs.html" style="color: #fbbf24; font-size: 16px;"><i class="fas fa-headset"></i></a>
     </div>
 
-    <div class="container">
-        <!-- Telegram Channel Box -->
-        <div class="telegram-box">
-            <p><i class="fab fa-telegram-plane"></i> Join our official Telegram channel for updates</p>
-            <a href="https://t.me/titanbuid" target="_blank" class="telegram-btn">
-                Open Telegram
-            </a>
-        </div>
-
-        <div class="section-title">Select Recharge Channel</div>
-        <div class="channel-options">
-            <div class="channel-btn active" onclick="selectChannel(1)">Channel 1 (Ranjanben)</div>
-            <div class="channel-btn" onclick="selectChannel(2)">Channel 2 (Rajubhai)</div>
-        </div>
-
-        <!-- UPI QR Code Section -->
-        <div class="qr-section">
-            <div class="qr-box">
-                <!-- Replace with your actual QR code image path -->
-                <img src="qr-code.png" alt="UPI QR Code" id="qrImage">
+    <div class="container" id="rechargeHistoryContainer">
+        <!-- Sample Dark Cards for Recharge -->
+        <div class="order-card">
+            <div class="order-card-header">
+                <span class="type-badge">Recharge</span>
+                <span class="status-badge">SUCCESS</span>
             </div>
-            <div class="upi-id" id="upiText">UPI ID: merchant@upi</div>
+            <div class="order-info-row">
+                Amount: <span style="color: #10b981;">₹500.00</span>
+            </div>
+            <div class="order-info-row">
+                UTR Number: <span>UTR9876543210</span>
+            </div>
+            <div class="order-info-row">
+                Time: <span>2026-09-20 14:30:15</span>
+            </div>
+            <div class="order-info-row" style="font-size: 11px; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 6px;">
+                Order number: <span style="font-size: 11px; color: #fbbf24;">R5120260920143015001</span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Enter Recharge Amount (₹)</label>
-            <input type="number" class="form-control" id="rechargeAmount" placeholder="e.g. 1000">
+        <div class="order-card">
+            <div class="order-card-header">
+                <span class="type-badge">Recharge</span>
+                <span class="status-badge">SUCCESS</span>
+            </div>
+            <div class="order-info-row">
+                Amount: <span style="color: #10b981;">₹1000.00</span>
+            </div>
+            <div class="order-info-row">
+                UTR Number: <span>UTR1234567890</span>
+            </div>
+            <div class="order-info-row">
+                Time: <span>2026-09-18 10:15:40</span>
+            </div>
+            <div class="order-info-row" style="font-size: 11px; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 6px;">
+                Order number: <span style="font-size: 11px; color: #fbbf24;">R5120260918101540002</span>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label>Enter 12-Digit UTR / Reference Number</label>
-            <input type="text" class="form-control" id="utrNumber" placeholder="Enter UTR after payment">
-        </div>
-
-        <button class="submit-btn" onclick="submitRecharge()">Submit Recharge</button>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <a href="home.html" class="nav-item">
+        <a href="index.html" class="nav-item">
             <i class="fas fa-home"></i> Home
         </a>
         <a href="recharge.html" class="nav-item active">
@@ -235,36 +171,5 @@
         </a>
     </div>
 
-    <script>
-        function selectChannel(ch) {
-            const btns = document.querySelectorAll('.channel-btn');
-            btns.forEach(b => b.classList.remove('active'));
-            btns[ch - 1].classList.add('active');
-            
-            // Channel change hone par QR ya UPI ID change karne ka logic yahan daal sakte hain
-            if(ch === 1) {
-                document.getElementById('upiText').innerText = "UPI ID: ranjanben@upi";
-            } else {
-                document.getElementById('upiText').innerText = "UPI ID: rajubhai@upi";
-            }
-        }
-
-        function submitRecharge() {
-            const amount = document.getElementById('rechargeAmount').value;
-            const utr = document.getElementById('utrNumber').value;
-
-            if(!amount || !utr) {
-                alert('Please fill in both amount and UTR number!');
-                return;
-            }
-
-            if(utr.length < 12) {
-                alert('Please enter a valid 12-digit UTR number!');
-                return;
-            }
-
-            alert('Recharge request submitted successfully!');
-        }
-    </script>
 </body>
 </html>
