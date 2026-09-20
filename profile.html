@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - User Profile</title>
+    <title>TitanBuild - Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -20,31 +20,11 @@
         .header {
             background: #111827;
             color: #fbbf24;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 18px;
+            padding: 16px;
+            text-align: center;
+            font-size: 16px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
-        }
-        /* Top Corner Customer Service Button */
-        .cs-top-btn {
-            background: #1f2937;
-            color: #fbbf24;
-            border: 1px solid #374151;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
-        }
-        .cs-top-btn:hover {
-            border-color: #fbbf24;
-            background: #252f42;
         }
         .container {
             max-width: 480px;
@@ -56,49 +36,49 @@
             border: 1px solid #1f2937;
             border-radius: 12px;
             padding: 20px;
+            text-align: center;
             margin-bottom: 15px;
+        }
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+            font-size: 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
         }
-        .profile-info h3 {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-        }
-        .profile-info p {
-            font-size: 16px;
-            color: #fff;
-            font-weight: bold;
-        }
-        .logout-btn {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        .section-box {
+        .menu-list {
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 12px;
-            padding: 15px;
+            overflow: hidden;
             margin-bottom: 15px;
         }
-        .section-box h3 {
-            font-size: 14px;
-            color: #fbbf24;
-            margin-bottom: 12px;
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
             border-bottom: 1px solid #1f2937;
-            padding-bottom: 8px;
-        }
-        .history-placeholder {
-            color: #64748b;
-            text-align: center;
-            padding: 20px;
+            color: #e2e8f0;
+            text-decoration: none;
             font-size: 13px;
+        }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        .menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .menu-item-left i {
+            color: #fbbf24;
+            font-size: 16px;
         }
         /* Bottom Navigation Bar */
         .bottom-nav {
@@ -131,47 +111,54 @@
 </head>
 <body>
 
-    <!-- Header with Top Corner CS Button -->
     <div class="header">
-        <span>USER PROFILE</span>
-        <a href="cs.html" class="cs-top-btn">
-            <i class="fas fa-headset"></i> Support
-        </a>
+        My Profile
     </div>
 
     <div class="container">
-        <!-- Account Info Card -->
+        <!-- User Info Card -->
         <div class="profile-card">
-            <div class="profile-info">
-                <h3>ACCOUNT PHONE</h3>
-                <p id="userPhoneDisplay">7359679116</p>
-                <p style="font-size: 13px; color: #fbbf24; margin-top: 4px;">₹0.00</p>
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
             </div>
-            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            <h3 style="font-size: 15px; color: #fff; margin-bottom: 4px;">TitanUser</h3>
+            <p style="font-size: 12px; color: #94a3b8;">Phone: +91 73596*****</p>
         </div>
 
-        <!-- Leased Assets Section -->
-        <div class="section-box">
-            <h3>MY LEASED ASSETS</h3>
-            <div class="history-placeholder">Loading assets...</div>
-        </div>
+        <!-- Menu Options -->
+        <div class="menu-list">
+            <!-- Recharge History Link -->
+            <a href="recharge.html" class="menu-item">
+                <div class="menu-item-left">
+                    <i class="fas fa-wallet"></i>
+                    <span>Recharge History</span>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #64748b; font-size: 12px;"></i>
+            </a>
 
-        <!-- Recharge History Section -->
-        <div class="section-box">
-            <h3>RECHARGE HISTORY</h3>
-            <div class="history-placeholder">Loading recharges...</div>
-        </div>
+            <!-- Withdrawal History Link -->
+            <a href="withdraw.html" class="menu-item">
+                <div class="menu-item-left">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Withdrawal History</span>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #64748b; font-size: 12px;"></i>
+            </a>
 
-        <!-- Withdrawal History Section -->
-        <div class="section-box">
-            <h3>WITHDRAWAL HISTORY</h3>
-            <div class="history-placeholder">Loading withdrawals...</div>
+            <!-- Customer Support Link -->
+            <a href="cs.html" class="menu-item">
+                <div class="menu-item-left">
+                    <i class="fas fa-headset"></i>
+                    <span>Customer Support</span>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #64748b; font-size: 12px;"></i>
+            </a>
         </div>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <a href="home.html" class="nav-item">
+        <a href="index.html" class="nav-item">
             <i class="fas fa-home"></i> Home
         </a>
         <a href="recharge.html" class="nav-item">
@@ -185,18 +172,6 @@
         </a>
     </div>
 
-    <script>
-        // Load user phone from localStorage if available
-        const savedPhone = localStorage.getItem('user_phone');
-        if(savedPhone) {
-            document.getElementById('userPhoneDisplay').innerText = savedPhone;
-        }
-
-        function logout() {
-            localStorage.removeItem('user_phone');
-            alert('Logged out successfully!');
-            window.location.href = 'index.html';
-        }
-    </script>
 </body>
 </html>
+
