@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Recharge History</title>
+    <title>TitanBuild - Recharge & History</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -32,12 +32,81 @@
             cursor: pointer;
             font-size: 18px;
         }
-        .container {
-            max-width: 480px;
-            margin: 15px auto;
-            padding: 0 15px;
+        /* Top Tabs for Recharge Page */
+        .recharge-tabs {
+            display: flex;
+            background: #111827;
+            border-bottom: 1px solid #1f2937;
         }
-        /* Sample jaisa Dark Order Card */
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            color: #fbbf24;
+            border-bottom-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.05);
+        }
+        .tab-section {
+            display: none;
+            padding: 15px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .tab-section.active {
+            display: block;
+        }
+        /* Form & Card Styles */
+        .card-box {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            background: #0b0f19;
+            border: 1px solid #374151;
+            padding: 10px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+        }
+        .form-group input:focus {
+            border-color: #fbbf24;
+        }
+        .submit-btn {
+            width: 100%;
+            background: #fbbf24;
+            color: #111827;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        /* History Dark Cards */
         .order-card {
             background: #111827;
             border: 1px solid #1f2937;
@@ -110,12 +179,41 @@
 
     <div class="header">
         <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
-        <span>Recharge History</span>
+        <span>Recharge Center</span>
         <a href="cs.html" style="color: #fbbf24; font-size: 16px;"><i class="fas fa-headset"></i></a>
     </div>
 
-    <div class="container" id="rechargeHistoryContainer">
-        <!-- Sample Dark Cards for Recharge -->
+    <!-- Recharge Tabs -->
+    <div class="recharge-tabs">
+        <button class="tab-btn active" onclick="switchRechargeTab('paySection', this)"><i class="fas fa-wallet"></i> Recharge Money</button>
+        <button class="tab-btn" onclick="switchRechargeTab('historySection', this)"><i class="fas fa-history"></i> Recharge History</button>
+    </div>
+
+    <!-- SECTION 1: RECHARGE PAYMENT -->
+    <div id="paySection" class="tab-section active">
+        <div class="card-box" style="text-align: center;">
+            <p style="font-size: 13px; color: #94a3b8; margin-bottom: 10px;">Scan QR or Pay to UPI</p>
+            <div style="background: #fff; padding: 15px; display: inline-block; border-radius: 8px; margin-bottom: 10px;">
+                <i class="fas fa-qrcode" style="font-size: 100px; color: #000;"></i>
+            </div>
+            <p style="font-size: 12px; color: #fbbf24;">UPI ID: titanbuild@oksbi</p>
+        </div>
+
+        <div class="card-box">
+            <div class="form-group">
+                <label>Enter Amount (₹)</label>
+                <input type="number" id="rechargeAmount" placeholder="e.g. 500">
+            </div>
+            <div class="form-group">
+                <label>Enter 12-Digit UTR Number</label>
+                <input type="text" id="utrNumber" placeholder="Enter UTR after payment">
+            </div>
+            <button class="submit-btn" onclick="submitRecharge()">Submit Recharge</button>
+        </div>
+    </div>
+
+    <!-- SECTION 2: RECHARGE HISTORY -->
+    <div id="historySection" class="tab-section">
         <div class="order-card">
             <div class="order-card-header">
                 <span class="type-badge">Recharge</span>
@@ -132,25 +230,6 @@
             </div>
             <div class="order-info-row" style="font-size: 11px; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 6px;">
                 Order number: <span style="font-size: 11px; color: #fbbf24;">R5120260920143015001</span>
-            </div>
-        </div>
-
-        <div class="order-card">
-            <div class="order-card-header">
-                <span class="type-badge">Recharge</span>
-                <span class="status-badge">SUCCESS</span>
-            </div>
-            <div class="order-info-row">
-                Amount: <span style="color: #10b981;">₹1000.00</span>
-            </div>
-            <div class="order-info-row">
-                UTR Number: <span>UTR1234567890</span>
-            </div>
-            <div class="order-info-row">
-                Time: <span>2026-09-18 10:15:40</span>
-            </div>
-            <div class="order-info-row" style="font-size: 11px; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 6px;">
-                Order number: <span style="font-size: 11px; color: #fbbf24;">R5120260918101540002</span>
             </div>
         </div>
     </div>
@@ -171,5 +250,25 @@
         </a>
     </div>
 
+    <script>
+        function switchRechargeTab(sectionId, btn) {
+            document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function submitRecharge() {
+            const amount = document.getElementById('rechargeAmount').value;
+            const utr = document.getElementById('utrNumber').value;
+            if(!amount || !utr) {
+                alert('Please enter amount and UTR number');
+                return;
+            }
+            alert('Recharge request submitted successfully!');
+            document.getElementById('rechargeAmount').value = '';
+            document.getElementById('utrNumber').value = '';
+        }
+    </script>
 </body>
 </html>
