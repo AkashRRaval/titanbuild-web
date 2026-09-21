@@ -52,15 +52,19 @@
         }
         .qr-box {
             background: #fff;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
             display: inline-block;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            position: relative;
         }
+        /* Yeh CSS image ke niche ke text (naam) ko crop karke chupa degi taaki sirf QR code dikhe */
         .qr-box img {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
+            width: 210px;
+            height: 190px;
+            object-fit: cover;
+            object-position: top;
         }
         .upi-text {
             color: #fbbf24;
@@ -143,10 +147,10 @@
         <div class="card" id="channel1Card">
             <h3>Scan & Pay via UPI App</h3>
             <div class="qr-box">
-                <!-- Fallback to external direct github raw URL or embedded if available, using raw GitHub link to ensure load -->
-                <img src="https://raw.githubusercontent.com/AkashRRaval/titanbuild/main/NaviQR_RAVAL_RAJUBHAI_MANGABHAI_18092026211409379.png" onerror="this.src='qr1.png'" alt="QR Code 1">
+                <!-- Pehli photo ka naam qr1.png rakhein GitHub par -->
+                <img src="qr1.png" alt="QR Code 1">
             </div>
-            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">UPI ID:</div>
+            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">UPI ID:</div>
             <div class="upi-text">ravalrajubhai331@naviaxis</div>
         </div>
 
@@ -154,9 +158,10 @@
         <div class="card" id="channel2Card" style="display: none;">
             <h3>Scan & Pay via UPI App</h3>
             <div class="qr-box">
-                <img src="https://raw.githubusercontent.com/AkashRRaval/titanbuild/main/NaviQR_RANJANBEN_RAJUBHAI_18092026212538836.png" onerror="this.src='qr2.png'" alt="QR Code 2">
+                <!-- Dusri photo ka naam qr2.png rakhein GitHub par -->
+                <img src="qr2.png" alt="QR Code 2">
             </div>
-            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">UPI ID:</div>
+            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">UPI ID:</div>
             <div class="upi-text">fastpaytes@naviaxis</div>
         </div>
 
