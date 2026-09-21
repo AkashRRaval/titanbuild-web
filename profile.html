@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - User Profile</title>
+    <title>TitanBuild - Profile & Wallet</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -22,266 +22,220 @@
             color: #fbbf24;
             padding: 16px;
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
         }
-        .profile-card {
+        .container {
+            max-width: 400px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+        .card {
             background: #111827;
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
             border: 1px solid #1f2937;
-            text-align: center;
-        }
-        .profile-card h2 {
-            color: #fff;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        .profile-card p {
-            color: #94a3b8;
-            font-size: 13px;
-        }
-        .menu-list {
-            margin: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .menu-item {
-            background: #111827;
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #1f2937;
-            cursor: pointer;
-            color: #fff;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .menu-item i:first-child {
-            color: #fbbf24;
-            margin-right: 12px;
-            font-size: 16px;
-        }
-        .menu-left {
-            display: flex;
-            align-items: center;
-        }
-        /* Modal Popup Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        .modal-content {
-            background: #111827;
-            padding: 25px;
             border-radius: 12px;
-            width: 100%;
-            max-width: 350px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .balance-card {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
             border: 1px solid #374151;
             text-align: center;
         }
-        .modal-content h3 {
-            color: #fbbf24;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        .modal-content p {
+        .balance-card h4 {
             color: #94a3b8;
             font-size: 13px;
-            margin-bottom: 20px;
-            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+        .balance-card h2 {
+            color: #fbbf24;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-row button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .btn-recharge {
+            background: #fbbf24;
+            color: #111827;
+        }
+        .btn-withdraw {
+            background: #374151;
+            color: #fff;
+        }
+        .card h3 {
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 12px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+        .input-group input {
+            width: 100%;
+            background: #0b0f19;
+            border: 1px solid #374151;
+            padding: 10px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
         }
         .btn-primary {
             background: #fbbf24;
             color: #111827;
             border: none;
-            padding: 10px 20px;
+            width: 100%;
+            padding: 11px;
             border-radius: 8px;
             font-weight: bold;
+            font-size: 13px;
             cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
+            margin-top: 5px;
         }
-        .btn-secondary {
-            background: transparent;
-            color: #94a3b8;
-            border: 1px solid #374151;
-            padding: 8px 20px;
+        .bank-info {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px dashed #fbbf24;
+            padding: 10px;
             border-radius: 8px;
+            font-size: 12px;
+            color: #fbbf24;
+            text-align: center;
+        }
+        .menu-list {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .menu-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #1f2937;
             cursor: pointer;
-            width: 100%;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        .menu-item i:first-child {
+            margin-right: 12px;
+            color: #fbbf24;
+            width: 20px;
+        }
+        .menu-item span {
+            flex: 1;
+        }
+        .menu-item i:last-child {
+            color: #6b7280;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        User Profile
+        <span>My Profile & Wallet</span>
     </div>
 
-    <div class="profile-card">
-        <h2>Raval Akash</h2>
-        <p>User ID: User_7359</p>
-    </div>
-
-    <div class="menu-list">
-        <!-- Wallet Option -->
-        <div class="menu-item" onclick="openWallet()">
-            <div class="menu-left">
-                <i class="fas fa-wallet"></i>
-                <span>My Wallet & Benefits</span>
+    <div class="container">
+        <!-- Wallet & Actions Card -->
+        <div class="card balance-card">
+            <h4>Wallet Balance (Daily Benefits Included)</h4>
+            <h2 id="walletBalance">₹0.00</h2>
+            <div class="btn-row">
+                <button class="btn-recharge" onclick="window.location.href='recharge.html'">Recharge</button>
+                <button class="btn-withdraw" onclick="checkWithdrawalLock()">Withdraw</button>
             </div>
-            <i class="fas fa-chevron-right" style="color: #64748b;"></i>
         </div>
 
-        <!-- Asset Purchases History -->
-        <div class="menu-item" onclick="openAssetHistory()">
-            <div class="menu-left">
-                <i class="fas fa-box-archive"></i>
-                <span>Asset Purchases History</span>
+        <!-- Bank Card Binding Section -->
+        <div class="card">
+            <h3>Bank Card Binding</h3>
+            <div id="boundBankInfo" style="display: none;" class="bank-info">
+                Bank Bound Successfully!
             </div>
-            <i class="fas fa-chevron-right" style="color: #64748b;"></i>
+            <div id="bankForm">
+                <div class="input-group">
+                    <label>Account Holder Name</label>
+                    <input type="text" id="accName" placeholder="Enter holder name">
+                </div>
+                <div class="input-group">
+                    <label>Bank Account Number</label>
+                    <input type="text" id="accNo" placeholder="Enter account number">
+                </div>
+                <div class="input-group">
+                    <label>IFSC Code</label>
+                    <input type="text" id="ifscCode" placeholder="Enter IFSC code">
+                </div>
+                <button class="btn-primary" onclick="bindBank()">Save & Bind Bank</button>
+            </div>
         </div>
 
-        <!-- Support Chat -->
-        <a href="cs.html" class="menu-item">
-            <div class="menu-left">
-                <i class="fas fa-headset"></i>
-                <span>Customer Support</span>
-            </div>
-            <i class="fas fa-chevron-right" style="color: #64748b;"></i>
-        </a>
-    </div>
-
-    <!-- Wallet & Withdrawal Modal -->
-    <div class="modal" id="walletModal">
-        <div class="modal-content">
-            <h3>My Wallet</h3>
-            <p style="font-size: 16px; color: #fff; margin-bottom: 5px;">Daily Benefit Balance:</p>
-            <h2 id="walletBalance" style="color: #fbbf24; margin-bottom: 15px;">₹0.00</h2>
-            <p id="cycleStatusText">Cycle Status: Ongoing (Withdrawal Locked)</p>
-            
-            <button class="btn-primary" onclick="tryWithdrawal()">Withdraw Funds</button>
-            <button class="btn-secondary" onclick="closeModal('walletModal')">Close</button>
-        </div>
-    </div>
-
-    <!-- ATM Card Purchase Popup Modal -->
-    <div class="modal" id="atmPopupModal">
-        <div class="modal-content">
-            <i class="fas fa-credit-card" style="font-size: 35px; color: #fbbf24; margin-bottom: 10px;"></i>
-            <h3>Withdrawal Limit Locked!</h3>
-            <p>Aapka investment cycle complete ho chuka hai aur aap withdrawal karna chahte hain. Withdrawal limit unlock karne ke liye pehle **ATM Card** product purchase karein.</p>
-            <button class="btn-primary" onclick="buyAtmCard()">Buy ATM Card Now</button>
-            <button class="btn-secondary" onclick="closeModal('atmPopupModal')">Cancel</button>
-        </div>
-    </div>
-
-    <!-- Asset History Modal -->
-    <div class="modal" id="assetModal">
-        <div class="modal-content" style="max-width: 400px; text-align: left;">
-            <h3>Asset Purchases History</h3>
-            <div id="assetHistoryList" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px; font-size: 13px; color: #94a3b8;">
-                <!-- Dynamic Data -->
-            </div>
-            <button class="btn-secondary" onclick="closeModal('assetModal')">Close</button>
+        <!-- History & Records Menu -->
+        <div class="menu-list">
+            <a href="recharge.html" class="menu-item">
+                <i class="fas fa-history"></i>
+                <span>Asset Purchases & Recharge History</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" class="menu-item" onclick="alert('Daily benefits are active on your wallet cycle!')">
+                <i class="fas fa-gift"></i>
+                <span>Daily Benefits Status</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
         </div>
     </div>
 
     <script>
-        // Dummy Data / LocalStorage Check initialization
-        function initUserData() {
-            if (!localStorage.getItem('titan_user_wallet')) {
-                localStorage.setItem('titan_user_wallet', JSON.stringify({
-                    balance: 1250.50,
-                    cycleCompleted: false, // Jab tak cycle complete nahi hota
-                    hasAtmCard: false
-                }));
-            }
-            if (!localStorage.getItem('titan_asset_history')) {
-                localStorage.setItem('titan_asset_history', JSON.stringify([
-                    { name: 'Titan Starter Miner', price: '₹500', date: '2026-03-01', status: 'Active (Cycle Ongoing)' }
-                ]));
-            }
-        }
-        initUserData();
+        function bindBank() {
+            const name = document.getElementById('accName').value.trim();
+            const acc = document.getElementById('accNo').value.trim();
+            const ifsc = document.getElementById('ifscCode').value.trim();
 
-        function openWallet() {
-            let data = JSON.parse(localStorage.getItem('titan_user_wallet'));
-            document.getElementById('walletBalance').innerText = `₹${data.balance.toFixed(2)}`;
-            
-            const statusText = document.getElementById('cycleStatusText');
-            if(data.cycleCompleted) {
-                statusText.innerHTML = "Cycle Status: <span style='color:#10b981;'>Completed</span>";
+            if(!name || !acc || !ifsc) {
+                alert("Please fill in all bank details to bind!");
+                return;
+            }
+
+            alert("Bank account bound successfully!");
+            document.getElementById('bankForm').style.display = 'none';
+            document.getElementById('boundBankInfo').style.display = 'block';
+            document.getElementById('boundBankInfo').innerText = `Bound Bank: ${name} (${acc})`;
+        }
+
+        function checkWithdrawalLock() {
+            let cycleCompleted = false; // Change to true when cycle finishes
+            if(!cycleCompleted) {
+                alert("Withdrawal is locked until your investment cycle completes!");
             } else {
-                statusText.innerHTML = "Cycle Status: <span style='color:#f59e0b;'>Ongoing (Locked until cycle finishes)</span>";
+                let buyCard = confirm("Cycle completed! Please purchase an ATM Card to unlock your withdrawal limit.");
+                if(buyCard) {
+                    alert("Redirecting to ATM Card purchase gateway...");
+                }
             }
-
-            document.getElementById('walletModal').style.display = 'flex';
-        }
-
-        function openAssetHistory() {
-            let history = JSON.parse(localStorage.getItem('titan_asset_history')) || [];
-            let listDiv = document.getElementById('assetHistoryList');
-            
-            if(history.length === 0) {
-                listDiv.innerHTML = "<p>No assets purchased yet.</p>";
-            } else {
-                let html = "";
-                history.forEach(item => {
-                    html += `<div style="background:#1f2937; padding:10px; border-radius:6px; margin-bottom:8px;">
-                        <strong style="color:#fff;">${item.name}</strong><br>
-                        Price: ${item.price} | Date: ${item.date}<br>
-                        Status: <span style="color:#fbbf24;">${item.status}</span>
-                    </div>`;
-                });
-                listDiv.innerHTML = html;
-            }
-            document.getElementById('assetModal').style.display = 'flex';
-        }
-
-        function tryWithdrawal() {
-            let data = JSON.parse(localStorage.getItem('titan_user_wallet'));
-            closeModal('walletModal');
-
-            if (!data.cycleCompleted) {
-                alert("Aapka cycle abhi complete nahi hua hai! Cycle pura hone tak paise withdraw nahi kiye ja sakte.");
-            } else if (!data.hasAtmCard) {
-                // Agar cycle complete hai par ATM card nahi kharida, toh limit purchase ka popup dikhao
-                document.getElementById('atmPopupModal').style.display = 'flex';
-            } else {
-                alert("Withdrawal request processed successfully!");
-            }
-        }
-
-        function buyAtmCard() {
-            // Simulate ATM Card purchase action
-            let data = JSON.parse(localStorage.getItem('titan_user_wallet'));
-            data.hasAtmCard = true;
-            localStorage.setItem('titan_user_wallet', JSON.stringify(data));
-
-            // Add to asset history
-            let history = JSON.parse(localStorage.getItem('titan_asset_history')) || [];
-            history.push({ name: 'VIP ATM Card (Withdrawal Limit Pass)', price: '₹299', date: new Date().toISOString().split('T')[0], status: 'Unlocked' });
-            localStorage.setItem('titan_asset_history', JSON.stringify(history));
-
-            alert("ATM Card successfully purchased! Now you can withdraw your funds.");
-            closeModal('atmPopupModal');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
         }
     </script>
 </body>
