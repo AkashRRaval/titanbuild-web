@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Profile & Wallet</title>
+    <title>TitanBuild - Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -31,94 +31,59 @@
             margin: 15px auto;
             padding: 0 15px;
         }
-        .card {
+        /* Top Stats Grid (2 rows x 3 columns) */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px 10px;
             margin-bottom: 15px;
-        }
-        .balance-card {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-            border: 1px solid #374151;
             text-align: center;
         }
-        .balance-card h4 {
-            color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 5px;
-        }
-        .balance-card h2 {
-            color: #fbbf24;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        .btn-row {
-            display: flex;
-            gap: 10px;
-        }
-        .btn-row button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        .btn-recharge {
-            background: #fbbf24;
-            color: #111827;
-        }
-        .btn-withdraw {
-            background: #374151;
-            color: #fff;
-        }
-        .card h3 {
-            color: #fff;
+        .stat-box h4 {
             font-size: 15px;
-            margin-bottom: 15px;
-        }
-        .input-group {
-            margin-bottom: 12px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            color: #94a3b8;
+            color: #fbbf24;
             margin-bottom: 4px;
         }
-        .input-group input {
-            width: 100%;
-            background: #0b0f19;
-            border: 1px solid #374151;
-            padding: 10px;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 13px;
-            outline: none;
+        .stat-box span {
+            font-size: 11px;
+            color: #94a3b8;
+            line-height: 1.2;
+            display: block;
         }
-        .btn-primary {
-            background: #fbbf24;
-            color: #111827;
-            border: none;
-            width: 100%;
-            padding: 11px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-            margin-top: 5px;
+
+        /* Action Buttons Grid (4 buttons) */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
         }
-        .bank-info {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px dashed #fbbf24;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #fbbf24;
+        .action-btn {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 12px 5px;
             text-align: center;
+            cursor: pointer;
+            color: #e2e8f0;
+            text-decoration: none;
         }
+        .action-btn i {
+            font-size: 18px;
+            color: #fbbf24;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .action-btn span {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Menu List */
         .menu-list {
             background: #111827;
             border: 1px solid #1f2937;
@@ -127,7 +92,7 @@
             margin-bottom: 15px;
         }
         .menu-item {
-            padding: 15px 20px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -135,108 +100,156 @@
             cursor: pointer;
             color: #e2e8f0;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
         }
         .menu-item:last-child {
             border-bottom: none;
         }
+        .menu-item .left-side {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
         .menu-item i:first-child {
-            margin-right: 12px;
             color: #fbbf24;
+            font-size: 15px;
             width: 20px;
+            text-align: center;
         }
-        .menu-item span {
-            flex: 1;
-        }
-        .menu-item i:last-child {
+        .menu-item i.fa-chevron-right {
             color: #6b7280;
-            font-size: 12px;
+            font-size: 11px;
+        }
+        
+        /* Logout Button */
+        .btn-logout {
+            background: #111827;
+            border: 1px solid #374151;
+            color: #ef4444;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <span>My Profile & Wallet</span>
+        <span>My Profile</span>
     </div>
 
     <div class="container">
-        <!-- Wallet & Actions Card -->
-        <div class="card balance-card">
-            <h4>Wallet Balance (Daily Benefits Included)</h4>
-            <h2 id="walletBalance">₹0.00</h2>
-            <div class="btn-row">
-                <button class="btn-recharge" onclick="window.location.href='recharge.html'">Recharge</button>
-                <button class="btn-withdraw" onclick="checkWithdrawalLock()">Withdraw</button>
+        <!-- Top Earnings / Amount Blocks -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h4 id="withdrawAmt">₹0</h4>
+                <span>Withdraw Amount</span>
+            </div>
+            <div class="stat-box">
+                <h4 id="rechargeAmt">₹0</h4>
+                <span>Recharge Amount</span>
+            </div>
+            <div class="stat-box">
+                <h4 id="totalWithdraw">₹0</h4>
+                <span>Total Withdrawal</span>
+            </div>
+            <div class="stat-box" style="margin-top: 10px;">
+                <h4 id="todaysIncome">₹0</h4>
+                <span>Today's Income</span>
+            </div>
+            <div class="stat-box" style="margin-top: 10px;">
+                <h4 id="teamIncome">₹0</h4>
+                <span>Team Income</span>
+            </div>
+            <div class="stat-box" style="margin-top: 10px;">
+                <h4 id="totalIncome">₹0</h4>
+                <span>Total Income</span>
             </div>
         </div>
 
-        <!-- Bank Card Binding Section -->
-        <div class="card">
-            <h3>Bank Card Binding</h3>
-            <div id="boundBankInfo" style="display: none;" class="bank-info">
-                Bank Bound Successfully!
-            </div>
-            <div id="bankForm">
-                <div class="input-group">
-                    <label>Account Holder Name</label>
-                    <input type="text" id="accName" placeholder="Enter holder name">
-                </div>
-                <div class="input-group">
-                    <label>Bank Account Number</label>
-                    <input type="text" id="accNo" placeholder="Enter account number">
-                </div>
-                <div class="input-group">
-                    <label>IFSC Code</label>
-                    <input type="text" id="ifscCode" placeholder="Enter IFSC code">
-                </div>
-                <button class="btn-primary" onclick="bindBank()">Save & Bind Bank</button>
-            </div>
-        </div>
-
-        <!-- History & Records Menu -->
-        <div class="menu-list">
-            <a href="recharge.html" class="menu-item">
-                <i class="fas fa-history"></i>
-                <span>Asset Purchases & Recharge History</span>
-                <i class="fas fa-chevron-right"></i>
+        <!-- 4 Action Buttons (Recharge, Withdraw, Check-In, Prize) -->
+        <div class="action-grid">
+            <a href="recharge.html" class="action-btn">
+                <i class="fas fa-wallet"></i>
+                <span>Recharge</span>
             </a>
-            <a href="#" class="menu-item" onclick="alert('Daily benefits are active on your wallet cycle!')">
+            <a href="withdraw.html" class="action-btn">
+                <i class="fas fa-university"></i>
+                <span>Withdraw</span>
+            </a>
+            <a href="#" onclick="alert('Daily Check-In feature coming soon!')" class="action-btn">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-In</span>
+            </a>
+            <a href="#" onclick="alert('No active prizes available right now!')" class="action-btn">
                 <i class="fas fa-gift"></i>
-                <span>Daily Benefits Status</span>
+                <span>Prize</span>
+            </a>
+        </div>
+
+        <!-- Detailed Options Menu List -->
+        <div class="menu-list">
+            <a href="withdraw.html" class="menu-item">
+                <div class="left-side">
+                    <i class="fas fa-id-card"></i>
+                    <span>Withdrawal Information (Bank Binding)</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="recharge.html" class="menu-item">
+                <div class="left-side">
+                    <i class="fas fa-box-open"></i>
+                    <span>My Products / Asset History</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" onclick="alert('No bills found.')" class="menu-item">
+                <div class="left-side">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>My Bills</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" onclick="alert('TitanBuild is a platform for digital asset growth and daily benefits.')" class="menu-item">
+                <div class="left-side">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About Us</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" onclick="alert('Password change feature.')" class="menu-item">
+                <div class="left-side">
+                    <i class="fas fa-lock"></i>
+                    <span>Change Password</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" onclick="alert('Connecting to customer service support...')" class="menu-item">
+                <div class="left-side">
+                    <i class="fas fa-headset"></i>
+                    <span>Customer Service</span>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="#" onclick="alert('App download link will be available soon.')" class="menu-item">
+                <div class="left-side">
+                    <i class="fas fa-download"></i>
+                    <span>Download App</span>
+                </div>
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>
+
+        <!-- Logout Button -->
+        <button class="btn-logout" onclick="alert('Logged out successfully!'); window.location.href='login.html';">
+            Logout
+        </button>
     </div>
 
-    <script>
-        function bindBank() {
-            const name = document.getElementById('accName').value.trim();
-            const acc = document.getElementById('accNo').value.trim();
-            const ifsc = document.getElementById('ifscCode').value.trim();
-
-            if(!name || !acc || !ifsc) {
-                alert("Please fill in all bank details to bind!");
-                return;
-            }
-
-            alert("Bank account bound successfully!");
-            document.getElementById('bankForm').style.display = 'none';
-            document.getElementById('boundBankInfo').style.display = 'block';
-            document.getElementById('boundBankInfo').innerText = `Bound Bank: ${name} (${acc})`;
-        }
-
-        function checkWithdrawalLock() {
-            let cycleCompleted = false; // Change to true when cycle finishes
-            if(!cycleCompleted) {
-                alert("Withdrawal is locked until your investment cycle completes!");
-            } else {
-                let buyCard = confirm("Cycle completed! Please purchase an ATM Card to unlock your withdrawal limit.");
-                if(buyCard) {
-                    alert("Redirecting to ATM Card purchase gateway...");
-                }
-            }
-        }
-    </script>
 </body>
 </html>
