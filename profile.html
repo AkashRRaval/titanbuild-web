@@ -15,7 +15,7 @@
         body {
             background-color: #0b0f19;
             color: #e2e8f0;
-            padding-bottom: 70px;
+            padding-bottom: 80px; /* Footer ke liye space */
         }
         .header {
             background: #111827;
@@ -116,7 +116,7 @@
             font-size: 12px;
         }
         .logout-btn {
-            margin: 20px 15px;
+            margin: 15px;
             background: #ef4444;
             color: #fff;
             border: none;
@@ -127,6 +127,36 @@
             font-size: 15px;
             cursor: pointer;
             text-align: center;
+        }
+
+        /* Bottom Navigation Menu Bar Style */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            text-decoration: none;
+            color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+        .nav-item i {
+            font-size: 18px;
+        }
+        .nav-item.active, .nav-item:hover {
+            color: #fbbf24;
         }
     </style>
 </head>
@@ -156,7 +186,7 @@
         </div>
     </div>
 
-    <!-- Navigation Menu Options (Connected to respective files) -->
+    <!-- Navigation Menu Options -->
     <div class="menu-list">
         <a href="withdraw-info.html" class="menu-item">
             <div class="menu-left">
@@ -193,12 +223,32 @@
 
     <button class="logout-btn" onclick="logoutUser()">Log Out</button>
 
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Invest</span>
+        </a>
+        <a href="team.html" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
     <script>
         function logoutUser() {
             if(confirm("Kya aap sach mein logout karna chahte hain?")) {
                 localStorage.clear();
                 alert("Logged out successfully!");
-                // Aap yahan login page ka link de sakte hain, jaise window.location.href='login.html';
+                // window.location.href = 'login.html';
             }
         }
     </script>
