@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TitanBuild - Record / Bills</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            padding-bottom: 70px;
+        }
+        .header {
+            background: #111827;
+            color: #fbbf24;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+        .header i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+        .tabs {
+            display: flex;
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+        .tab.active {
+            background: #fbbf24;
+            color: #111827;
+        }
+        .record-item {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .record-info h6 {
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+        .record-info span {
+            color: #6b7280;
+            font-size: 11px;
+        }
+        .record-amount {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .amount-pos { color: #34d399; }
+        .amount-neg { color: #f87171; }
+        
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 40px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
+        <span>Record / Bills</span>
+        <i class="fas fa-file-invoice-dollar"></i>
+    </div>
+
+    <div class="container">
+        <!-- 3 Functional Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchRecordTab('account', this)">Account</div>
+            <div class="tab" onclick="switchRecordTab('recharge', this)">Recharge</div>
+            <div class="tab" onclick="switchRecordTab('withdrawal', this)">Withdrawal</div>
+        </div>
+
+        <div id="recordList">
+            <!-- Dynamic records injected here -->
+        </div>
+    </div>
+
+    <script>
+        const mockData = {
+            account: [
+                { title: 'Daily Bonus Credit', date: '2026-03-30 10:30 AM', amount: '+₹50.00', type: 'pos' },
+                { title: 'Investment Purchase', date: '2026-03-29 02:15 PM', amount: '-₹500.00', type: 'neg' }
+            ],
+            recharge: [
+                { title: 'UPI Auto Recharge', date: '2026-03-29 02:10 PM', amount: '+₹500.00', type: 'pos' }
+            ],
+            withdrawal: [
+                { title: 'Bank Withdrawal (Pending)', date: '2026-03-28 06:45 PM', amount: '-₹200.00', type: 'neg' }
+            ]
+        };
+
+        function switchRecordTab(type, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            
+            renderRecords(type);
+        }
+
+        function renderRecords(type) {
+            const list = document.getElementById('recordList');
+            const data = mockData[type] || [];
+
+            if(data.length === 0) {
+                list.innerHTML = `<div class="empty-state"><i class="fas fa-receipt" style="font-size:24px; margin-bottom:8px; display:block;"></i>No records found for ${type}.</div>`;
+                return;
+            }
+
+            let html = '';
+            data.forEach(item => {
+                const amtClass = item.type === 'pos' ? 'amount-pos' : 'amount-neg';
+                html += `
+                    <div class="record-item">
+                        <div class="record-info">
+                            <h6>${item.title}</h6>
+                            <span>${item.date}</span>
+                        </div>
+                        <div class="record-amount ${amtClass}">${item.amount}</div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        // Initial load
+        renderRecords('account');
+    </script>
+</body>
+</html>
+
