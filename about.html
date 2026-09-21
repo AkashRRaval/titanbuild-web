@@ -15,7 +15,6 @@
         body {
             background-color: #0b0f19;
             color: #e2e8f0;
-            padding-bottom: 70px;
         }
         .header {
             background: #111827;
@@ -24,79 +23,48 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
         }
-        .header i {
-            cursor: pointer;
-            font-size: 18px;
+        .header a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-size: 16px;
         }
-        .container {
-            max-width: 400px;
-            margin: 15px auto;
-            padding: 0 15px;
+        .content {
+            padding: 20px;
+            text-align: center;
         }
-        .card {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .about-banner {
-            width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, #1f2937, #111827);
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .content i {
+            font-size: 50px;
             color: #fbbf24;
             margin-bottom: 15px;
-            border: 1px solid #374151;
         }
-        .about-banner i {
-            font-size: 40px;
-            margin-bottom: 8px;
-        }
-        .about-banner span {
-            font-size: 16px;
-            font-weight: bold;
+        .content h2 {
             color: #fff;
+            margin-bottom: 10px;
         }
-        .about-text {
+        .content p {
             color: #94a3b8;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.6;
-            text-align: justify;
-            margin-bottom: 12px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
+        <a href="home.html"><i class="fas fa-arrow-left"></i></a>
         <span>About Us</span>
-        <i class="fas fa-info-circle"></i>
+        <div style="width: 20px;"></div>
     </div>
 
-    <div class="container">
-        <div class="card">
-            <div class="about-banner">
-                <i class="fas fa-shield-alt"></i>
-                <span>TitanBuild Enterprise</span>
-            </div>
-            <div class="about-text">
-                <strong>TitanBuild</strong> is a leading digital asset management and smart financial investment platform. We specialize in providing secure, steady, and reliable automated daily returns through structured growth cycles.
-            </div>
-            <div class="about-text">
-                Our mission is to empower individual investors with cutting-edge technology, transparent fund records, and seamless multi-bank withdrawal channels ensuring absolute safety and financial freedom.
-            </div>
-        </div>
+    <div class="content">
+        <i class="fas fa-shield-alt"></i>
+        <h2>TitanBuild Platform</h2>
+        <p>TitanBuild ek advanced aur secure financial asset management platform hai, jo aapko behtareen investment solutions aur seamless transactions provide karta hai.</p>
     </div>
+
 </body>
 </html>
-
