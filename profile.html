@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Profile</title>
+    <title>TitanBuild - My Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -13,98 +13,102 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #6b1414; /* Dark red theme as per your screenshot */
-            color: #fff;
+            background-color: #f8fafc;
+            color: #1e293b;
             padding-bottom: 90px;
         }
         .header {
-            background: #540e0e;
-            color: #ffbc36;
+            background: #fff;
+            color: #d97706;
             padding: 16px;
             text-align: center;
             font-size: 18px;
             font-weight: bold;
-            border-bottom: 1px solid #7c1a1a;
+            border-bottom: 1px solid #e2e8f0;
         }
         .container {
             padding: 15px;
         }
-        .user-card {
-            background: #540e0e;
-            border: 1px solid #7c1a1a;
+
+        /* Stats Grid (Top Box) */
+        .stats-box {
+            background: #fff;
             border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             margin-bottom: 15px;
         }
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: #ff7700;
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+            padding: 8px 0;
+        }
+        .stats-row:not(:last-child) {
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .stat-val {
+            font-size: 15px;
             font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 2px;
         }
-        .user-info .phone {
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 4px;
+        .stat-lbl {
+            font-size: 11px;
+            color: #64748b;
         }
-        .user-info .balance {
-            font-size: 14px;
-            color: #ffbc36;
-        }
-        
-        /* Action Buttons Grid (Recharge & Withdraw) */
+
+        /* Action Buttons Grid (4 Buttons) */
         .action-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
             margin-bottom: 15px;
         }
         .action-btn {
-            background: #540e0e;
-            border: 1px solid #7c1a1a;
-            border-radius: 12px;
-            padding: 20px;
+            background: #fff;
+            border: 1px solid #fef3c7;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-radius: 10px;
+            padding: 12px 5px;
             text-align: center;
-            color: #fff;
-            font-weight: bold;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .action-btn i {
-            font-size: 24px;
-            color: #ff7700;
+            font-size: 20px;
+            color: #d97706;
+        }
+        .action-btn span {
+            font-size: 11px;
+            font-weight: 600;
+            color: #b45309;
         }
 
-        /* Menu List (Screenshot wale exact purane options) */
+        /* Menu List (Line by line options) */
         .menu-list {
-            background: #540e0e;
-            border: 1px solid #7c1a1a;
+            background: #fff;
             border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
         .menu-item {
-            padding: 16px 20px;
+            padding: 15px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #7c1a1a;
-            color: #fff;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1e293b;
             text-decoration: none;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
+            font-weight: 500;
         }
         .menu-item:last-child {
             border-bottom: none;
@@ -112,11 +116,35 @@
         .menu-item div {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
-        .menu-item i {
-            color: #ff7700;
+        .menu-item i.fa-regular, .menu-item i.fa-solid {
+            color: #d97706;
             font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        .menu-item .fa-chevron-right {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        /* Logout Button */
+        .logout-container {
+            padding: 0 0 20px 0;
+        }
+        .btn-logout {
+            width: 100%;
+            padding: 14px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         /* Modal Styles */
@@ -124,32 +152,32 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
             z-index: 2000;
             padding: 20px;
         }
         .modal-content {
-            background: #540e0e;
-            border: 1px solid #7c1a1a;
+            background: #fff;
             border-radius: 12px;
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
             padding: 20px;
             position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .modal-title {
             font-size: 16px;
             font-weight: bold;
-            color: #ffbc36;
+            color: #d97706;
             margin-bottom: 15px;
             text-align: center;
         }
         .close-modal {
             position: absolute;
             top: 15px; right: 15px;
-            color: #fff;
+            color: #64748b;
             font-size: 18px;
             cursor: pointer;
         }
@@ -159,22 +187,23 @@
         .form-group label {
             display: block;
             font-size: 12px;
-            color: #ffd27f;
+            color: #64748b;
             margin-bottom: 5px;
+            font-weight: 600;
         }
         .form-control {
             width: 100%;
             padding: 10px;
-            background: #3c0808;
-            border: 1px solid #7c1a1a;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
-            color: #fff;
+            color: #1e293b;
             font-size: 14px;
         }
         .btn-submit {
             width: 100%;
             padding: 12px;
-            background: #ff7700;
+            background: #d97706;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -185,15 +214,19 @@
         
         /* Channel List inside Recharge Modal */
         .channel-btn {
-            background: #3c0808;
-            border: 1px solid #7c1a1a;
-            padding: 14px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
             border-radius: 8px;
             margin-bottom: 10px;
             text-align: center;
             cursor: pointer;
             font-weight: bold;
-            color: #fff;
+            color: #1e293b;
+        }
+        .channel-btn:hover {
+            border-color: #d97706;
+            color: #d97706;
         }
 
         /* QR Code Container */
@@ -202,28 +235,29 @@
             display: none;
         }
         .qr-container img {
-            width: 180px;
-            height: 180px;
+            width: 170px;
+            height: 170px;
             border-radius: 8px;
-            margin: 15px 0;
+            margin: 10px 0;
             background: #fff;
             padding: 5px;
+            border: 1px solid #e2e8f0;
         }
 
-        /* Bottom Nav */
+        /* Bottom Nav Bar */
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
-            background: #540e0e;
-            border-top: 1px solid #7c1a1a;
+            background: #fff;
+            border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 8px 0;
             z-index: 1000;
         }
         .nav-item {
             text-decoration: none;
-            color: #ffa8a8;
+            color: #64748b;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -231,7 +265,7 @@
             gap: 4px;
         }
         .nav-item i { font-size: 18px; }
-        .nav-item.active { color: #ffbc36; }
+        .nav-item.active { color: #d97706; }
     </style>
 </head>
 <body>
@@ -239,16 +273,39 @@
     <div class="header">My Profile</div>
 
     <div class="container">
-        <!-- User Info Card -->
-        <div class="user-card">
-            <div class="user-avatar" id="userInitial">9</div>
-            <div class="user-info">
-                <div class="phone" id="userPhoneDisplay">9876543210</div>
-                <div class="balance">Balance: ₹<span id="userBalance">1000</span></div>
+        <!-- Stats Box -->
+        <div class="stats-box">
+            <div class="stats-row">
+                <div>
+                    <div class="stat-val">₹<span id="withdrawAmountStat">800</span></div>
+                    <div class="stat-lbl">Withdraw Amount</div>
+                </div>
+                <div>
+                    <div class="stat-val">₹<span id="rechargeAmountStat">0</span></div>
+                    <div class="stat-lbl">Recharge Amount</div>
+                </div>
+                <div>
+                    <div class="stat-val">₹<span id="totalWithdrawalStat">0</span></div>
+                    <div class="stat-lbl">Total Withdrawal</div>
+                </div>
+            </div>
+            <div class="stats-row" style="border-bottom: none; padding-top: 12px;">
+                <div>
+                    <div class="stat-val">₹<span id="todaysIncomeStat">0</span></div>
+                    <div class="stat-lbl">Today's Income</div>
+                </div>
+                <div>
+                    <div class="stat-val">₹<span id="teamIncomeStat">0</span></div>
+                    <div class="stat-lbl">Team Income</div>
+                </div>
+                <div>
+                    <div class="stat-val">₹<span id="totalIncomeStat">1000</span></div>
+                    <div class="stat-lbl">Total Income</div>
+                </div>
             </div>
         </div>
 
-        <!-- Recharge & Withdraw Grid -->
+        <!-- 4 Action Buttons Grid -->
         <div class="action-grid">
             <div class="action-btn" onclick="openRechargeModal()">
                 <i class="fas fa-wallet"></i>
@@ -258,22 +315,51 @@
                 <i class="fas fa-money-bill-wave"></i>
                 <span>Withdraw</span>
             </div>
+            <div class="action-btn" onclick="alert('Check-In feature coming soon!')">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-In</span>
+            </div>
+            <div class="action-btn" onclick="alert('No active prizes right now!')">
+                <i class="fas fa-gift"></i>
+                <span>Prize</span>
+            </div>
         </div>
 
-        <!-- Menu List (Purane options bilkul waise hi rakhe hain) -->
+        <!-- Menu List (Line by Line Options) -->
         <div class="menu-list">
-            <a href="#" class="menu-item">
-                <div><i class="fas fa-history"></i> Recharge History</div>
-                <i class="fas fa-chevron-right" style="font-size: 12px; color: #ffa8a8;"></i>
-            </a>
-            <a href="#" class="menu-item">
-                <div><i class="fas fa-exchange-alt"></i> Withdrawal History</div>
-                <i class="fas fa-chevron-right" style="font-size: 12px; color: #ffa8a8;"></i>
-            </a>
-            <a href="#" class="menu-item" onclick="logout()">
-                <div><i class="fas fa-sign-out-alt"></i> Logout</div>
-                <i class="fas fa-chevron-right" style="font-size: 12px; color: #ffa8a8;"></i>
-            </a>
+            <div class="menu-item" onclick="alert('Opening Withdrawal Information')">
+                <div><i class="fas fa-wallet"></i> Withdrawal information</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="menu-item" onclick="window.location.href='invest.html'">
+                <div><i class="fas fa-shopping-bag"></i> My Products</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="menu-item" onclick="alert('Opening My Bills / History')">
+                <div><i class="fas fa-file-alt"></i> My Bills</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="menu-item" onclick="alert('TitanBuild is a heavy machinery investment platform.')">
+                <div><i class="fas fa-address-card"></i> About Us</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="menu-item" onclick="alert('Change Password feature')">
+                <div><i class="fas fa-lock"></i> Change Password</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="menu-item" onclick="window.open('https://wa.me/', '_blank')">
+                <div><i class="fas fa-headset"></i> Customer Service</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="menu-item" onclick="alert('App APK download link will be available soon.')">
+                <div><i class="fas fa-download"></i> Download</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <!-- Logout Button -->
+        <div class="logout-container">
+            <button class="btn-logout" onclick="logout()">Logout</button>
         </div>
     </div>
 
@@ -289,16 +375,16 @@
             </div>
 
             <div class="qr-container" id="qrContainer">
-                <p style="font-size: 13px; color: #ffd27f;" id="selectedChannelTitle"></p>
-                <!-- Apni QR code image ka link yahan daal sakta hai -->
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=yourupi@oksbi&pn=TitanBuild" alt="Payment QR Code" id="qrImage">
-                <p style="font-size: 11px; color: #ffbc36; margin-top: 5px;">Scan QR code to pay, then enter UTR below</p>
+                <p style="font-size: 13px; color: #64748b;" id="selectedChannelTitle"></p>
+                <!-- Yahan tera QR code image aayega -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=yourupi@oksbi&pn=TitanBuild" alt="Payment QR Code">
+                <p style="font-size: 11px; color: #d97706; margin-top: 5px; font-weight: bold;">Scan QR code to pay, then enter UTR below</p>
                 
                 <div class="form-group" style="margin-top: 15px;">
                     <input type="text" class="form-control" id="utrNumber" placeholder="Enter 12-digit UTR / Ref Number">
                 </div>
                 <button class="btn-submit" onclick="submitRecharge()">Submit Payment</button>
-                <button style="background: transparent; border: none; color: #ffa8a8; font-size: 12px; margin-top: 10px; cursor: pointer; width: 100%;" onclick="backToChannels()">Back to Channels</button>
+                <button style="background: transparent; border: none; color: #64748b; font-size: 12px; margin-top: 10px; cursor: pointer; width: 100%;" onclick="backToChannels()">Back to Channels</button>
             </div>
         </div>
     </div>
@@ -310,7 +396,7 @@
             <div class="modal-title">Withdraw Funds</div>
             <div class="form-group">
                 <label>Withdrawal Amount (₹)</label>
-                <input type="number" class="form-control" id="withdrawAmount" placeholder="Enter amount">
+                <input type="number" class="form-control" id="withdrawAmountInput" placeholder="Enter amount">
             </div>
             <div class="form-group">
                 <label>Bank UPI ID / Account Number</label>
@@ -331,8 +417,12 @@
             <span>Home</span>
         </a>
         <a href="invest.html" class="nav-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Invest</span>
+            <i class="fas fa-box"></i>
+            <span>Product</span>
+        </a>
+        <a href="#" class="nav-item" onclick="alert('Beneficial page')">
+            <i class="fas fa-gift"></i>
+            <span>Beneficial</span>
         </a>
         <a href="team.html" class="nav-item">
             <i class="fas fa-users"></i>
@@ -340,18 +430,14 @@
         </a>
         <a href="profile.html" class="nav-item active">
             <i class="fas fa-user"></i>
-            <span>Profile</span>
+            <span>My</span>
         </a>
     </div>
 
     <script>
         window.onload = function() {
-            let phone = localStorage.getItem('userPhone') || '9876543210';
-            document.getElementById('userPhoneDisplay').innerText = phone;
-            document.getElementById('userInitial').innerText = phone.charAt(0);
-
             let balance = localStorage.getItem('userBalance') || '1000';
-            document.getElementById('userBalance').innerText = balance;
+            document.getElementById('totalIncomeStat').innerText = balance;
         };
 
         function openRechargeModal() {
@@ -388,7 +474,7 @@
             document.getElementById('withdrawModal').style.display = 'none';
         }
         function submitWithdrawal() {
-            let amount = parseFloat(document.getElementById('withdrawAmount').value);
+            let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
             let currentBalance = parseFloat(localStorage.getItem('userBalance') || '1000');
             
             if(!amount || amount <= 0) {
@@ -402,7 +488,7 @@
             
             currentBalance -= amount;
             localStorage.setItem('userBalance', currentBalance.toFixed(2));
-            document.getElementById('userBalance').innerText = currentBalance.toFixed(2);
+            document.getElementById('totalIncomeStat').innerText = currentBalance.toFixed(2);
             
             alert("Withdrawal request submitted successfully!");
             closeWithdrawModal();
@@ -415,4 +501,3 @@
     </script>
 </body>
 </html>
-
