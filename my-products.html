@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TitanBuild - My Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            padding-bottom: 70px;
+        }
+        .header {
+            background: #111827;
+            color: #fbbf24;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+        .header i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+        .assets-box {
+            display: flex;
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .asset-item {
+            flex: 1;
+        }
+        .asset-item h4 {
+            color: #fbbf24;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .asset-item span {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .tabs {
+            display: flex;
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+        .tab.active {
+            background: #fbbf24;
+            color: #111827;
+        }
+        .product-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .product-img {
+            width: 80px;
+            height: 80px;
+            background: #1f2937;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .product-info h5 {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .product-info p {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        .product-info .price {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
+        <span>My Products</span>
+        <i class="fas fa-box-open"></i>
+    </div>
+
+    <div class="container">
+        <!-- Asset Summary -->
+        <div class="assets-box">
+            <div class="asset-item">
+                <h4 id="totalAssets">₹500.00</h4>
+                <span>Total assets</span>
+            </div>
+            <div style="width: 1px; background: #374151;"></div>
+            <div class="asset-item">
+                <h4 id="totalIncome">₹150.00</h4>
+                <span>Total income</span>
+            </div>
+        </div>
+
+        <!-- Valid / Expired Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('valid', this)">Valid</div>
+            <div class="tab" onclick="switchTab('expired', this)">Expired</div>
+        </div>
+
+        <!-- Products List View -->
+        <div id="productList">
+            <div class="product-card">
+                <div class="product-img" style="display:flex; align-items:center; justify-content:center; background:#1f2937; color:#fbbf24; font-size:24px;">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div class="product-info">
+                    <h5>Titan Build Starter Asset</h5>
+                    <p>Daily Return: <span class="price">₹50.00</span></p>
+                    <p>Cycle: 30 Days | Status: <span style="color:#34d399;">Running</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(type, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            const list = document.getElementById('productList');
+            if(type === 'expired') {
+                list.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open" style="font-size:24px; margin-bottom:8px; display:block;"></i>No expired products found.</div>`;
+            } else {
+                list.innerHTML = `
+                    <div class="product-card">
+                        <div class="product-img" style="display:flex; align-items:center; justify-content:center; background:#1f2937; color:#fbbf24; font-size:24px;">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="product-info">
+                            <h5>Titan Build Starter Asset</h5>
+                            <p>Daily Return: <span class="price">₹50.00</span></p>
+                            <p>Cycle: 30 Days | Status: <span style="color:#34d399;">Running</span></p>
+                        </div>
+                    </div>`;
+            }
+        }
+    </script>
+</body>
+</html>
+
