@@ -15,7 +15,7 @@
         body {
             background-color: #0b0f19;
             color: #e2e8f0;
-            padding-bottom: 80px; /* Footer ke liye space */
+            padding-bottom: 80px;
         }
         .header {
             background: #111827;
@@ -128,8 +128,6 @@
             cursor: pointer;
             text-align: center;
         }
-
-        /* Bottom Navigation Menu Bar Style */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -164,7 +162,6 @@
 
     <div class="header">My Profile</div>
 
-    <!-- User Details Card -->
     <div class="user-card">
         <div class="avatar"><i class="fas fa-user"></i></div>
         <div class="user-info">
@@ -173,7 +170,6 @@
         </div>
     </div>
 
-    <!-- Balance Section -->
     <div class="balance-section">
         <div class="bal-item">
             <h4 id="userBalance">₹500.00</h4>
@@ -186,7 +182,6 @@
         </div>
     </div>
 
-    <!-- Navigation Menu Options -->
     <div class="menu-list">
         <a href="withdraw-info.html" class="menu-item">
             <div class="menu-left">
@@ -223,9 +218,8 @@
 
     <button class="logout-btn" onclick="logoutUser()">Log Out</button>
 
-    <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
-        <a href="index.html" class="nav-item">
+        <a href="home.html" class="nav-item">
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
@@ -248,7 +242,7 @@
             if(confirm("Kya aap sach mein logout karna chahte hain?")) {
                 localStorage.clear();
                 alert("Logged out successfully!");
-                // window.location.href = 'login.html';
+                window.location.href = 'login.html';
             }
         }
     </script>
