@@ -3,14 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to Home...</title>
-    <meta http-equiv="refresh" content="0;url=index.html">
+    <title>TitanBuild - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            padding-bottom: 80px;
+        }
+        .header {
+            background: #111827;
+            color: #fbbf24;
+            padding: 16px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #111827, #1f2937);
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            text-align: center;
+        }
+        .welcome-card h2 {
+            color: #fbbf24;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        .welcome-card p {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 15px;
+        }
+        .action-btn {
+            background: #111827;
+            border: 1px solid #1f2937;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #e2e8f0;
+            transition: 0.2s;
+        }
+        .action-btn i {
+            font-size: 24px;
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        .action-btn span {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            text-decoration: none;
+            color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            gap: 4px;
+        }
+        .nav-item i {
+            font-size: 18px;
+        }
+        .nav-item.active {
+            color: #fbbf24;
+        }
+    </style>
 </head>
-<body style="background-color: #0b0f19; color: #fff; text-align: center; padding-top: 100px; font-family: sans-serif;">
-    <p>Loading Home...</p>
-    <script>
-        // Fallback redirection just in case
-        window.location.href = "index.html";
-    </script>
+<body>
+
+    <div class="header">TitanBuild Dashboard</div>
+
+    <div class="welcome-card">
+        <h2>Welcome Back!</h2>
+        <p>Aapka platform safalta-purnaq run ho raha hai.</p>
+    </div>
+
+    <div class="quick-actions">
+        <a href="invest.html" class="action-btn">
+            <i class="fas fa-chart-line"></i>
+            <span>Invest Now</span>
+        </a>
+        <a href="withdraw-info.html" class="action-btn">
+            <i class="fas fa-wallet"></i>
+            <span>Bank Bind</span>
+        </a>
+        <a href="team.html" class="action-btn">
+            <i class="fas fa-users"></i>
+            <span>My Team</span>
+        </a>
+        <a href="about.html" class="action-btn">
+            <i class="fas fa-info-circle"></i>
+            <span>About Us</span>
+        </a>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Invest</span>
+        </a>
+        <a href="team.html" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
 </body>
 </html>
