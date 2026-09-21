@@ -252,7 +252,7 @@
             <div class="user-avatar" id="userInitial">U</div>
             <div class="user-info">
                 <div class="phone" id="userPhoneDisplay">9876543210</div>
-                <div class="balance">Balance: ₹<span id="userBalance">0.00</span></div>
+                <div class="balance">Balance: ₹<span id="userBalance">1000</span></div>
             </div>
         </div>
 
@@ -268,7 +268,7 @@
             </div>
         </div>
 
-        <!-- Other Menu Links -->
+        <!-- Menu List (Purane options intact rakhe hain) -->
         <div class="menu-list">
             <a href="#" class="menu-item">
                 <div><i class="fas fa-history"></i> Recharge History</div>
@@ -280,24 +280,25 @@
             </a>
             <a href="#" class="menu-item" onclick="logout()">
                 <div><i class="fas fa-sign-out-alt" style="color: #ef4444;"></i> <span style="color: #ef4444;">Logout</span></div>
+                <i class="fas fa-chevron-right" style="font-size: 12px; color: #64748b;"></i>
             </a>
         </div>
     </div>
 
-    <!-- Recharge Modal -->
+    <!-- Recharge Modal with Channel 1 & Channel 2 -->
     <div class="modal" id="rechargeModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeRechargeModal()">&times;</span>
             <div class="modal-title">Select Recharge Channel</div>
             
             <div id="channelSelection">
-                <div class="channel-btn" onclick="selectChannel('Channel 1')">Channel 1 (UPI / QR)</div>
+                <div class="channel-btn" onclick="selectChannel('Channel 1')">Channel 1 (UPI QR)</div>
                 <div class="channel-btn" onclick="selectChannel('Channel 2')">Channel 2 (Fast QR)</div>
             </div>
 
             <div class="qr-container" id="qrContainer">
                 <p style="font-size: 13px; color: #94a3b8;" id="selectedChannelTitle"></p>
-                <!-- Yahan tera QR code image link aayega -->
+                <!-- Apni QR code image ka link yahan daal sakte ho -->
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=yourupi@oksbi&pn=TitanBuild" alt="Payment QR Code" id="qrImage">
                 <p style="font-size: 11px; color: #fbbf24; margin-top: 5px;">Scan QR code to pay, then enter UTR below</p>
                 
@@ -305,7 +306,7 @@
                     <input type="text" class="form-control" id="utrNumber" placeholder="Enter 12-digit UTR / Ref Number">
                 </div>
                 <button class="btn-submit" onclick="submitRecharge()">Submit Payment</button>
-                <button style="background: transparent; border: none; color: #94a3b8; font-size: 12px; margin-top: 10px; cursor: pointer;" onclick="backToChannels()">Back to Channels</button>
+                <button style="background: transparent; border: none; color: #94a3b8; font-size: 12px; margin-top: 10px; cursor: pointer; width: 100%;" onclick="backToChannels()">Back to Channels</button>
             </div>
         </div>
     </div>
@@ -357,7 +358,7 @@
             document.getElementById('userPhoneDisplay').innerText = phone;
             document.getElementById('userInitial').innerText = phone.charAt(0).toUpperCase();
 
-            let balance = localStorage.getItem('userBalance') || '500.00';
+            let balance = localStorage.getItem('userBalance') || '1000';
             document.getElementById('userBalance').innerText = balance;
         };
 
@@ -398,7 +399,7 @@
         }
         function submitWithdrawal() {
             let amount = parseFloat(document.getElementById('withdrawAmount').value);
-            let currentBalance = parseFloat(localStorage.getItem('userBalance') || '500.00');
+            let currentBalance = parseFloat(localStorage.getItem('userBalance') || '1000');
             
             if(!amount || amount <= 0) {
                 alert("Please enter a valid withdrawal amount.");
@@ -423,5 +424,4 @@
         }
     </script>
 </body>
-                </html>
-                
+</html>
