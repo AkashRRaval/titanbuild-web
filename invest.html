@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TitanBuild - Invest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            padding-bottom: 80px;
+        }
+        .header {
+            background: #111827;
+            color: #fbbf24;
+            padding: 16px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+        .product-container {
+            padding: 15px;
+        }
+        .product-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .product-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-bottom: 1px solid #1f2937;
+        }
+        .product-body {
+            padding: 15px;
+        }
+        .product-title {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+        .product-info span {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        .btn-invest {
+            background: #fbbf24;
+            color: #111827;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-invest:hover {
+            background: #f59e0b;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            text-decoration: none;
+            color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            gap: 4px;
+        }
+        .nav-item i {
+            font-size: 18px;
+        }
+        .nav-item.active {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Investment Products</div>
+
+    <div class="product-container">
+        <!-- Product 1 -->
+        <div class="product-card">
+            <img src="qr1.png" alt="Product Image" class="product-img">
+            <div class="product-body">
+                <div class="product-title">Titan Standard Asset - I</div>
+                <div class="product-info">
+                    <div>Price: <span>₹500</span></div>
+                    <div>Daily Income: <span>₹120</span></div>
+                    <div>Cycle: <span>30 Days</span></div>
+                </div>
+                <button class="btn-invest" onclick="buyProduct('Titan Standard Asset - I', 500)">Invest Now</button>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card">
+            <img src="qr2.png" alt="Product Image" class="product-img">
+            <div class="product-body">
+                <div class="product-title">Titan Premium Asset - II</div>
+                <div class="product-info">
+                    <div>Price: <span>₹2000</span></div>
+                    <div>Daily Income: <span>₹520</span></div>
+                    <div>Cycle: <span>45 Days</span></div>
+                </div>
+                <button class="btn-invest" onclick="buyProduct('Titan Premium Asset - II', 2000)">Invest Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="invest.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>Invest</span>
+        </a>
+        <a href="team.html" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <script>
+        function buyProduct(name, price) {
+            alert(name + " successfully purchased for ₹" + price + "!");
+        }
+    </script>
+</body>
+      </html>
+
