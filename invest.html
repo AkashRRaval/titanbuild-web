@@ -26,15 +26,37 @@
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
         }
-        .section-title {
-            color: #fbbf24;
-            font-size: 16px;
-            margin: 20px 15px 10px 15px;
-            border-left: 4px solid #fbbf24;
-            padding-left: 8px;
+        /* Top Tabs Styling */
+        .tabs-container {
+            display: flex;
+            background: #111827;
+            padding: 10px;
+            gap: 8px;
+            overflow-x: auto;
+            border-bottom: 1px solid #1f2937;
         }
-        .product-container {
-            padding: 0 15px;
+        .tab-btn {
+            background: #1f2937;
+            color: #94a3b8;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            background: #fbbf24;
+            color: #111827;
+        }
+        .tab-content {
+            display: none;
+            padding: 15px;
+        }
+        .tab-content.active {
+            display: block;
         }
         .product-card {
             background: #111827;
@@ -49,8 +71,8 @@
             align-items: center;
         }
         .product-img {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid #374151;
@@ -59,16 +81,16 @@
             flex-grow: 1;
         }
         .product-title {
-            font-size: 15px;
+            font-size: 14px;
             color: #fff;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: bold;
         }
         .product-info {
             font-size: 12px;
             color: #94a3b8;
             margin-bottom: 8px;
-            line-height: 1.5;
+            line-height: 1.4;
         }
         .product-info span {
             color: #fbbf24;
@@ -82,7 +104,7 @@
             padding: 8px;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -122,194 +144,86 @@
 
     <div class="header">Investment Center</div>
 
-    <!-- SECTION 1: Beneficiary Assets -->
-    <div class="section-title">Beneficiary Section</div>
-    <div class="product-container">
+    <!-- Top Tabs Header -->
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('standard', event)">STANDARD</button>
+        <button class="tab-btn" onclick="switchTab('beneficial', event)">BENEFICIAL</button>
+        <button class="tab-btn" onclick="switchTab('vip', event)">VIP ASSETS</button>
+        <button class="tab-btn" onclick="switchTab('debitcard', event)">DEBIT CARD</button>
+    </div>
+
+    <!-- TAB 1: STANDARD -->
+    <div id="standard" class="tab-content active">
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=300" alt="Product" class="product-img">
             <div class="product-body">
-                <div class="product-title">Beneficiary Plan - I</div>
+                <div class="product-title">Mini Excavator CAT 302</div>
                 <div class="product-info">
-                    Price: <span>₹500</span> | Daily: <span>₹120</span><br>Cycle: 30 Days
+                    Invest: <span>₹500</span> | Daily: <span>₹25</span><br>Cycle: 50 Days
                 </div>
-                <button class="btn-invest" onclick="buyProduct('Beneficiary Plan - I', 500)">Invest Now</button>
+                <button class="btn-invest" onclick="buyProduct('Mini Excavator CAT 302', 500)">Invest Standard</button>
             </div>
         </div>
-
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=300" alt="Product" class="product-img">
             <div class="product-body">
-                <div class="product-title">Beneficiary Plan - II</div>
+                <div class="product-title">Backhoe Loader JCB 3CX</div>
                 <div class="product-info">
-                    Price: <span>₹800</span> | Daily: <span>₹195</span><br>Cycle: 30 Days
+                    Invest: <span>₹1,000</span> | Daily: <span>₹52</span><br>Cycle: 50 Days
                 </div>
-                <button class="btn-invest" onclick="buyProduct('Beneficiary Plan - II', 800)">Invest Now</button>
+                <button class="btn-invest" onclick="buyProduct('Backhoe Loader JCB 3CX', 1000)">Invest Standard</button>
             </div>
         </div>
+    </div>
 
+    <!-- TAB 2: BENEFICIAL -->
+    <div id="beneficial" class="tab-content">
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=300" alt="Product" class="product-img">
             <div class="product-body">
-                <div class="product-title">Beneficiary Plan - III</div>
+                <div class="product-title">Beneficial Fleet - I</div>
                 <div class="product-info">
-                    Price: <span>₹1000</span> | Daily: <span>₹250</span><br>Cycle: 30 Days
+                    Invest: <span>₹1,500</span> | Daily: <span>₹80</span><br>Cycle: 40 Days
                 </div>
-                <button class="btn-invest" onclick="buyProduct('Beneficiary Plan - III', 1000)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">Beneficiary Plan - IV</div>
-                <div class="product-info">
-                    Price: <span>₹1200</span> | Daily: <span>₹300</span><br>Cycle: 30 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('Beneficiary Plan - IV', 1200)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">Beneficiary Plan - V</div>
-                <div class="product-info">
-                    Price: <span>₹1500</span> | Daily: <span>₹380</span><br>Cycle: 30 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('Beneficiary Plan - V', 1500)">Invest Now</button>
+                <button class="btn-invest" onclick="buyProduct('Beneficial Fleet - I', 1500)">Invest Beneficial</button>
             </div>
         </div>
     </div>
 
-    <!-- SECTION 2: VIP Assets -->
-    <div class="section-title">VIP Section</div>
-    <div class="product-container">
+    <!-- TAB 3: VIP ASSETS -->
+    <div id="vip" class="tab-content">
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=300" alt="Product" class="product-img">
             <div class="product-body">
-                <div class="product-title">VIP Asset - I</div>
+                <div class="product-title">VIP Heavy Asset - I</div>
                 <div class="product-info">
-                    Price: <span>₹2000</span> | Daily: <span>₹520</span><br>Cycle: 45 Days
+                    Invest: <span>₹3,000</span> | Daily: <span>₹180</span><br>Cycle: 45 Days
                 </div>
-                <button class="btn-invest" onclick="buyProduct('VIP Asset - I', 2000)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1621416894569-0f39ed31d247?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">VIP Asset - II</div>
-                <div class="product-info">
-                    Price: <span>₹2500</span> | Daily: <span>₹660</span><br>Cycle: 45 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('VIP Asset - II', 2500)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">VIP Asset - III</div>
-                <div class="product-info">
-                    Price: <span>₹3000</span> | Daily: <span>₹810</span><br>Cycle: 45 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('VIP Asset - III', 3000)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">VIP Asset - IV</div>
-                <div class="product-info">
-                    Price: <span>₹3500</span> | Daily: <span>₹960</span><br>Cycle: 45 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('VIP Asset - IV', 3500)">Invest Now</button>
+                <button class="btn-invest" onclick="buyProduct('VIP Heavy Asset - I', 3000)">Invest VIP</button>
             </div>
         </div>
     </div>
 
-    <!-- SECTION 3: Debit Card Assets -->
-    <div class="section-title">Debit Card Section</div>
-    <div class="product-container">
+    <!-- TAB 4: DEBIT CARD (Withdrawal Limit Upgrade) -->
+    <div id="debitcard" class="tab-content">
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=300" alt="Product" class="product-img">
             <div class="product-body">
-                <div class="product-title">Debit Card Plan - I</div>
+                <div class="product-title">Titan Debit Card (Tier 1)</div>
                 <div class="product-info">
-                    Price: <span>₹4000</span> | Daily: <span>₹1120</span><br>Cycle: 60 Days
+                    Price: <span>₹500</span><br>Withdrawal Limit: <span style="color:#10b981;">₹5,000</span>
                 </div>
-                <button class="btn-invest" onclick="buyProduct('Debit Card Plan - I', 4000)">Invest Now</button>
+                <button class="btn-invest" onclick="buyProduct('Titan Debit Card (Tier 1)', 500)">Purchase Limit Card</button>
             </div>
         </div>
-
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1556742049-0a67d553c2a5?w=300" alt="Product" class="product-img">
             <div class="product-body">
-                <div class="product-title">Debit Card Plan - II</div>
+                <div class="product-title">Titan Debit Card (Tier 2)</div>
                 <div class="product-info">
-                    Price: <span>₹4500</span> | Daily: <span>₹1280</span><br>Cycle: 60 Days
+                    Price: <span>₹2,000</span><br>Withdrawal Limit: <span style="color:#10b981;">₹25,000</span>
                 </div>
-                <button class="btn-invest" onclick="buyProduct('Debit Card Plan - II', 4500)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1589758438368-0ad531db3366?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">Debit Card Plan - III</div>
-                <div class="product-info">
-                    Price: <span>₹5000</span> | Daily: <span>₹1450</span><br>Cycle: 60 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('Debit Card Plan - III', 5000)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">Debit Card Plan - IV</div>
-                <div class="product-info">
-                    Price: <span>₹5500</span> | Daily: <span>₹1620</span><br>Cycle: 60 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('Debit Card Plan - IV', 5500)">Invest Now</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECTION 4: Special Titan Assets -->
-    <div class="section-title">Special Titan Section</div>
-    <div class="product-container">
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">Titan Elite - I</div>
-                <div class="product-info">
-                    Price: <span>₹6000</span> | Daily: <span>₹1800</span><br>Cycle: 90 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('Titan Elite - I', 6000)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">Titan Elite - II</div>
-                <div class="product-info">
-                    Price: <span>₹7000</span> | Daily: <span>₹2170</span><br>Cycle: 90 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('Titan Elite - II', 7000)">Invest Now</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300" alt="Product" class="product-img">
-            <div class="product-body">
-                <div class="product-title">Titan Supreme - III</div>
-                <div class="product-info">
-                    Price: <span>₹8000</span> | Daily: <span>₹2560</span><br>Cycle: 90 Days
-                </div>
-                <button class="btn-invest" onclick="buyProduct('Titan Supreme - III', 8000)">Invest Now</button>
+                <button class="btn-invest" onclick="buyProduct('Titan Debit Card (Tier 2)', 2000)">Purchase Limit Card</button>
             </div>
         </div>
     </div>
@@ -335,10 +249,23 @@
     </div>
 
     <script>
+        function switchTab(tabId, event) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            // Show current tab and activate button
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
         function buyProduct(name, price) {
             alert(name + " successfully purchased for ₹" + price + "!");
         }
     </script>
 </body>
-    </html>
-                
+</html>
