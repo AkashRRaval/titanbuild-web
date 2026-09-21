@@ -15,7 +15,7 @@
         body {
             background-color: #0b0f19;
             color: #e2e8f0;
-            padding-bottom: 70px;
+            padding-bottom: 20px;
         }
         .header {
             background: #111827;
@@ -24,167 +24,70 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
         }
-        .header i {
-            cursor: pointer;
-            font-size: 18px;
+        .header a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-size: 16px;
         }
         .container {
-            max-width: 400px;
-            margin: 15px auto;
-            padding: 0 15px;
+            padding: 15px;
         }
-        .assets-box {
-            display: flex;
+        .my-card {
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
-            text-align: center;
-        }
-        .asset-item {
-            flex: 1;
-        }
-        .asset-item h4 {
-            color: #fbbf24;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-        .asset-item span {
-            color: #94a3b8;
-            font-size: 12px;
-        }
-        .tabs {
             display: flex;
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-        .tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-            color: #94a3b8;
-            transition: 0.3s;
-        }
-        .tab.active {
-            background: #fbbf24;
-            color: #111827;
-        }
-        .product-card {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-            display: flex;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
         }
-        .product-img {
+        .my-card img {
             width: 80px;
             height: 80px;
-            background: #1f2937;
-            border-radius: 8px;
             object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #374151;
         }
-        .product-info h5 {
+        .my-info h4 {
             color: #fff;
-            font-size: 14px;
+            font-size: 15px;
             margin-bottom: 5px;
         }
-        .product-info p {
+        .my-info p {
             color: #94a3b8;
             font-size: 12px;
             margin-bottom: 3px;
         }
-        .product-info .price {
+        .my-info span {
             color: #fbbf24;
             font-weight: bold;
-        }
-        .empty-state {
-            text-align: center;
-            color: #6b7280;
-            padding: 40px 0;
-            font-size: 13px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
-        <span>My Products</span>
-        <i class="fas fa-box-open"></i>
+        <a href="profile.html"><i class="fas fa-arrow-left"></i></a>
+        <span>My Products History</span>
+        <div style="width: 20px;"></div>
     </div>
 
     <div class="container">
-        <!-- Asset Summary -->
-        <div class="assets-box">
-            <div class="asset-item">
-                <h4 id="totalAssets">₹500.00</h4>
-                <span>Total assets</span>
-            </div>
-            <div style="width: 1px; background: #374151;"></div>
-            <div class="asset-item">
-                <h4 id="totalIncome">₹150.00</h4>
-                <span>Total income</span>
-            </div>
-        </div>
-
-        <!-- Valid / Expired Tabs -->
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('valid', this)">Valid</div>
-            <div class="tab" onclick="switchTab('expired', this)">Expired</div>
-        </div>
-
-        <!-- Products List View -->
-        <div id="productList">
-            <div class="product-card">
-                <div class="product-img" style="display:flex; align-items:center; justify-content:center; background:#1f2937; color:#fbbf24; font-size:24px;">
-                    <i class="fas fa-cube"></i>
-                </div>
-                <div class="product-info">
-                    <h5>Titan Build Starter Asset</h5>
-                    <p>Daily Return: <span class="price">₹50.00</span></p>
-                    <p>Cycle: 30 Days | Status: <span style="color:#34d399;">Running</span></p>
-                </div>
+        <div class="my-card">
+            <img src="qr1.png" alt="Product">
+            <div class="my-info">
+                <h4>Titan Standard Asset - I</h4>
+                <p>Invested: <span>₹500</span></p>
+                <p>Daily Return: <span>₹120</span></p>
+                <p>Status: <span style="color: #10b981;">Active</span></p>
             </div>
         </div>
     </div>
 
-    <script>
-        function switchTab(type, el) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-
-            const list = document.getElementById('productList');
-            if(type === 'expired') {
-                list.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open" style="font-size:24px; margin-bottom:8px; display:block;"></i>No expired products found.</div>`;
-            } else {
-                list.innerHTML = `
-                    <div class="product-card">
-                        <div class="product-img" style="display:flex; align-items:center; justify-content:center; background:#1f2937; color:#fbbf24; font-size:24px;">
-                            <i class="fas fa-cube"></i>
-                        </div>
-                        <div class="product-info">
-                            <h5>Titan Build Starter Asset</h5>
-                            <p>Daily Return: <span class="price">₹50.00</span></p>
-                            <p>Cycle: 30 Days | Status: <span style="color:#34d399;">Running</span></p>
-                        </div>
-                    </div>`;
-            }
-        }
-    </script>
 </body>
 </html>
-
