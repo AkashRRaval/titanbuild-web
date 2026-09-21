@@ -13,37 +13,37 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0b0f19;
-            color: #e2e8f0;
+            background-color: #6b1414; /* Dark red theme as per your screenshot */
+            color: #fff;
             padding-bottom: 90px;
         }
         .header {
-            background: #111827;
-            color: #fbbf24;
+            background: #540e0e;
+            color: #ffbc36;
             padding: 16px;
             text-align: center;
             font-size: 18px;
             font-weight: bold;
-            border-bottom: 1px solid #1f2937;
+            border-bottom: 1px solid #7c1a1a;
         }
         .container {
             padding: 15px;
         }
         .user-card {
-            background: #111827;
-            border: 1px solid #1f2937;
+            background: #540e0e;
+            border: 1px solid #7c1a1a;
             border-radius: 12px;
             padding: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .user-avatar {
             width: 50px;
             height: 50px;
-            background: #fbbf24;
-            color: #111827;
+            background: #ff7700;
+            color: #fff;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -59,7 +59,7 @@
         }
         .user-info .balance {
             font-size: 14px;
-            color: #34d399;
+            color: #ffbc36;
         }
         
         /* Action Buttons Grid (Recharge & Withdraw) */
@@ -67,48 +67,44 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .action-btn {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 10px;
-            padding: 15px;
+            background: #540e0e;
+            border: 1px solid #7c1a1a;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
             color: #fff;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         .action-btn i {
-            font-size: 22px;
-            color: #fbbf24;
-        }
-        .action-btn:hover {
-            border-color: #fbbf24;
+            font-size: 24px;
+            color: #ff7700;
         }
 
-        /* Menu List */
+        /* Menu List (Screenshot wale exact purane options) */
         .menu-list {
-            background: #111827;
-            border: 1px solid #1f2937;
+            background: #540e0e;
+            border: 1px solid #7c1a1a;
             border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 20px;
         }
         .menu-item {
-            padding: 15px 20px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #1f2937;
-            color: #e2e8f0;
+            border-bottom: 1px solid #7c1a1a;
+            color: #fff;
             text-decoration: none;
             cursor: pointer;
+            font-size: 15px;
         }
         .menu-item:last-child {
             border-bottom: none;
@@ -116,10 +112,10 @@
         .menu-item div {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
         .menu-item i {
-            color: #fbbf24;
+            color: #ff7700;
             font-size: 16px;
         }
 
@@ -135,8 +131,8 @@
             padding: 20px;
         }
         .modal-content {
-            background: #111827;
-            border: 1px solid #1f2937;
+            background: #540e0e;
+            border: 1px solid #7c1a1a;
             border-radius: 12px;
             width: 100%;
             max-width: 400px;
@@ -146,14 +142,14 @@
         .modal-title {
             font-size: 16px;
             font-weight: bold;
-            color: #fbbf24;
+            color: #ffbc36;
             margin-bottom: 15px;
             text-align: center;
         }
         .close-modal {
             position: absolute;
             top: 15px; right: 15px;
-            color: #94a3b8;
+            color: #fff;
             font-size: 18px;
             cursor: pointer;
         }
@@ -163,14 +159,14 @@
         .form-group label {
             display: block;
             font-size: 12px;
-            color: #94a3b8;
+            color: #ffd27f;
             margin-bottom: 5px;
         }
         .form-control {
             width: 100%;
             padding: 10px;
-            background: #1f2937;
-            border: 1px solid #374151;
+            background: #3c0808;
+            border: 1px solid #7c1a1a;
             border-radius: 8px;
             color: #fff;
             font-size: 14px;
@@ -178,8 +174,8 @@
         .btn-submit {
             width: 100%;
             padding: 12px;
-            background: #fbbf24;
-            color: #111827;
+            background: #ff7700;
+            color: #fff;
             border: none;
             border-radius: 8px;
             font-weight: bold;
@@ -189,19 +185,15 @@
         
         /* Channel List inside Recharge Modal */
         .channel-btn {
-            background: #1f2937;
-            border: 1px solid #374151;
-            padding: 12px;
+            background: #3c0808;
+            border: 1px solid #7c1a1a;
+            padding: 14px;
             border-radius: 8px;
             margin-bottom: 10px;
             text-align: center;
             cursor: pointer;
             font-weight: bold;
             color: #fff;
-            transition: 0.2s;
-        }
-        .channel-btn:hover {
-            border-color: #fbbf24;
         }
 
         /* QR Code Container */
@@ -222,8 +214,8 @@
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
-            background: #111827;
-            border-top: 1px solid #1f2937;
+            background: #540e0e;
+            border-top: 1px solid #7c1a1a;
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
@@ -231,7 +223,7 @@
         }
         .nav-item {
             text-decoration: none;
-            color: #94a3b8;
+            color: #ffa8a8;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -239,7 +231,7 @@
             gap: 4px;
         }
         .nav-item i { font-size: 18px; }
-        .nav-item.active { color: #fbbf24; }
+        .nav-item.active { color: #ffbc36; }
     </style>
 </head>
 <body>
@@ -249,7 +241,7 @@
     <div class="container">
         <!-- User Info Card -->
         <div class="user-card">
-            <div class="user-avatar" id="userInitial">U</div>
+            <div class="user-avatar" id="userInitial">9</div>
             <div class="user-info">
                 <div class="phone" id="userPhoneDisplay">9876543210</div>
                 <div class="balance">Balance: ₹<span id="userBalance">1000</span></div>
@@ -268,19 +260,19 @@
             </div>
         </div>
 
-        <!-- Menu List (Purane options intact rakhe hain) -->
+        <!-- Menu List (Purane options bilkul waise hi rakhe hain) -->
         <div class="menu-list">
             <a href="#" class="menu-item">
                 <div><i class="fas fa-history"></i> Recharge History</div>
-                <i class="fas fa-chevron-right" style="font-size: 12px; color: #64748b;"></i>
+                <i class="fas fa-chevron-right" style="font-size: 12px; color: #ffa8a8;"></i>
             </a>
             <a href="#" class="menu-item">
                 <div><i class="fas fa-exchange-alt"></i> Withdrawal History</div>
-                <i class="fas fa-chevron-right" style="font-size: 12px; color: #64748b;"></i>
+                <i class="fas fa-chevron-right" style="font-size: 12px; color: #ffa8a8;"></i>
             </a>
             <a href="#" class="menu-item" onclick="logout()">
-                <div><i class="fas fa-sign-out-alt" style="color: #ef4444;"></i> <span style="color: #ef4444;">Logout</span></div>
-                <i class="fas fa-chevron-right" style="font-size: 12px; color: #64748b;"></i>
+                <div><i class="fas fa-sign-out-alt"></i> Logout</div>
+                <i class="fas fa-chevron-right" style="font-size: 12px; color: #ffa8a8;"></i>
             </a>
         </div>
     </div>
@@ -297,16 +289,16 @@
             </div>
 
             <div class="qr-container" id="qrContainer">
-                <p style="font-size: 13px; color: #94a3b8;" id="selectedChannelTitle"></p>
-                <!-- Apni QR code image ka link yahan daal sakte ho -->
+                <p style="font-size: 13px; color: #ffd27f;" id="selectedChannelTitle"></p>
+                <!-- Apni QR code image ka link yahan daal sakta hai -->
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=yourupi@oksbi&pn=TitanBuild" alt="Payment QR Code" id="qrImage">
-                <p style="font-size: 11px; color: #fbbf24; margin-top: 5px;">Scan QR code to pay, then enter UTR below</p>
+                <p style="font-size: 11px; color: #ffbc36; margin-top: 5px;">Scan QR code to pay, then enter UTR below</p>
                 
                 <div class="form-group" style="margin-top: 15px;">
                     <input type="text" class="form-control" id="utrNumber" placeholder="Enter 12-digit UTR / Ref Number">
                 </div>
                 <button class="btn-submit" onclick="submitRecharge()">Submit Payment</button>
-                <button style="background: transparent; border: none; color: #94a3b8; font-size: 12px; margin-top: 10px; cursor: pointer; width: 100%;" onclick="backToChannels()">Back to Channels</button>
+                <button style="background: transparent; border: none; color: #ffa8a8; font-size: 12px; margin-top: 10px; cursor: pointer; width: 100%;" onclick="backToChannels()">Back to Channels</button>
             </div>
         </div>
     </div>
@@ -356,13 +348,12 @@
         window.onload = function() {
             let phone = localStorage.getItem('userPhone') || '9876543210';
             document.getElementById('userPhoneDisplay').innerText = phone;
-            document.getElementById('userInitial').innerText = phone.charAt(0).toUpperCase();
+            document.getElementById('userInitial').innerText = phone.charAt(0);
 
             let balance = localStorage.getItem('userBalance') || '1000';
             document.getElementById('userBalance').innerText = balance;
         };
 
-        // Recharge Modal Functions
         function openRechargeModal() {
             document.getElementById('rechargeModal').style.display = 'flex';
             document.getElementById('channelSelection').style.display = 'block';
@@ -390,7 +381,6 @@
             closeRechargeModal();
         }
 
-        // Withdrawal Modal Functions
         function openWithdrawModal() {
             document.getElementById('withdrawModal').style.display = 'flex';
         }
@@ -425,3 +415,4 @@
     </script>
 </body>
 </html>
+
