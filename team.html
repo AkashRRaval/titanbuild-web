@@ -1,83 +1,115 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Team Commission</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TitanBuild - Team</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            padding-bottom: 80px;
+        }
+        .header {
+            background: #111827;
+            color: #fbbf24;
+            padding: 16px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+        .team-card {
+            background: #111827;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #1f2937;
+            text-align: center;
+        }
+        .team-card h3 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        .team-card p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .ref-box {
+            background: #0b0f19;
+            border: 1px solid #374151;
+            padding: 10px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            word-break: break-all;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            text-decoration: none;
+            color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            gap: 4px;
+        }
+        .nav-item i {
+            font-size: 18px;
+        }
+        .nav-item.active {
+            color: #fbbf24;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white pb-24 font-sans">
+<body>
 
-    <!-- Header -->
-    <header class="bg-yellow-500 text-black font-extrabold p-4 sticky top-0 z-50 shadow-lg text-center text-lg">
-        My Referral Team
-    </header>
+    <div class="header">My Team</div>
 
-    <div class="p-4">
-        <!-- Commission Summary Card -->
-        <div class="bg-gray-800 rounded-2xl p-5 border border-yellow-500/30 text-center shadow-xl mb-5">
-            <span class="text-xs text-gray-400 block mb-1">Total Team Bonus Earned</span>
-            <span class="text-3xl font-black text-yellow-400">₹ 0.00</span>
-            <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-700 text-xs">
-                <div>
-                    <span class="text-gray-400 block">Total Invited</span>
-                    <span class="font-bold text-white text-base">0 Users</span>
-                </div>
-                <div>
-                    <span class="text-gray-400 block">Active Assets</span>
-                    <span class="font-bold text-green-400 text-base">0 Fleet</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Level Income Ratio -->
-        <h3 class="text-sm font-bold border-l-4 border-yellow-500 pl-2 mb-3">Referral Levels</h3>
-        <div class="space-y-3 mb-5">
-            <div class="bg-gray-800 p-3 rounded-xl border border-gray-700 flex justify-between items-center text-xs">
-                <div>
-                    <span class="font-bold text-yellow-400 block">Level 1 (Direct Member)</span>
-                    <span class="text-gray-400">Commission Rate</span>
-                </div>
-                <span class="text-base font-black text-green-400">10%</span>
-            </div>
-            <div class="bg-gray-800 p-3 rounded-xl border border-gray-700 flex justify-between items-center text-xs">
-                <div>
-                    <span class="font-bold text-yellow-400 block">Level 2 (Secondary Member)</span>
-                    <span class="text-gray-400">Commission Rate</span>
-                </div>
-                <span class="text-base font-black text-green-400">3%</span>
-            </div>
-            <div class="bg-gray-800 p-3 rounded-xl border border-gray-700 flex justify-between items-center text-xs">
-                <div>
-                    <span class="font-bold text-yellow-400 block">Level 3 (Sub-Member)</span>
-                    <span class="text-gray-400">Commission Rate</span>
-                </div>
-                <span class="text-base font-black text-green-400">1%</span>
-            </div>
-        </div>
+    <div class="team-card">
+        <h3>Invite Friends & Earn</h3>
+        <p>Apna referral link share karein aur commission paayein.</p>
+        <div class="ref-box" id="refLink">https://titanbuild.com/register.html?ref=12345</div>
     </div>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-gray-950 border-t border-gray-800 flex justify-around p-3 text-center text-xs z-50">
-        <a href="index.html" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-house text-lg mb-0.5"></i>
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
-        <a href="index.html#productsSection" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-truck-monster text-lg mb-0.5"></i>
-            <span>Products</span>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Invest</span>
         </a>
-        <a href="team.html" class="text-yellow-400 font-bold flex flex-col items-center">
-            <i class="fa-solid fa-users text-lg mb-0.5"></i>
+        <a href="team.html" class="nav-item active">
+            <i class="fas fa-users"></i>
             <span>Team</span>
         </a>
-        <a href="profile.html" class="text-gray-400 flex flex-col items-center">
-            <i class="fa-solid fa-user text-lg mb-0.5"></i>
-            <span>My</span>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
         </a>
-    </nav>
+    </div>
 
 </body>
 </html>
-
