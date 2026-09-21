@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Withdrawal History</title>
+    <title>TitanBuild - Withdrawal Information</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,7 +15,7 @@
         body {
             background-color: #0b0f19;
             color: #e2e8f0;
-            padding-bottom: 80px;
+            padding-bottom: 70px;
         }
         .header {
             background: #111827;
@@ -33,76 +33,70 @@
             font-size: 18px;
         }
         .container {
-            max-width: 480px;
-            margin: 15px auto;
+            max-width: 400px;
+            margin: 20px auto;
             padding: 0 15px;
         }
-        /* Sample jaisa Dark Order Card */
-        .order-card {
+        .card {
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
         }
-        .order-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #1f2937;
-            padding-bottom: 8px;
-        }
-        .type-badge {
-            background: rgba(251, 191, 36, 0.15);
+        .tab-box {
+            background: #0b0f19;
+            border: 1px solid #fbbf24;
             color: #fbbf24;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .status-badge {
-            color: #10b981;
-            font-size: 13px;
-            font-weight: bold;
-        }
-        .order-info-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 6px;
-        }
-        .order-info-row span {
-            color: #fff;
-            font-weight: 500;
-        }
-        /* Bottom Navigation Bar */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #111827;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid #1f2937;
-            z-index: 100;
-        }
-        .nav-item {
             text-align: center;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 11px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
-        .nav-item i {
-            display: block;
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            width: 100%;
+            background: #0b0f19;
+            border: 1px solid #374151;
+            padding: 12px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .captcha-row {
+            display: flex;
+            gap: 10px;
+        }
+        .captcha-row input {
+            flex: 1;
+        }
+        .captcha-img {
+            background: #fff;
+            color: #000;
+            padding: 0 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-family: monospace;
             font-size: 18px;
-            margin-bottom: 3px;
+            letter-spacing: 3px;
         }
-        .nav-item.active {
-            color: #fbbf24;
+        .btn-confirm {
+            background: #fbbf24;
+            color: #111827;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -110,66 +104,50 @@
 
     <div class="header">
         <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
-        <span>Withdrawal History</span>
-        <a href="cs.html" style="color: #fbbf24; font-size: 16px;"><i class="fas fa-headset"></i></a>
+        <span>Withdrawal information</span>
+        <i class="fas fa-university"></i>
     </div>
 
-    <div class="container" id="withdrawHistoryContainer">
-        <!-- Sample Dark Cards matching user requirement -->
-        <div class="order-card">
-            <div class="order-card-header">
-                <span class="type-badge">Withdraw</span>
-                <span class="status-badge">Completed</span>
+    <div class="container">
+        <div class="card">
+            <div class="tab-box">Bank</div>
+            <div class="input-group">
+                <input type="text" id="accNo" placeholder="Enter bank account number">
             </div>
-            <div class="order-info-row">
-                Balance: <span style="color: #fbbf24;">₹150</span>
+            <div class="input-group">
+                <input type="text" id="accName" placeholder="Please enter the account holder's name">
             </div>
-            <div class="order-info-row">
-                Type: <span>BANK CARD</span>
+            <div class="input-group">
+                <input type="text" id="method" placeholder="Please select the withdrawal method" value="Bank Transfer" readonly>
             </div>
-            <div class="order-info-row">
-                Time: <span>2026-09-16 14:31:17</span>
+            <div class="input-group">
+                <input type="text" id="ifsc" placeholder="Please enter the IFSC code / branch">
             </div>
-            <div class="order-info-row" style="font-size: 11px; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 6px;">
-                Order number: <span style="font-size: 11px; color: #fbbf24;">W51202609161431164990001</span>
+            <div class="input-group captcha-row">
+                <input type="text" id="captcha" placeholder="Please enter the captcha code">
+                <div class="captcha-img">8887</div>
             </div>
-        </div>
-
-        <div class="order-card">
-            <div class="order-card-header">
-                <span class="type-badge">Withdraw</span>
-                <span class="status-badge">Completed</span>
-            </div>
-            <div class="order-info-row">
-                Balance: <span style="color: #fbbf24;">₹152</span>
-            </div>
-            <div class="order-info-row">
-                Type: <span>BANK CARD</span>
-            </div>
-            <div class="order-info-row">
-                Time: <span>2026-09-16 13:53:59</span>
-            </div>
-            <div class="order-info-row" style="font-size: 11px; margin-top: 6px; border-top: 1px solid #1f2937; padding-top: 6px;">
-                Order number: <span style="font-size: 11px; color: #fbbf24;">W51202609161353589560001</span>
-            </div>
+            <button class="btn-confirm" onclick="saveBank()">Confirm</button>
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i> Home
-        </a>
-        <a href="recharge.html" class="nav-item">
-            <i class="fas fa-wallet"></i> Recharge
-        </a>
-        <a href="withdraw.html" class="nav-item active">
-            <i class="fas fa-exchange-alt"></i> Withdraw
-        </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user"></i> Profile
-        </a>
-    </div>
+    <script>
+        function saveBank() {
+            const acc = document.getElementById('accNo').value.trim();
+            const name = document.getElementById('accName').value.trim();
+            const captcha = document.getElementById('captcha').value.trim();
 
+            if(!acc || !name || !captcha) {
+                alert("Please fill in all the required details!");
+                return;
+            }
+            if(captcha !== "8887") {
+                alert("Invalid captcha code!");
+                return;
+            }
+            alert("Bank details saved successfully!");
+            window.location.href = 'profile.html';
+        }
+    </script>
 </body>
 </html>
