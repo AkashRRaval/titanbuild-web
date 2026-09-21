@@ -4,125 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TitanBuild - Register</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDe6eJF8ISMX2oqNEhMtSZhONQCIPG_Lb8",
-            authDomain: "titanbuildlive.firebaseapp.com",
-            projectId: "titanbuildlive",
-            storageBucket: "titanbuildlive.firebasestorage.app",
-            messagingSenderId: "190147437260",
-            appId: "1:190147437260:web:2c8cc81a4180bb9ac09869",
-            measurementId: "G-TGB7V2M7XF"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.handleRegister = async function() {
-            const phone = document.getElementById('regPhone').value.trim();
-            const password = document.getElementById('regPassword').value.trim();
-            const inviteCode = document.getElementById('inviteCode').value.trim();
-
-            if (!phone || !password) {
-                alert('Please enter both phone number and password.');
-                return;
-            }
-
-            if (phone.length !== 10) {
-                alert('Please enter a valid 10-digit mobile number.');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters long.');
-                return;
-            }
-
-            try {
-                const userRef = doc(db, "users", phone);
-                const userSnap = await getDoc(userRef);
-
-                if (userSnap.exists()) {
-                    alert('This phone number is already registered! Please login.');
-                    window.location.href = 'login.html';
-                    return;
-                }
-
-                // Create User Document in Firestore
-                await setDoc(userRef, {
-                    phone: phone,
-                    password: password,
-                    balance: 0.00,
-                    inviteCode: inviteCode || 'NONE',
-                    createdAt: serverTimestamp()
-                });
-
-                alert('Registration successful! Please login to continue.');
-                window.location.href = 'login.html';
-
-            } catch (e) {
-                console.error("Registration error:", e);
-                alert('Registration failed. Please try again.');
-            }
-        };
-    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .register-container {
+            background: #111827;
+            border: 1px solid #1f2937;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .register-container h2 {
+            color: #fbbf24;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            background: #0b0f19;
+            border: 1px solid #374151;
+            padding: 12px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-group input:focus {
+            border-color: #fbbf24;
+        }
+        .btn-submit {
+            background: #fbbf24;
+            color: #111827;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            background: #f59e0b;
+        }
+        .footer-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .footer-text a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body class="bg-gray-950 text-white min-h-screen flex items-center justify-center p-4 font-sans">
-        <div class="max-w-md w-full bg-gray-900 border border-gray-800 p-6 rounded-3xl shadow-2xl space-y-5">
-        
-        <!-- Header -->
-        <div class="text-center space-y-2">
-            <div class="w-12 h-12 bg-gradient-to-tr from-yellow-600 to-amber-400 rounded-2xl flex items-center justify-center text-black font-black mx-auto shadow-lg text-xl">
-                <i class="fa-solid fa-helmet-safety"></i>
-            </div>
-            <h1 class="text-lg font-black tracking-wider text-yellow-400 uppercase">Create Account</h1>
-            <p class="text-xs text-gray-400">Join TitanBuild & Start Leasing Assets</p>
+<body>
+
+    <div class="register-container">
+        <h2>Create Account</h2>
+        <div class="input-group">
+            <label>Phone Number</label>
+            <input type="text" id="regPhone" placeholder="Enter your phone number">
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="regPass" placeholder="Create a password">
+        </div>
+        <div class="input-group">
+            <label>Referral Code (Optional)</label>
+            <input type="text" id="refCode" placeholder="Enter invitation code">
         </div>
 
-        <!-- Form Inputs -->
-        <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Mobile Number</label>
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-500 text-xs font-bold">+91</span>
-                    <input type="tel5" id="regPhone" maxlength="10" placeholder="Enter 10-digit mobile number" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-yellow-500 font-bold">
-                </div>
-            </div>
+        <button class="btn-submit" onclick="handleRegister()">Register</button>
 
-            <div>
-                <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Create Password</label>
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-500 text-xs"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" id="regPassword" placeholder="Minimum 6 characters" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-yellow-500 font-bold">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-[10px] text-gray-400 font-bold uppercase mb-1">Invitation Code (Optional)</label>
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-500 text-xs"><i class="fa-solid fa-ticket"></i></span>
-                    <input type="text" id="inviteCode" placeholder="Enter invite code if any" class="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-yellow-500 font-bold">
-                </div>
-            </div>
-
-            <button onclick="handleRegister()" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg mt-2">
-                REGISTER NOW
-            </button>
+        <div class="footer-text">
+            Already have an account? <a href="login.html">Login here</a>
         </div>
-
-        <!-- Footer Link -->
-        <div class="text-center pt-2 border-t border-gray-800">
-            <p class="text-xs text-gray-400">Already have an account? <a href="login.html" class="text-yellow-400 font-bold hover:underline">Login here</a></p>
-        </div>
-
     </div>
 
+    <script>
+        function handleRegister() {
+            const phone = document.getElementById('regPhone').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+
+            if(!phone || !pass) {
+                alert("Please fill phone number and password!");
+                return;
+            }
+
+            localStorage.setItem('registered_phone', phone);
+            localStorage.setItem('registered_pass', pass);
+            alert("Registration successful! Please login.");
+            window.location.href = 'login.html';
+        }
+    </script>
 </body>
 </html>
