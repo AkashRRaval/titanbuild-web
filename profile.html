@@ -22,234 +22,185 @@
             color: #fbbf24;
             padding: 16px;
             text-align: center;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
         }
-        .container {
-            max-width: 400px;
-            margin: 15px auto;
-            padding: 0 15px;
-        }
-        /* Top Stats Grid (2 rows x 3 columns) */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            background: #111827;
-            border: 1px solid #1f2937;
+        .user-card {
+            background: linear-gradient(135deg, #111827, #1f2937);
+            margin: 15px;
+            padding: 20px;
             border-radius: 12px;
-            padding: 15px 10px;
-            margin-bottom: 15px;
-            text-align: center;
+            border: 1px solid #374151;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        .stat-box h4 {
-            font-size: 15px;
-            color: #fbbf24;
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: #fbbf24;
+            color: #111827;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .user-info h3 {
+            color: #fff;
+            font-size: 16px;
             margin-bottom: 4px;
         }
-        .stat-box span {
-            font-size: 11px;
+        .user-info p {
             color: #94a3b8;
-            line-height: 1.2;
-            display: block;
+            font-size: 12px;
         }
-
-        /* Action Buttons Grid (4 buttons) */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        .action-btn {
+        .balance-section {
             background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 10px;
-            padding: 12px 5px;
-            text-align: center;
-            cursor: pointer;
-            color: #e2e8f0;
-            text-decoration: none;
-        }
-        .action-btn i {
-            font-size: 18px;
-            color: #fbbf24;
-            margin-bottom: 6px;
-            display: block;
-        }
-        .action-btn span {
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* Menu List */
-        .menu-list {
-            background: #111827;
-            border: 1px solid #1f2937;
+            margin: 15px;
+            padding: 15px;
             border-radius: 12px;
+            border: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+        .bal-item h4 {
+            color: #fbbf24;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .bal-item span {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .menu-list {
+            margin: 15px;
+            background: #111827;
+            border-radius: 12px;
+            border: 1px solid #1f2937;
             overflow: hidden;
-            margin-bottom: 15px;
         }
         .menu-item {
-            padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #1f2937;
-            cursor: pointer;
+            padding: 15px;
             color: #e2e8f0;
             text-decoration: none;
-            font-size: 13px;
+            border-bottom: 1px solid #1f2937;
+            transition: background 0.2s;
         }
         .menu-item:last-child {
             border-bottom: none;
         }
-        .menu-item .left-side {
+        .menu-item:active {
+            background: #1f2937;
+        }
+        .menu-left {
             display: flex;
             align-items: center;
             gap: 12px;
+            font-size: 14px;
         }
-        .menu-item i:first-child {
+        .menu-left i {
             color: #fbbf24;
-            font-size: 15px;
+            font-size: 16px;
             width: 20px;
             text-align: center;
         }
         .menu-item i.fa-chevron-right {
             color: #6b7280;
-            font-size: 11px;
+            font-size: 12px;
         }
-        
-        /* Logout Button */
-        .btn-logout {
-            background: #111827;
-            border: 1px solid #374151;
-            color: #ef4444;
-            width: 100%;
+        .logout-btn {
+            margin: 20px 15px;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            width: calc(100% - 30px);
             padding: 14px;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
             text-align: center;
-            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <span>My Profile</span>
+    <div class="header">My Profile</div>
+
+    <!-- User Details Card -->
+    <div class="user-card">
+        <div class="avatar"><i class="fas fa-user"></i></div>
+        <div class="user-info">
+            <h3 id="usernameDisplay">Titan User</h3>
+            <p>Phone: +91 ******9999</p>
+        </div>
     </div>
 
-    <div class="container">
-        <!-- Top Earnings / Amount Blocks -->
-        <div class="stats-grid">
-            <div class="stat-box">
-                <h4 id="withdrawAmt">₹0</h4>
-                <span>Withdraw Amount</span>
-            </div>
-            <div class="stat-box">
-                <h4 id="rechargeAmt">₹0</h4>
-                <span>Recharge Amount</span>
-            </div>
-            <div class="stat-box">
-                <h4 id="totalWithdraw">₹0</h4>
-                <span>Total Withdrawal</span>
-            </div>
-            <div class="stat-box" style="margin-top: 10px;">
-                <h4 id="todaysIncome">₹0</h4>
-                <span>Today's Income</span>
-            </div>
-            <div class="stat-box" style="margin-top: 10px;">
-                <h4 id="teamIncome">₹0</h4>
-                <span>Team Income</span>
-            </div>
-            <div class="stat-box" style="margin-top: 10px;">
-                <h4 id="totalIncome">₹0</h4>
-                <span>Total Income</span>
-            </div>
+    <!-- Balance Section -->
+    <div class="balance-section">
+        <div class="bal-item">
+            <h4 id="userBalance">₹500.00</h4>
+            <span>Total Balance</span>
         </div>
-
-        <!-- 4 Action Buttons (Recharge, Withdraw, Check-In, Prize) -->
-        <div class="action-grid">
-            <a href="recharge.html" class="action-btn">
-                <i class="fas fa-wallet"></i>
-                <span>Recharge</span>
-            </a>
-            <a href="withdraw.html" class="action-btn">
-                <i class="fas fa-university"></i>
-                <span>Withdraw</span>
-            </a>
-            <a href="#" onclick="alert('Daily Check-In feature coming soon!')" class="action-btn">
-                <i class="fas fa-calendar-check"></i>
-                <span>Check-In</span>
-            </a>
-            <a href="#" onclick="alert('No active prizes available right now!')" class="action-btn">
-                <i class="fas fa-gift"></i>
-                <span>Prize</span>
-            </a>
+        <div style="width: 1px; background: #374151;"></div>
+        <div class="bal-item">
+            <h4 id="userIncome">₹150.00</h4>
+            <span>Total Income</span>
         </div>
-
-        <!-- Detailed Options Menu List -->
-        <div class="menu-list">
-            <a href="withdraw.html" class="menu-item">
-                <div class="left-side">
-                    <i class="fas fa-id-card"></i>
-                    <span>Withdrawal Information (Bank Binding)</span>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <a href="recharge.html" class="menu-item">
-                <div class="left-side">
-                    <i class="fas fa-box-open"></i>
-                    <span>My Products / Asset History</span>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <a href="#" onclick="alert('No bills found.')" class="menu-item">
-                <div class="left-side">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <span>My Bills</span>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <a href="#" onclick="alert('TitanBuild is a platform for digital asset growth and daily benefits.')" class="menu-item">
-                <div class="left-side">
-                    <i class="fas fa-info-circle"></i>
-                    <span>About Us</span>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <a href="#" onclick="alert('Password change feature.')" class="menu-item">
-                <div class="left-side">
-                    <i class="fas fa-lock"></i>
-                    <span>Change Password</span>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <a href="#" onclick="alert('Connecting to customer service support...')" class="menu-item">
-                <div class="left-side">
-                    <i class="fas fa-headset"></i>
-                    <span>Customer Service</span>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <a href="#" onclick="alert('App download link will be available soon.')" class="menu-item">
-                <div class="left-side">
-                    <i class="fas fa-download"></i>
-                    <span>Download App</span>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        </div>
-
-        <!-- Logout Button -->
-        <button class="btn-logout" onclick="alert('Logged out successfully!'); window.location.href='login.html';">
-            Logout
-        </button>
     </div>
 
+    <!-- Navigation Menu Options (Connected to respective files) -->
+    <div class="menu-list">
+        <a href="withdraw-info.html" class="menu-item">
+            <div class="menu-left">
+                <i class="fas fa-id-card"></i>
+                <span>Withdrawal Information (Bank Bind)</span>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+
+        <a href="my-products.html" class="menu-item">
+            <div class="menu-left">
+                <i class="fas fa-box-open"></i>
+                <span>My Products</span>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+
+        <a href="my-bills.html" class="menu-item">
+            <div class="menu-left">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>My Bills / Records</span>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+
+        <a href="about.html" class="menu-item">
+            <div class="menu-left">
+                <i class="fas fa-info-circle"></i>
+                <span>About Us</span>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+
+    <button class="logout-btn" onclick="logoutUser()">Log Out</button>
+
+    <script>
+        function logoutUser() {
+            if(confirm("Kya aap sach mein logout karna chahte hain?")) {
+                localStorage.clear();
+                alert("Logged out successfully!");
+                // Aap yahan login page ka link de sakte hain, jaise window.location.href='login.html';
+            }
+        }
+    </script>
 </body>
 </html>
