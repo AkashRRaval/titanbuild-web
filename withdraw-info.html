@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitanBuild - Withdrawal Information</title>
+    <title>TitanBuild - Bank Bind</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,7 +15,6 @@
         body {
             background-color: #0b0f19;
             color: #e2e8f0;
-            padding-bottom: 70px;
         }
         .header {
             background: #111827;
@@ -24,48 +23,30 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             border-bottom: 1px solid #1f2937;
         }
-        .header i {
-            cursor: pointer;
-            font-size: 18px;
-        }
-        .container {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-        .card {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-        .tab-box {
-            background: #0b0f19;
-            border: 1px solid #fbbf24;
+        .header a {
             color: #fbbf24;
-            text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .form-container {
+            padding: 20px;
         }
         .input-group {
             margin-bottom: 15px;
         }
         .input-group label {
             display: block;
-            font-size: 12px;
+            font-size: 13px;
             color: #94a3b8;
             margin-bottom: 5px;
         }
         .input-group input {
             width: 100%;
-            background: #0b0f19;
+            background: #111827;
             border: 1px solid #374151;
             padding: 12px;
             border-radius: 8px;
@@ -73,140 +54,88 @@
             font-size: 14px;
             outline: none;
         }
-        .input-group input:disabled {
-            background: #1f2937;
-            color: #9ca3af;
-            cursor: not-allowed;
+        .input-group input:focus {
+            border-color: #fbbf24;
         }
-        .captcha-row {
-            display: flex;
-            gap: 10px;
-        }
-        .captcha-row input {
-            flex: 1;
-        }
-        .captcha-img {
-            background: #fff;
-            color: #000;
-            padding: 0 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            font-family: monospace;
-            font-size: 18px;
-            letter-spacing: 3px;
-        }
-        .btn-confirm {
+        .btn-submit {
             background: #fbbf24;
             color: #111827;
             border: none;
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
             margin-top: 10px;
         }
-        .success-msg {
-            background: #064e3b;
-            color: #34d399;
-            padding: 12px;
-            border-radius: 8px;
+        .note {
+            font-size: 12px;
+            color: #ef4444;
             text-align: center;
-            font-size: 13px;
-            margin-bottom: 15px;
-            display: none;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <i class="fas fa-arrow-left" onclick="window.location.href='profile.html'"></i>
-        <span>Withdrawal information</span>
-        <i class="fas fa-university"></i>
+        <a href="profile.html"><i class="fas fa-arrow-left"></i></a>
+        <span>Withdrawal Information</span>
+        <div style="width: 20px;"></div>
     </div>
 
-    <div class="container">
-        <div class="card">
-            <div class="tab-box">Bank Account Binding</div>
-            <div id="successAlert" class="success-msg">Bank account successfully bound! Ready for withdrawals.</div>
-            
-            <div class="input-group">
-                <label>Bank Account Number</label>
-                <input type="text" id="accNo" placeholder="Enter bank account number">
-            </div>
-            <div class="input-group">
-                <label>Account Holder Name</label>
-                <input type="text" id="accName" placeholder="Please enter account holder name">
-            </div>
-            <div class="input-group">
-                <label>Withdrawal Method</label>
-                <input type="text" id="method" value="Bank Transfer" readonly>
-            </div>
-            <div class="input-group">
-                <label>IFSC Code / Branch</label>
-                <input type="text" id="ifsc" placeholder="Please enter IFSC code">
-            </div>
-            <div class="input-group" id="captchaBox">
-                <label>Captcha Code</label>
-                <div class="captcha-row">
-                    <input type="text" id="captcha" placeholder="Enter captcha code">
-                    <div class="captcha-img" id="captchaText">4829</div>
-                </div>
-            </div>
-            <button class="btn-confirm" id="submitBtn" onclick="saveBank()">Confirm & Bind</button>
+    <div class="form-container">
+        <div class="input-group">
+            <label>Account Holder Name</label>
+            <input type="text" id="accName" placeholder="Enter bank account holder name">
         </div>
+        <div class="input-group">
+            <label>Bank Account Number</label>
+            <input type="text" id="accNum" placeholder="Enter account number">
+        </div>
+        <div class="input-group">
+            <label>IFSC Code</label>
+            <input type="text" id="ifscCode" placeholder="Enter bank IFSC code">
+        </div>
+        
+        <button class="btn-submit" id="bindBtn" onclick="saveBankDetails()">Bind Bank Account</button>
+        <p class="note">* Note: Bank details can only be bound ONCE for security reasons.</p>
     </div>
 
     <script>
-        // Check if bank details are already saved (Prevents re-binding every time)
         window.onload = function() {
-            const savedBank = localStorage.getItem('titan_bank_details');
-            if (savedBank) {
-                const data = JSON.parse(savedBank);
-                document.getElementById('accNo').value = data.accNo;
-                document.getElementById('accName').value = data.accName;
-                document.getElementById('ifsc').value = data.ifsc;
+            if(localStorage.getItem('bank_bound') === 'true') {
+                document.getElementById('accName').value = localStorage.getItem('bank_name') || '';
+                document.getElementById('accNum').value = localStorage.getItem('bank_num') || '';
+                document.getElementById('ifscCode').value = localStorage.getItem('bank_ifsc') || '';
                 
-                // Lock fields so user cannot edit once bound
-                document.getElementById('accNo').disabled = true;
+                // Disable inputs & button after one-time bind
                 document.getElementById('accName').disabled = true;
-                document.getElementById('ifsc').disabled = true;
-                document.getElementById('captchaBox').style.display = 'none';
-                document.getElementById('submitBtn').style.display = 'none';
-                
-                const alertBox = document.getElementById('successAlert');
-                alertBox.style.display = 'block';
+                document.getElementById('accNum').disabled = true;
+                document.getElementById('ifscCode').disabled = true;
+                document.getElementById('bindBtn').style.display = 'none';
             }
         };
 
-        function saveBank() {
-            const acc = document.getElementById('accNo').value.trim();
+        function saveBankDetails() {
             const name = document.getElementById('accName').value.trim();
-            const ifsc = document.getElementById('ifsc').value.trim();
-            const captcha = document.getElementById('captcha').value.trim();
-            const correctCaptcha = document.getElementById('captchaText').innerText;
+            const num = document.getElementById('accNum').value.trim();
+            const ifsc = document.getElementById('ifscCode').value.trim();
 
-            if(!acc || !name || !ifsc || !captcha) {
-                alert("Please fill in all the required details!");
-                return;
-            }
-            if(captcha !== correctCaptcha) {
-                alert("Invalid captcha code! Please try again.");
+            if(!name || !num || !ifsc) {
+                alert("Please fill all bank details!");
                 return;
             }
 
-            // Save securely to local storage (or integrate your backend API call here)
-            const bankData = { accNo: acc, accName: name, ifsc: ifsc };
-            localStorage.setItem('titan_bank_details', JSON.stringify(bankData));
+            localStorage.setItem('bank_bound', 'true');
+            localStorage.setItem('bank_name', name);
+            localStorage.setItem('bank_num', num);
+            localStorage.setItem('bank_ifsc', ifsc);
 
-            alert("Bank details bound successfully! You can now withdraw funds.");
+            alert("Bank account successfully bound!");
             location.reload();
         }
     </script>
 </body>
-                                       </html>
-  
+</html>
