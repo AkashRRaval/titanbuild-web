@@ -467,7 +467,7 @@
             <span>My</span>
         </a>
     </div>
-            <script>
+      <script>
     window.onload = function() {
         let balance = localStorage.getItem('userBalance') || '0';
         document.getElementById('withdrawAmountStat').innerText = balance;
@@ -549,12 +549,7 @@
         alert("Withdrawal request submitted successfully!");
         closeModal('withdrawModal');
     }
-
-    function logout() {
-        localStorage.removeItem('userPhone');
-        localStorage.removeItem('userBalance');
-        window.location.href = 'login.html';
-    }
-            </script>
-            </body>
-                </html>
+</script>
+</body>
+</html>
+                    
