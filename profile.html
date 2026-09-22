@@ -13,7 +13,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0f172a; /* Original Dark Blue/Black Theme */
+            background-color: #0f172a;
             color: #f8fafc;
             padding-bottom: 90px;
         }
@@ -29,8 +29,6 @@
         .container {
             padding: 15px;
         }
-
-        /* Stats Box */
         .stats-box {
             background: #1e293b;
             border: 1px solid #334155;
@@ -58,8 +56,6 @@
             font-size: 11px;
             color: #94a3b8;
         }
-
-        /* 4 Action Buttons Grid */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -87,8 +83,6 @@
             font-weight: 600;
             color: #f8fafc;
         }
-
-        /* Menu List */
         .menu-list {
             background: #1e293b;
             border: 1px solid #334155;
@@ -126,8 +120,6 @@
             color: #64748b;
             font-size: 12px;
         }
-
-        /* Logout Button */
         .logout-container {
             padding: 0 0 20px 0;
         }
@@ -143,8 +135,6 @@
             cursor: pointer;
             text-align: center;
         }
-
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -208,8 +198,6 @@
             font-size: 14px;
             cursor: pointer;
         }
-        
-        /* Channel List inside Recharge Modal */
         .channel-btn {
             background: #0f172a;
             border: 1px solid #334155;
@@ -225,8 +213,6 @@
             border-color: #fbbf24;
             color: #fbbf24;
         }
-
-        /* QR Code Container */
         .qr-container {
             text-align: center;
             display: none;
@@ -240,7 +226,6 @@
             padding: 5px;
             border: 1px solid #334155;
         }
-
         .info-box-content {
             font-size: 13px;
             color: #cbd5e1;
@@ -251,8 +236,6 @@
             border-radius: 8px;
             border: 1px solid #334155;
         }
-
-        /* Bottom Nav Bar */
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
@@ -285,7 +268,7 @@
         <div class="stats-box">
             <div class="stats-row">
                 <div>
-                    <div class="stat-val">₹<span id="withdrawAmountStat">800</span></div>
+                    <div class="stat-val">₹<span id="withdrawAmountStat">0</span></div>
                     <div class="stat-lbl">Withdraw Amount</div>
                 </div>
                 <div>
@@ -307,7 +290,7 @@
                     <div class="stat-lbl">Team Income</div>
                 </div>
                 <div>
-                    <div class="stat-val">₹<span id="totalIncomeStat">1000</span></div>
+                    <div class="stat-val">₹<span id="totalIncomeStat">0</span></div>
                     <div class="stat-lbl">Total Income</div>
                 </div>
             </div>
@@ -352,7 +335,7 @@
                 <i class="fas fa-chevron-right"></i>
             </div>
             <div class="menu-item" onclick="openPasswordModal()">
-                <div><i class="fas fa-lock"></i> Change Password</div>
+                <div><i class="fas fa-lock"><span> Change Password</div>
                 <i class="fas fa-chevron-right"></i>
             </div>
             <div class="menu-item" onclick="window.open('https://wa.me/', '_blank')">
@@ -371,22 +354,19 @@
         </div>
     </div>
 
-    <!-- Recharge Modal with qr1.png & qr2.png mapping -->
+    <!-- Recharge Modal -->
     <div class="modal" id="rechargeModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('rechargeModal')">&times;</span>
             <div class="modal-title">Select Recharge Channel</div>
-            
             <div id="channelSelection">
                 <div class="channel-btn" onclick="selectChannel('Channel 1', 'qr1.png')">Channel 1 (UPI QR)</div>
                 <div class="channel-btn" onclick="selectChannel('Channel 2', 'qr2.png')">Channel 2 (Fast QR)</div>
             </div>
-
             <div class="qr-container" id="qrContainer">
                 <p style="font-size: 13px; color: #94a3b8;" id="selectedChannelTitle"></p>
                 <img id="qrImageElement" src="" alt="Payment QR Code">
                 <p style="font-size: 11px; color: #fbbf24; margin-top: 5px; font-weight: bold;">Scan QR code to pay, then enter UTR below</p>
-                
                 <div class="form-group" style="margin-top: 15px;">
                     <input type="text" class="form-control" id="utrNumber" placeholder="Enter 12-digit UTR / Ref Number">
                 </div>
@@ -487,10 +467,10 @@
             <span>My</span>
         </a>
     </div>
-
-    <script>
+        <script>
         window.onload = function() {
-            let balance = localStorage.getItem('userBalance') || '1000';
+            let balance = localStorage.getItem('userBalance') || '0';
+            document.getElementById('withdrawAmountStat').innerText = balance;
             document.getElementById('totalIncomeStat').innerText = balance;
         };
 
@@ -499,23 +479,29 @@
             document.getElementById('channelSelection').style.display = 'block';
             document.getElementById('qrContainer').style.display = 'none';
         }
+
         function openWithdrawModal() {
             document.getElementById('withdrawModal').style.display = 'flex';
         }
+
         function openCheckInModal() {
             document.getElementById('checkInModal').style.display = 'flex';
         }
+
         function openPrizeModal() {
             document.getElementById('prizeModal').style.display = 'flex';
         }
+
         function openPasswordModal() {
             document.getElementById('passwordModal').style.display = 'flex';
         }
+
         function openInfoModal(title, text) {
             document.getElementById('infoTitle').innerText = title;
             document.getElementById('infoText').innerText = text;
             document.getElementById('infoModal').style.display = 'flex';
         }
+
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
@@ -544,7 +530,7 @@
 
         function submitWithdrawal() {
             let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
-            let currentBalance = parseFloat(localStorage.getItem('userBalance') || '1000');
+            let currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
             
             if(!amount || amount <= 0) {
                 alert("Please enter a valid withdrawal amount.");
@@ -557,6 +543,7 @@
             
             currentBalance -= amount;
             localStorage.setItem('userBalance', currentBalance.toFixed(2));
+            document.getElementById('withdrawAmountStat').innerText = currentBalance.toFixed(2);
             document.getElementById('totalIncomeStat').innerText = currentBalance.toFixed(2);
             
             alert("Withdrawal request submitted successfully!");
@@ -565,9 +552,10 @@
 
         function logout() {
             localStorage.removeItem('userPhone');
+            localStorage.removeItem('userBalance');
             window.location.href = 'index.html';
         }
     </script>
 </body>
-                    </html>
-    
+    </html>
+                    
