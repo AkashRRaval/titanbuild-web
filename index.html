@@ -468,94 +468,93 @@
         </a>
     </div>
             <script>
-        window.onload = function() {
-            let balance = localStorage.getItem('userBalance') || '0';
-            document.getElementById('withdrawAmountStat').innerText = balance;
-            document.getElementById('totalIncomeStat').innerText = balance;
-        };
+    window.onload = function() {
+        let balance = localStorage.getItem('userBalance') || '0';
+        document.getElementById('withdrawAmountStat').innerText = balance;
+        document.getElementById('totalIncomeStat').innerText = balance;
+    };
 
-        function openRechargeModal() {
-            document.getElementById('rechargeModal').style.display = 'flex';
-            document.getElementById('channelSelection').style.display = 'block';
-            document.getElementById('qrContainer').style.display = 'none';
-        }
+    function openRechargeModal() {
+        document.getElementById('rechargeModal').style.display = 'flex';
+        document.getElementById('channelSelection').style.display = 'block';
+        document.getElementById('qrContainer').style.display = 'none';
+    }
 
-        function openWithdrawModal() {
-            document.getElementById('withdrawModal').style.display = 'flex';
-        }
+    function openWithdrawModal() {
+        document.getElementById('withdrawModal').style.display = 'flex';
+    }
 
-        function openCheckInModal() {
-            document.getElementById('checkInModal').style.display = 'flex';
-        }
+    function openCheckInModal() {
+        document.getElementById('checkInModal').style.display = 'flex';
+    }
 
-        function openPrizeModal() {
-            document.getElementById('prizeModal').style.display = 'flex';
-        }
+    function openPrizeModal() {
+        document.getElementById('prizeModal').style.display = 'flex';
+    }
 
-        function openPasswordModal() {
-            document.getElementById('passwordModal').style.display = 'flex';
-        }
+    function openPasswordModal() {
+        document.getElementById('passwordModal').style.display = 'flex';
+    }
 
-        function openInfoModal(title, text) {
-            document.getElementById('infoTitle').innerText = title;
-            document.getElementById('infoText').innerText = text;
-            document.getElementById('infoModal').style.display = 'flex';
-        }
+    function openInfoModal(title, text) {
+        document.getElementById('infoTitle').innerText = title;
+        document.getElementById('infoText').innerText = text;
+        document.getElementById('infoModal').style.display = 'flex';
+    }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
 
-        function selectChannel(channelName, qrFile) {
-            document.getElementById('channelSelection').style.display = 'none';
-            document.getElementById('qrContainer').style.display = 'block';
-            document.getElementById('selectedChannelTitle').innerText = "Pay via " + channelName;
-            document.getElementById('qrImageElement').src = qrFile;
-        }
+    function selectChannel(channelName, qrFile) {
+        document.getElementById('channelSelection').style.display = 'none';
+        document.getElementById('qrContainer').style.display = 'block';
+        document.getElementById('selectedChannelTitle').innerText = "Pay via " + channelName;
+        document.getElementById('qrImageElement').src = qrFile;
+    }
 
-        function backToChannels() {
-            document.getElementById('channelSelection').style.display = 'block';
-            document.getElementById('qrContainer').style.display = 'none';
-        }
+    function backToChannels() {
+        document.getElementById('channelSelection').style.display = 'block';
+        document.getElementById('qrContainer').style.display = 'none';
+    }
 
-        function submitRecharge() {
-            let utr = document.getElementById('utrNumber').value;
-            if(utr.length < 8) {
-                alert("Please enter a valid UTR / Transaction reference number.");
-                return;
-            }
-            alert("Recharge request submitted successfully! Pending verification.");
-            closeModal('rechargeModal');
+    function submitRecharge() {
+        let utr = document.getElementById('utrNumber').value;
+        if(utr.length < 8) {
+            alert("Please enter a valid UTR / Transaction reference number.");
+            return;
         }
+        alert("Recharge request submitted successfully! Pending verification.");
+        closeModal('rechargeModal');
+    }
 
-        function submitWithdrawal() {
-            let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
-            let currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
-            
-            if(!amount || amount <= 0) {
-                alert("Please enter a valid withdrawal amount.");
-                return;
-            }
-            if(amount > currentBalance) {
-                alert("Insufficient balance!");
-                return;
-            }
-            
-            currentBalance -= amount;
-            localStorage.setItem('userBalance', currentBalance.toFixed(2));
-            document.getElementById('withdrawAmountStat').innerText = currentBalance.toFixed(2);
-            document.getElementById('totalIncomeStat').innerText = currentBalance.toFixed(2);
-            
-            alert("Withdrawal request submitted successfully!");
-            closeModal('withdrawModal');
+    function submitWithdrawal() {
+        let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
+        let currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+        
+        if(!amount || amount <= 0) {
+            alert("Please enter a valid withdrawal amount.");
+            return;
         }
+        if(amount > currentBalance) {
+            alert("Insufficient balance!");
+            return;
+        }
+        
+        currentBalance -= amount;
+        localStorage.setItem('userBalance', currentBalance.toFixed(2));
+        document.getElementById('withdrawAmountStat').innerText = currentBalance.toFixed(2);
+        document.getElementById('totalIncomeStat').innerText = currentBalance.toFixed(2);
+        
+        alert("Withdrawal request submitted successfully!");
+        closeModal('withdrawModal');
+    }
 
-        function logout() {
-            localStorage.removeItem('userPhone');
-            localStorage.removeItem('userBalance');
-            window.location.href = 'login.html'; // Agar tere login page ka naam kuch aur hai, toh yahan change kar lena
-        }
-    </script>
-</body>
+    function logout() {
+        localStorage.removeItem('userPhone');
+        localStorage.removeItem('userBalance');
+        window.location.href = 'login.html';
+    }
+            </script>
+            </body>
                 </html>
-                    
