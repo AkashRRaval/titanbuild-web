@@ -144,6 +144,8 @@
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            text-decoration: none;
+            display: block;
         }
     </style>
 </head>
@@ -196,11 +198,10 @@
         </div>
 
         <div class="logout-btn-container">
-            <button class="logout-btn" onclick="logoutUser()">Logout</button>
+            <a href="login.html" class="logout-btn" onclick="logoutUser()">Logout</a>
         </div>
     </div>
 
-    <!-- Modals -->
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('withdrawModal')">&times;</span>
@@ -252,17 +253,15 @@
         </div>
     </div>
         <script>
-        // 1. AUTHENTICATION & USER ISOLATION CHECK
+        // Security Guard: Check if user is logged in
         let currentUser = localStorage.getItem('currentUserPhone');
         
-        // Agar user login nahi hai, toh seedha login page par bhej do
         if (!currentUser) {
             window.location.href = 'login.html';
         } else {
             document.getElementById('userPhoneDisplay').innerText = currentUser;
         }
 
-        // Helper keys specific to logged-in user
         function getKey(keyName) {
             return currentUser + '_' + keyName;
         }
@@ -306,7 +305,6 @@
             document.getElementById('infoModal').style.display = 'flex';
         }
 
-        // Secure Withdrawal with Unique Order Number & User Isolation
         function submitWithdrawal() {
             let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
             let currentBalance = parseFloat(localStorage.getItem(getKey('userBalance')) || '0');
@@ -320,11 +318,9 @@
                 return;
             }
             
-            // Deduct balance
             currentBalance -= amount;
             localStorage.setItem(getKey('userBalance'), currentBalance.toFixed(2));
             
-            // Update total withdrawal stat
             let totalWithdrawn = parseFloat(localStorage.getItem(getKey('totalWithdrawn')) || '0') + amount;
             localStorage.setItem(getKey('totalWithdrawn'), totalWithdrawn.toFixed(2));
 
@@ -332,12 +328,10 @@
             document.getElementById('totalIncomeStat').innerText = '₹' + currentBalance.toFixed(2);
             document.getElementById('totalWithdrawalStat').innerText = '₹' + totalWithdrawn.toFixed(2);
             
-            // Generate Unique Order Number and Date-Time
             let orderNumber = 'ORD' + Math.floor(100000 + Math.random() * 900000);
             let now = new Date();
             let dateTime = now.toLocaleString();
             
-            // Save to user-specific history
             let history = JSON.parse(localStorage.getItem(getKey('withdrawalHistory')) || '[]');
             history.unshift({ orderNo: orderNumber, amount: amount, dateTime: dateTime, status: 'Success' });
             localStorage.setItem(getKey('withdrawalHistory'), JSON.stringify(history));
@@ -347,7 +341,6 @@
             closeModal('withdrawModal');
         }
 
-        // View Withdrawal History
         function openWithdrawalHistoryModal() {
             let history = JSON.parse(localStorage.getItem(getKey('withdrawalHistory')) || '[]');
             let container = document.getElementById('withdrawalHistoryList');
@@ -369,7 +362,6 @@
             document.getElementById('withdrawalHistoryModal').style.display = 'flex';
         }
 
-        // View Purchased Products
         function openMyProductsModal() {
             let products = JSON.parse(localStorage.getItem(getKey('purchasedProducts')) || '[]');
             let container = document.getElementById('purchasedProductsList');
@@ -390,7 +382,6 @@
             document.getElementById('myProductsModal').style.display = 'flex';
         }
 
-        // View Bills / Recharge History
         function openBillsModal() {
             let bills = JSON.parse(localStorage.getItem(getKey('rechargeBills')) || '[]');
             let container = document.getElementById('billsList');
@@ -411,10 +402,8 @@
             document.getElementById('billsModal').style.display = 'flex';
         }
 
-        // Secure Logout
         function logoutUser() {
             localStorage.removeItem('currentUserPhone');
-            window.location.href = 'login.html';
         }
     </script>
 </body>
