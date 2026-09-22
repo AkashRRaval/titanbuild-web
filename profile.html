@@ -131,12 +131,26 @@
             margin-bottom: 10px;
             font-size: 13px;
         }
+        .logout-btn-container {
+            padding: 15px;
+            text-align: center;
+        }
+        .logout-btn {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">My Profile</div>
+        <div class="header">My Profile (<span id="userPhoneDisplay"></span>)</div>
 
         <div class="stats-box">
             <div class="stat-item">
@@ -180,8 +194,13 @@
             <div class="menu-item" onclick="openPasswordModal()">Change Password <span>&gt;</span></div>
             <div class="menu-item" onclick="openInfoModal('Customer Service', 'Contact our 24/7 support team via Telegram or official portal email.')">Customer Service <span>&gt;</span></div>
         </div>
+
+        <div class="logout-btn-container">
+            <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        </div>
     </div>
 
+    <!-- Modals -->
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('withdrawModal')">&times;</span>
@@ -233,10 +252,28 @@
         </div>
     </div>
         <script>
+        // 1. AUTHENTICATION & USER ISOLATION CHECK
+        let currentUser = localStorage.getItem('currentUserPhone');
+        
+        // Agar user login nahi hai, toh seedha login page par bhej do
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('userPhoneDisplay').innerText = currentUser;
+        }
+
+        // Helper keys specific to logged-in user
+        function getKey(keyName) {
+            return currentUser + '_' + keyName;
+        }
+
         window.onload = function() {
-            let balance = localStorage.getItem('userBalance') || '0';
+            let balance = localStorage.getItem(getKey('userBalance')) || '0';
             document.getElementById('withdrawAmountStat').innerText = '₹' + balance;
             document.getElementById('totalIncomeStat').innerText = '₹' + balance;
+            
+            let totalWithdrawn = localStorage.getItem(getKey('totalWithdrawn')) || '0';
+            document.getElementById('totalWithdrawalStat').innerText = '₹' + totalWithdrawn;
         };
 
         function closeModal(modalId) {
@@ -269,9 +306,10 @@
             document.getElementById('infoModal').style.display = 'flex';
         }
 
+        // Secure Withdrawal with Unique Order Number & User Isolation
         function submitWithdrawal() {
             let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
-            let currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+            let currentBalance = parseFloat(localStorage.getItem(getKey('userBalance')) || '0');
             
             if(!amount || amount <= 0) {
                 alert("Please enter a valid withdrawal amount.");
@@ -282,26 +320,36 @@
                 return;
             }
             
+            // Deduct balance
             currentBalance -= amount;
-            localStorage.setItem('userBalance', currentBalance.toFixed(2));
+            localStorage.setItem(getKey('userBalance'), currentBalance.toFixed(2));
+            
+            // Update total withdrawal stat
+            let totalWithdrawn = parseFloat(localStorage.getItem(getKey('totalWithdrawn')) || '0') + amount;
+            localStorage.setItem(getKey('totalWithdrawn'), totalWithdrawn.toFixed(2));
+
             document.getElementById('withdrawAmountStat').innerText = '₹' + currentBalance.toFixed(2);
             document.getElementById('totalIncomeStat').innerText = '₹' + currentBalance.toFixed(2);
+            document.getElementById('totalWithdrawalStat').innerText = '₹' + totalWithdrawn.toFixed(2);
             
+            // Generate Unique Order Number and Date-Time
             let orderNumber = 'ORD' + Math.floor(100000 + Math.random() * 900000);
             let now = new Date();
             let dateTime = now.toLocaleString();
             
-            let history = JSON.parse(localStorage.getItem('withdrawalHistory') || '[]');
+            // Save to user-specific history
+            let history = JSON.parse(localStorage.getItem(getKey('withdrawalHistory')) || '[]');
             history.unshift({ orderNo: orderNumber, amount: amount, dateTime: dateTime, status: 'Success' });
-            localStorage.setItem('withdrawalHistory', JSON.stringify(history));
+            localStorage.setItem(getKey('withdrawalHistory'), JSON.stringify(history));
             
             alert("Withdrawal request confirmed! Order ID: " + orderNumber);
             document.getElementById('withdrawAmountInput').value = '';
             closeModal('withdrawModal');
         }
 
+        // View Withdrawal History
         function openWithdrawalHistoryModal() {
-            let history = JSON.parse(localStorage.getItem('withdrawalHistory') || '[]');
+            let history = JSON.parse(localStorage.getItem(getKey('withdrawalHistory')) || '[]');
             let container = document.getElementById('withdrawalHistoryList');
             
             if(history.length === 0) {
@@ -321,8 +369,9 @@
             document.getElementById('withdrawalHistoryModal').style.display = 'flex';
         }
 
+        // View Purchased Products
         function openMyProductsModal() {
-            let products = JSON.parse(localStorage.getItem('purchasedProducts') || '[]');
+            let products = JSON.parse(localStorage.getItem(getKey('purchasedProducts')) || '[]');
             let container = document.getElementById('purchasedProductsList');
             
             if(products.length === 0) {
@@ -341,8 +390,9 @@
             document.getElementById('myProductsModal').style.display = 'flex';
         }
 
+        // View Bills / Recharge History
         function openBillsModal() {
-            let bills = JSON.parse(localStorage.getItem('rechargeBills') || '[]');
+            let bills = JSON.parse(localStorage.getItem(getKey('rechargeBills')) || '[]');
             let container = document.getElementById('billsList');
             
             if(bills.length === 0) {
@@ -359,6 +409,12 @@
                 container.innerHTML = html;
             }
             document.getElementById('billsModal').style.display = 'flex';
+        }
+
+        // Secure Logout
+        function logoutUser() {
+            localStorage.removeItem('currentUserPhone');
+            window.location.href = 'login.html';
         }
     </script>
 </body>
