@@ -467,7 +467,7 @@
             <span>My</span>
         </a>
     </div>
-        <script>
+            <script>
         window.onload = function() {
             let balance = localStorage.getItem('userBalance') || '0';
             document.getElementById('withdrawAmountStat').innerText = balance;
@@ -553,9 +553,9 @@
         function logout() {
             localStorage.removeItem('userPhone');
             localStorage.removeItem('userBalance');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html'; // Agar tere login page ka naam kuch aur hai, toh yahan change kar lena
         }
     </script>
 </body>
-    </html>
+                </html>
                     
