@@ -119,8 +119,11 @@
                 return;
             }
 
+            // Naye user ke liye balance ko explicitly 0 set kar diya hai
             localStorage.setItem('registered_phone', phone);
             localStorage.setItem('registered_pass', pass);
+            localStorage.setItem('user_balance', '0.00'); // Yahan balance 0 ho gaya
+
             alert("Registration successful! Please login.");
             window.location.href = 'login.html';
         }
