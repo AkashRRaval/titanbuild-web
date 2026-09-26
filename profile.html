@@ -108,6 +108,7 @@
             border: 1px solid #2b313a;
             color: #fff;
             border-radius: 5px;
+            box-sizing: border-box;
         }
         .modal-content button.submit-btn {
             width: 100%;
@@ -230,6 +231,7 @@
         </div>
     </div>
 
+    <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
         <a href="index.html" class="nav-item">
             <i class="fas fa-home"></i> Home
@@ -246,6 +248,17 @@
         <a href="profile.html" class="nav-item active">
             <i class="fas fa-user"></i> My
         </a>
+    </div>
+
+    <!-- Modals -->
+    <div id="rechargeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('rechargeModal')">&times;</span>
+            <h3>Recharge Amount</h3>
+            <input type="number" id="rechargeAmountInput" placeholder="Enter recharge amount">
+            <input type="text" id="rechargeUtrInput" placeholder="Enter UTR / Ref Number">
+            <button class="submit-btn" onclick="submitRecharge()">Submit Recharge</button>
+        </div>
     </div>
 
     <div id="withdrawModal" class="modal">
@@ -319,18 +332,56 @@
             
             let totalWithdrawn = localStorage.getItem(getKey('totalWithdrawn')) || '0';
             document.getElementById('totalWithdrawalStat').innerText = '₹' + totalWithdrawn;
+
+            let totalRecharge = localStorage.getItem(getKey('totalRecharge')) || '0';
+            document.getElementById('rechargeAmountStat').innerText = '₹' + totalRecharge;
         };
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
 
-        function openWithdrawModal() {
-            document.getElementById('withdrawModal').style.display = 'flex';
+        function openRechargeModal() {
+            document.getElementById('rechargeModal').style.display = 'flex';
         }
 
-        function openRechargeModal() {
-            alert("Redirecting to Recharge Gateway...");
+        function submitRecharge() {
+            let amount = parseFloat(document.getElementById('rechargeAmountInput').value);
+            let utr = document.getElementById('rechargeUtrInput').value.trim();
+            
+            if(!amount || amount <= 0) {
+                alert("Please enter a valid recharge amount.");
+                return;
+            }
+            if(!utr) {
+                alert("Please enter UTR / Reference number.");
+                return;
+            }
+
+            let currentBalance = parseFloat(localStorage.getItem(getKey('userBalance')) || '0');
+            currentBalance += amount;
+            localStorage.setItem(getKey('userBalance'), currentBalance.toFixed(2));
+
+            let totalRecharge = parseFloat(localStorage.getItem(getKey('totalRecharge')) || '0') + amount;
+            localStorage.setItem(getKey('totalRecharge'), totalRecharge.toFixed(2));
+            
+            document.getElementById('rechargeAmountStat').innerText = '₹' + totalRecharge.toFixed(2);
+            document.getElementById('withdrawAmountStat').innerText = '₹' + currentBalance.toFixed(2);
+            document.getElementById('totalIncomeStat').innerText = '₹' + currentBalance.toFixed(2);
+
+            let bills = JSON.parse(localStorage.getItem(getKey('rechargeBills')) || '[]');
+            let now = new Date().toLocaleString();
+            bills.unshift({ utr: utr, amount: amount, date: now });
+            localStorage.setItem(getKey('rechargeBills'), JSON.stringify(bills));
+
+            alert("Recharge successful! Balance added.");
+            document.getElementById('rechargeAmountInput').value = '';
+            document.getElementById('rechargeUtrInput').value = '';
+            closeModal('rechargeModal');
+        }
+
+        function openWithdrawModal() {
+            document.getElementById('withdrawModal').style.display = 'flex';
         }
 
         function openCheckInModal() {
@@ -375,11 +426,10 @@
             document.getElementById('totalWithdrawalStat').innerText = '₹' + totalWithdrawn.toFixed(2);
             
             let orderNumber = 'ORD' + Math.floor(100000 + Math.random() * 900000);
-            let now = new Date();
-            let dateTime = now.toLocaleString();
+            let now = new Date().toLocaleString();
             
             let history = JSON.parse(localStorage.getItem(getKey('withdrawalHistory')) || '[]');
-            history.unshift({ orderNo: orderNumber, amount: amount, dateTime: dateTime, status: 'Success' });
+            history.unshift({ orderNo: orderNumber, amount: amount, dateTime: now, status: 'Success' });
             localStorage.setItem(getKey('withdrawalHistory'), JSON.stringify(history));
             
             alert("Withdrawal request confirmed! Order ID: " + orderNumber);
@@ -453,5 +503,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
