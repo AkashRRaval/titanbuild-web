@@ -104,9 +104,9 @@
     </div>
 
     <script>
-        // Agar user pehle se logged in hai toh seedha profile par bhej do
+        // Check if user is already logged in using profile's expected session key
         window.onload = function() {
-            if(localStorage.getItem('titan_logged_in') === 'true') {
+            if(localStorage.getItem('currentUserPhone')) {
                 window.location.href = 'profile.html';
             }
         };
@@ -120,10 +120,8 @@
                 return;
             }
 
-            // Yahan aap apna login validation laga sakte hain. 
-            // Filhal yeh successful login man kar localStorage set kar raha hai:
-            localStorage.setItem('titan_logged_in', 'true');
-            localStorage.setItem('titan_username', user);
+            // Fix: Setting 'currentUserPhone' so profile.html security guard recognizes it correctly
+            localStorage.setItem('currentUserPhone', user);
 
             alert("Login successful!");
             window.location.href = 'profile.html';
