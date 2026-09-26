@@ -104,7 +104,6 @@
     </div>
 
     <script>
-        // Check if user is already logged in using profile's expected session key
         window.onload = function() {
             if(localStorage.getItem('currentUserPhone')) {
                 window.location.href = 'profile.html';
@@ -120,9 +119,7 @@
                 return;
             }
 
-            // Fix: Setting 'currentUserPhone' so profile.html security guard recognizes it correctly
             localStorage.setItem('currentUserPhone', user);
-
             alert("Login successful!");
             window.location.href = 'profile.html';
         }
