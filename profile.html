@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,6 +12,7 @@
             color: #ffffff;
             margin: 0;
             padding: 0;
+            padding-bottom: 70px;
         }
         .container {
             padding: 15px;
@@ -147,6 +149,32 @@
             text-decoration: none;
             display: block;
         }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #111827;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 999;
+        }
+        .nav-item {
+            text-align: center;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 11px;
+        }
+        .nav-item i {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #fbbf24;
+        }
     </style>
 </head>
 <body>
@@ -202,6 +230,24 @@
         </div>
     </div>
 
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-box"></i> Product
+        </a>
+        <a href="beneficial.html" class="nav-item">
+            <i class="fas fa-gift"></i> Beneficial
+        </a>
+        <a href="team.html" class="nav-item">
+            <i class="fas fa-users"></i> Team
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i> My
+        </a>
+    </div>
+
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('withdrawModal')">&times;</span>
@@ -252,8 +298,8 @@
             <button class="submit-btn" onclick="alert('Password changed successfully!'); closeModal('passwordModal');">Update Password</button>
         </div>
     </div>
-        <script>
-        // Security Guard: Check if user is logged in
+
+    <script>
         let currentUser = localStorage.getItem('currentUserPhone');
         
         if (!currentUser) {
@@ -407,4 +453,5 @@
         }
     </script>
 </body>
-</html>
+    </html>
+    
